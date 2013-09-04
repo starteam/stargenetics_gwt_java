@@ -3,8 +3,8 @@ package star.genetics.genetic.impl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.beans.StringTokenizer;
 
+import star.genetics.beans.StringTokenizer;
 import star.genetics.client.Messages;
 import star.genetics.genetic.model.Allele;
 import star.genetics.genetic.model.Chromosome;

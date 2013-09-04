@@ -1,6 +1,7 @@
 package star.genetics.utils;
 
-import java.beans.PropertyChangeListener;
+import star.genetics.beans.PropertyChangeListener;
+
 
 /**
  * Adds support for addPropertyChangeListener and removePropertyChangeListener

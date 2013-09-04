@@ -10,20 +10,6 @@ import star.genetics.genetic.model.MatingEngine;
 import star.genetics.shared.FieldVerifier;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -44,9 +30,9 @@ public class Stargenetics_gwt_java implements EntryPoint
 		test(self, me);
 	}
 	
-	public static int add(int a,int b)
+	public static String add(int a,int b)
 	{
-		return a+b;
+		return "" + a+b;
 	}
 
 	public native void test(Object self, MatingEngine me)
@@ -54,6 +40,7 @@ public class Stargenetics_gwt_java implements EntryPoint
 		$wnd.__sg_entry_point = self;
 		$wnd.__sg_me = me;
 		$wnd.__sg_add = $entry(@star.genetics.client.Stargenetics_gwt_java::add(II));
+		console.info( "Done!" );
 		return "Not A Number";
 	}-*/;
 
@@ -62,108 +49,14 @@ public class Stargenetics_gwt_java implements EntryPoint
 	 */
 	public void onModuleLoad()
 	{
-		final Button sendButton = new Button("Send");
-		final TextBox nameField = new TextBox();
-		nameField.setText("GWT User");
-		final Label errorLabel = new Label();
-
-		// We can add style names to widgets
-		sendButton.addStyleName("sendButton");
-
-		// Add the nameField and sendButton to the RootPanel
-		// Use RootPanel.get() to get the entire body element
-		RootPanel.get("nameFieldContainer").add(nameField);
-		RootPanel.get("sendButtonContainer").add(sendButton);
-		RootPanel.get("errorLabelContainer").add(errorLabel);
-
-		// Focus the cursor on the name field when the app loads
-		nameField.setFocus(true);
-		nameField.selectAll();
-
-		// Create the popup dialog box
-		final DialogBox dialogBox = new DialogBox();
-		dialogBox.setText("Remote Procedure Call");
-		dialogBox.setAnimationEnabled(true);
-		final Button closeButton = new Button("Close");
-		// We can set the id of a widget by accessing its Element
-		closeButton.getElement().setId("closeButton");
-		final Label textToServerLabel = new Label();
-		final HTML serverResponseLabel = new HTML();
-		VerticalPanel dialogVPanel = new VerticalPanel();
-		dialogVPanel.addStyleName("dialogVPanel");
-		dialogVPanel.add(new HTML("<b>Sending name to the server:</b>"));
-		dialogVPanel.add(textToServerLabel);
-		dialogVPanel.add(new HTML("<br><b>Server replies:</b>"));
-		dialogVPanel.add(serverResponseLabel);
-		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
-		dialogVPanel.add(closeButton);
-		dialogBox.setWidget(dialogVPanel);
-		test2();
-		// Add a handler to close the DialogBox
-		closeButton.addClickHandler(new ClickHandler()
-		{
-			public void onClick(ClickEvent event)
-			{
-				dialogBox.hide();
-				sendButton.setEnabled(true);
-				sendButton.setFocus(true);
-
-			}
-		});
-
-		// Create a handler for the sendButton and nameField
-		class MyHandler implements ClickHandler, KeyUpHandler
-		{
-			/**
-			 * Fired when the user clicks on the sendButton.
-			 */
-			public void onClick(ClickEvent event)
-			{
-				sendNameToServer();
-				MatingEngineImpl_XY xy = new MatingEngineImpl_XY();
-				ModelImpl impl = new ModelImpl();
-				GenomeImpl genome = new GenomeImpl();
-				ChromosomeImpl c = new ChromosomeImpl("name", genome);
-				GeneImpl g = new GeneImpl("test", 2, c);
-				impl.setGenome(genome);
-				System.out.println(impl);
-			}
-
-			/**
-			 * Fired when the user types in the nameField.
-			 */
-			public void onKeyUp(KeyUpEvent event)
-			{
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
-				{
-					sendNameToServer();
-				}
-			}
-
-			/**
-			 * Send the name from the nameField to the server and wait for a response.
-			 */
-			private void sendNameToServer()
-			{
-				// First, we validate the input.
-				errorLabel.setText("");
-				String textToServer = nameField.getText();
-				if (!FieldVerifier.isValidName(textToServer))
-				{
-					errorLabel.setText("Please enter at least four characters");
-					return;
-				}
-
-				// Then, we send the input to the server.
-				sendButton.setEnabled(false);
-				textToServerLabel.setText(textToServer);
-				serverResponseLabel.setText("");
-			}
-		}
-
-		// Add a handler to send the name to the server
-		MyHandler handler = new MyHandler();
-		sendButton.addClickHandler(handler);
-		nameField.addKeyUpHandler(handler);
+		MatingEngineImpl_XY xy = new MatingEngineImpl_XY();
+		ModelImpl impl = new ModelImpl();
+		GenomeImpl genome = new GenomeImpl();
+		ChromosomeImpl c = new ChromosomeImpl("name", genome);
+		GeneImpl g = new GeneImpl("test", 2, c);
+		impl.setGenome(genome);
+		impl.setMater(xy);
+		System.out.println(impl);
+		test(this,xy);
 	}
 }

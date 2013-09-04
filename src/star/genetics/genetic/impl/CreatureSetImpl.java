@@ -1,12 +1,12 @@
 package star.genetics.genetic.impl;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import star.genetics.beans.PropertyChangeEvent;
+import star.genetics.beans.PropertyChangeListener;
+import star.genetics.beans.PropertyChangeSupport;
 import star.genetics.genetic.model.Creature;
 
 public class CreatureSetImpl implements star.genetics.genetic.model.CreatureSet, Serializable

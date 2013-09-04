@@ -1,4 +1,4 @@
-package java.beans;
+package star.genetics.beans;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,7 @@ public class PropertyChangeSupport
 		
     }
 
-	public void addPropertyChangeListener(PropertyChangeListener listener)
+	public void addPropertyChangeListener(star.genetics.beans.PropertyChangeListener listener)
     {
 		listeners.add(listener);
     }

@@ -1,4 +1,4 @@
-package java.beans;
+package star.genetics.beans;
 
 public class PropertyChangeEvent
 {
