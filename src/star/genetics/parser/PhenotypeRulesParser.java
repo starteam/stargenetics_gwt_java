@@ -27,7 +27,7 @@ public class PhenotypeRulesParser
 
 	private static Rule parseRule(RuleSetImpl set, JSONObject rule, Genome genome)
     {
-		String matches = rule.get("matches").isString().toString();
+		String matches = rule.get("matches").isString().stringValue();
 		HashMap<String,String> phenotype = parsePhenotype( rule.get("phenotype").isObject());
 		return new RuleImpl(matches, phenotype , genome) ;
     }

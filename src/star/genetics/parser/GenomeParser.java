@@ -31,7 +31,7 @@ public class GenomeParser
 
 	private static void parseChromosome(ChromosomeImpl c, JSONObject chromosome)
     {
-		String name = chromosome.get("name").isString().toString();
+		String name = chromosome.get("name").isString().stringValue();
 		parseGenes( c , chromosome.get("genes").isArray());
     }
 
@@ -49,7 +49,7 @@ public class GenomeParser
 
 	private static void parseGene(ChromosomeImpl c, JSONObject gene)
     {
-		String name = gene.get("name").isString().toString();
+		String name = gene.get("name").isString().stringValue();
 		float position = (float)gene.get("position").isNumber().doubleValue();
 		GeneImpl g = new GeneImpl(name, position, c);
 		parseAlleles( g , gene.get("alleles").isArray());
@@ -67,7 +67,7 @@ public class GenomeParser
 
 	private static void parseAllele(GeneImpl gene, JSONObject allele)
     {
-		String name = allele.get("name").isString().toString();
+		String name = allele.get("name").isString().stringValue();
 		AlleleImpl a = new AlleleImpl(name, gene);
     }
 

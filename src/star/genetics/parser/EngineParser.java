@@ -10,7 +10,7 @@ public class EngineParser
 {
 	public static void parse(ModelImpl model, JSONObject engine)
 	{
-		String sex_type = engine.get("sex_type").isString().toString();
+		String sex_type = engine.get("sex_type").isString().stringValue();
 		if ("xy".equalsIgnoreCase(sex_type))
 		{
 			parse_XY(model, engine);

@@ -32,7 +32,8 @@ public class ModelParser
 		VisualizerParser.parse( model, genetics.get("visualizer").isObject());
 		GenomeParser.parse(model,genetics.get("genome").isObject());
 		EngineParser.parse(model,genetics.get("engine").isObject());
-		PhenotypeRulesParser.parse(model,genetics.get("phenotype_rules").isArray());		
+		PhenotypeRulesParser.parse(model,genetics.get("phenotype_rules").isArray());	
+		StrainsParser.parse(model,genetics.get("strains").isObject());
     }
 
 
