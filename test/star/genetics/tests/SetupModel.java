@@ -5,6 +5,10 @@ import static org.junit.Assert.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import star.genetics.genetic.impl.CreatureSetImpl;
+import star.genetics.genetic.impl.MatingException;
+import star.genetics.genetic.model.Creature;
+import star.genetics.genetic.model.CreatureSet;
 import star.genetics.genetic.model.Model;
 import star.genetics.parser.ModelParser;
 
@@ -21,14 +25,37 @@ public class SetupModel extends GWTTestCase
 	public void test()
 	{
 		Model m = ModelParser.parse(getJson());
-		System.out.println(m.getGenome());
 		assertNotNull(m.getGenome());
 		assertNotNull(m.getMatingEngine());
 		assertNotNull(m.getRules());
 		assertNotNull(m.getCreatures());
-
 	}
 
+	public void test2()
+	{
+		Model m = ModelParser.parse(getJson());
+		Creature c0 = m.getCreatures().get(0);
+		Creature c1 = m.getCreatures().get(1);
+		assertTrue(c0.getSex() != c1.getSex() );
+		CreatureSetImpl parents = new CreatureSetImpl();
+		parents.add(c0);
+		parents.add(c1);		
+		try
+        {
+			int progenies = 50;
+			String prefix = "Experiment 1";
+	       CreatureSet progeny = m.getMatingEngine().getProgenies(prefix, parents, 1, progenies, m.getRules());
+	       assertEquals(progenies, progeny.size());
+	       assertEquals(prefix+"-1", progeny.get(0));
+        }
+        catch (MatingException e)
+        {
+	        e.printStackTrace();
+	        fail(e.getMessage());
+        }
+		
+	}
+	
 	@Override
 	public String getModuleName()
 	{

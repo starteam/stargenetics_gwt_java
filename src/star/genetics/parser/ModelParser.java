@@ -36,9 +36,6 @@ public class ModelParser
 		StrainsParser.parse(model,genetics.get("strains").isObject());
     }
 
-
-	
-
 	public static Model parse( String json )
 	{
 		ModelImpl model = new ModelImpl();

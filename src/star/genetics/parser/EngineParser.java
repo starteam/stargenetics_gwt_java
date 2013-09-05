@@ -3,8 +3,14 @@ package star.genetics.parser;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 
+import star.genetics.genetic.impl.AlleleImpl;
+import star.genetics.genetic.impl.ChromosomeImpl;
+import star.genetics.genetic.impl.GeneImpl;
 import star.genetics.genetic.impl.MatingEngineImpl_XY;
 import star.genetics.genetic.impl.ModelImpl;
+import star.genetics.genetic.model.Chromosome;
+import star.genetics.genetic.model.Gene;
+import star.genetics.genetic.model.Genome;
 
 public class EngineParser
 {
@@ -42,5 +48,26 @@ public class EngineParser
 
 		MatingEngineImpl_XY xy = new MatingEngineImpl_XY(maleRecombinationRate, femaleRecombinationRate, femaleSexRatio, progeniesCount, twinningFrequency, identicalTwinsFrequency);
 		model.setMater(xy);
+		// fix genome
+		fixGenome_XY( model.getGenome() );
 	}
+
+	private static void fixGenome_XY(Genome genome)
+    {
+		Chromosome cx = genome.getChromosomeByName("X");
+		if( cx == null )
+		{
+			cx = new ChromosomeImpl("X", genome);
+			Gene gx = new GeneImpl("x", 0, cx);
+			new AlleleImpl("x", gx);
+		}
+		Chromosome cy = genome.getChromosomeByName("Y");
+		if( cy == null )
+		{
+			cy = new ChromosomeImpl("Y", genome);
+			Gene gy = new GeneImpl("y", 0, cy);
+			new AlleleImpl("x", gy);
+		}
+		
+    }
 }

@@ -37,6 +37,10 @@ public class Sex
 			{
 				// all y chromosome genes DiploidAlleles have one gene on them -- male
 				Chromosome c2 = genome.getChromosomeByName("X"); //$NON-NLS-1$
+				if( c2 == null )
+				{
+					return null;
+				}
 				for (Gene g : c2.getGenes())
 				{
 					if (makeup.get(g).getAlleleCount() != 1)
@@ -50,6 +54,10 @@ public class Sex
 			{
 				// all y chromosome genes DiploidAlleles have no gene on them -- female
 				Chromosome c2 = genome.getChromosomeByName("X"); //$NON-NLS-1$
+				if( c2 == null )
+				{
+					return null;
+				}
 				for (Gene g : c2.getGenes())
 				{
 					if (makeup.get(g).getAlleleCount() != 2)
