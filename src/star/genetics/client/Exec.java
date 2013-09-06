@@ -2,10 +2,13 @@ package star.genetics.client;
 
 import javax.management.RuntimeErrorException;
 
+import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.JavaScriptObject;
 
 public class Exec extends JavaScriptObject
 {
+	public static Callback<JavaScriptObject, JavaScriptObject> testingCallback;
+	
 	protected Exec()
 	{
 		super();
@@ -23,10 +26,13 @@ public class Exec extends JavaScriptObject
 	{
 		if (!onSuccessNative(json))
 		{
-			System.out.println(json);
+			if( testingCallback != null ) { testingCallback.onSuccess(json); }
 		}
-
 	}
+
+	private final native String toJSON(JavaScriptObject that) /*-{
+		return JSON.stringify(that);
+	}-*/;
 
 	private final native boolean onSuccessNative(JavaScriptObject json)
 	/*-{
@@ -43,11 +49,9 @@ public class Exec extends JavaScriptObject
 
 	final void onError(JavaScriptObject json)
 	{
-		System.out.println( "onError");
 		if (!onErrorNative(json))
 		{
-			System.out.println(json);
-			throw new RuntimeException("" + json);
+			if( testingCallback != null ) { testingCallback.onFailure(json); }
 		}
 	}
 
@@ -59,9 +63,7 @@ public class Exec extends JavaScriptObject
 				payload : json
 			});
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}-*/;
