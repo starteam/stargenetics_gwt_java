@@ -10,7 +10,7 @@ import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.junit.client.GWTTestCase;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.*; 
 
 public class JSONModel extends GWTTestCase
 {

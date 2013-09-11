@@ -30,13 +30,24 @@ public class Stargenetics_gwt_java implements EntryPoint
 		setupInterface();
 	}
 
-	private native void setupInterface()
+	static {
+		setupInterface();
+	}
+	
+	private static native void setupInterface()
 	/*-{
 		$wnd.__sg_bg_exec = $entry(@star.genetics.client.Stargenetics_gwt_java::execute(*));
+		console.info( "setup interface" ) ;
 	}-*/;
 
+	private static native void log( String str )
+	/*-{
+		console.info( str ) ;
+	}-*/;
 	public static void execute(Exec obj)
 	{	
+		log( "execute start " );
+		
 		if( obj != null )
 		{
 			String token = obj.getToken();
@@ -60,6 +71,8 @@ public class Stargenetics_gwt_java implements EntryPoint
 		{
 			logger.log( Level.WARNING , "Input argument invalid.");			
 		}
+		log( "execute done " );
+
 	}
 
 

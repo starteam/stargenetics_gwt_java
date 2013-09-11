@@ -1,7 +1,5 @@
 package star.genetics.client;
 
-import javax.management.RuntimeErrorException;
-
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.JavaScriptObject;
 
