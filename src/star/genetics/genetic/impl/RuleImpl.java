@@ -26,7 +26,10 @@ public class RuleImpl implements star.genetics.genetic.model.Rule, Serializable
 	{
 		this.rule = rule;
 		this.properties = properties;
-		parseRules(rule, g);
+		if(!isDefault())
+		{
+			parseRules(rule, g);
+		}
 	}
 
 	private void parseRules(String rule, Genome g)
@@ -139,6 +142,7 @@ public class RuleImpl implements star.genetics.genetic.model.Rule, Serializable
 				{
 					chromosome = gene.getChromosome();
 					chromosomeName = chromosome.getName();
+					break;
 				}
 			}
 		}
@@ -191,7 +195,7 @@ public class RuleImpl implements star.genetics.genetic.model.Rule, Serializable
 
 	public boolean isDefault()
 	{
-		return DEFAULT.equalsIgnoreCase(rule);
+		return DEFAULT.equalsIgnoreCase(rule) || "*".equalsIgnoreCase(rule);
 	}
 
 	public boolean isMatching(GeneticMakeup makeup, Creature.Sex sex)

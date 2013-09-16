@@ -90,7 +90,8 @@ public class StarGenetics
 		CreatureSet strains = model.getCreatures();
 		for (int i = 0; i < strains.size(); i++)
 		{
-			retset.set(i, StrainHelper.getShort(strains.get(i)));
+//			retset.set(i, StrainHelper.getShort(strains.get(i)));
+			retset.set(i, StrainHelper.getLong(strains.get(i),model.getRules()));
 		}
 		exec.onSuccess(ret.getJavaScriptObject());
 	}

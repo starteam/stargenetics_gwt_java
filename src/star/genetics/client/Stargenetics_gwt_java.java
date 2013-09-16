@@ -25,24 +25,27 @@ public class Stargenetics_gwt_java implements EntryPoint
 	private static Logger logger = Logger.getLogger("StarGenetics");
 	private static HashMap<String, StarGenetics> map = new HashMap<String, StarGenetics>();
 
+	
+
 	public void onModuleLoad()
 	{
-		setupInterface();
-	}
-
-	static {
 		setupInterface();
 	}
 	
 	private static native void setupInterface()
 	/*-{
 		$wnd.__sg_bg_exec = $entry(@star.genetics.client.Stargenetics_gwt_java::execute(*));
-		console.info( "setup interface" ) ;
+		if( typeof(console) == 'object' && console && console.info ) {
+			console.info( "setup interface" ) ;
+		}
 	}-*/;
 
 	private static native void log( String str )
 	/*-{
-		console.info( str ) ;
+		if( typeof(console) == 'object' && console && console.info )
+		{
+			console.info( str ) ;
+		}
 	}-*/;
 	public static void execute(Exec obj)
 	{	
