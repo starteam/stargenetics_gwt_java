@@ -1,4 +1,4 @@
-package star.genetics.client;
+package star.genetics.client.messages;
 
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -20,7 +20,7 @@ public class Exec extends JavaScriptObject
 		return this.command;
 	}-*/;
 
-	final void onSuccess(JavaScriptObject json)
+	public final void onSuccess(JavaScriptObject json)
 	{
 		if (!onSuccessNative(json))
 		{
@@ -45,7 +45,7 @@ public class Exec extends JavaScriptObject
 		}
 	}-*/;
 
-	final void onError(JavaScriptObject json)
+	public final void onError(JavaScriptObject json)
 	{
 		if (!onErrorNative(json))
 		{

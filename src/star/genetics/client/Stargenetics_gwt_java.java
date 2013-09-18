@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import star.genetics.client.messages.Exec;
 import star.genetics.genetic.impl.ChromosomeImpl;
 import star.genetics.genetic.impl.GeneImpl;
 import star.genetics.genetic.impl.GenomeImpl;

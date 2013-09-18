@@ -24,15 +24,18 @@ public class StrainHelper
 	public static JSONObject getLong(Creature creature, RuleSet rules)
 	{
 		JSONObject ret = new JSONObject();
+		
+		JSONObject phenotype = new JSONObject();
 		Map<String,String> properties = rules.getProperties(creature.getMakeup(), creature.getSex());
 		for( Entry<String,String> e : properties.entrySet() )
 		{
-			ret.put(e.getKey(), new JSONString(e.getValue()));
+			phenotype.put(e.getKey(), new JSONString(e.getValue()));
 		}
+		ret.put( "phenotype", phenotype );
 		ret.put( "name", new JSONString(creature.getName()));
 		ret.put( "id" , new JSONString(creature.getUUID()));
 		ret.put( "export_type" , new JSONString("long"));
-		
+		ret.put( "sex" , new JSONString( creature.getSex().name() ));
 		return ret;
 		
 	}

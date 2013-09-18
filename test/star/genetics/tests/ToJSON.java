@@ -32,9 +32,26 @@ public class ToJSON
 			return e.toString();
 		}
 	}
+	
+	static void setupmodel()
+	{
+		System.out.println( "SetupModel:");
+	    String json = getJSON("setupmodel.json");	   
+	    System.out.println( json );	    
+	    System.out.println( "return \""+ json.replace("\"","\\\"") + "\";") ;		
+	}
+	
+	static void mate()
+	{
+		System.out.println( "Mate:");
+	    String json = getJSON("setupmodel.json");	   
+	    System.out.println( json );	    
+	    System.out.println( "return \""+ json.replace("\"","\\\"") + "\";") ;
+
+	}
 
 	public static void main(String[] args)
     {
-	    System.out.println(getJSON("setupmodel.json"));
+		setupmodel();
     }
 }
