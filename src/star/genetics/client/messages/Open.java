@@ -1,5 +1,6 @@
 package star.genetics.client.messages;
 
+import star.genetics.client.StarGenetics;
 import star.genetics.genetic.model.Model;
 import star.genetics.parser.ModelParser;
 
@@ -17,7 +18,7 @@ public class Open extends Exec
 	public final native String getJSONModel() /*-{ return JSON.stringify(this.data.model); }-*/;
 	public final native JavaScriptObject getModel() /*-{ return this.data.model; }-*/;
 
-	public final Model execute()
+	public final Model execute(StarGenetics starGenetics)
     {
 		final String VERSION_1 = "Version_1";
 		Model model = null;
@@ -25,6 +26,7 @@ public class Open extends Exec
 		{
 			model = (ModelParser.parse(getJSONModel()));
 			JSONObject ret = new JSONObject();
+			starGenetics.setModel(model);
 			onSuccess(ret.getJavaScriptObject());
 		}
 		else

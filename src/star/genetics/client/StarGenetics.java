@@ -35,7 +35,7 @@ public class StarGenetics
 	private static Logger logger = Logger.getLogger("StarGenetics");
 	private Model model;
 
-	private void setModel(Model model)
+	public void setModel(Model model)
 	{
 		this.model = model;
 	}
@@ -79,8 +79,7 @@ public class StarGenetics
 	private void open(Exec exec)
 	{
 		Open cmd = exec.cast();
-		Model model = cmd.execute();
-		setModel(model);
+		cmd.execute(this);
 	}
 
 	private void listStrains(Exec exec)
@@ -96,5 +95,13 @@ public class StarGenetics
 		new UpdateExperimentImpl(cmd).execute(getModel());
     }
 
+
+	private static native void log( String str )
+	/*-{
+		if( typeof(console) == 'object' && console && console.info )
+		{
+			console.info( str ) ;
+		}
+	}-*/;
 
 }

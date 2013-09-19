@@ -55,14 +55,16 @@ public class Stargenetics_gwt_java implements EntryPoint
 		if( obj != null )
 		{
 			String token = obj.getToken();
+			log( "execute start token:" + token );
 			if( token != null ) {
 				if(! map.containsKey( token ) )
 				{
+					logger.log( Level.INFO, "New StarGenetics backend for token " + token );
 					map.put(token, new StarGenetics());
 				}
 				else
 				{
-					logger.log( Level.INFO, "Creating StarGenetics backend for token " + token );
+					logger.log( Level.INFO, "Loading existing StarGenetics backend for token " + token );
 				}
 				map.get(token).execute(obj);
 			}
