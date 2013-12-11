@@ -1,8 +1,5 @@
 package star.genetics.utils;
 
-import java.text.MessageFormat;
-import java.util.Arrays;
-
 public class Timer
 {
 	static long start;

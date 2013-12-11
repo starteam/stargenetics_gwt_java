@@ -1,9 +1,6 @@
 package star.genetics.genetic.impl;
 
 import java.io.Serializable;
-import java.text.MessageFormat;
-
-import star.genetics.client.Messages;
 import star.genetics.visualizers.Visualizer;
 import star.genetics.visualizers.VisualizerFactory;
 
