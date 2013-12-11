@@ -30,6 +30,7 @@ public class Stargenetics_gwt_java implements EntryPoint
 
 	public void onModuleLoad()
 	{
+		Messages.getString("Initialize"); 
 		setupInterface();
 	}
 	
@@ -66,7 +67,8 @@ public class Stargenetics_gwt_java implements EntryPoint
 				{
 					logger.log( Level.INFO, "Loading existing StarGenetics backend for token " + token );
 				}
-				map.get(token).execute(obj);
+				StarGenetics g = map.get(token);
+				g.execute(obj);
 			}
 			else
 			{
