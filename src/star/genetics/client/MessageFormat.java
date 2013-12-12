@@ -2,23 +2,31 @@ package star.genetics.client;
 
 public class MessageFormat
 {
-	public static String format(String format,Object... varags) {
-		log( "MessageFormat.format: " + format );
-		StringBuffer sb  = new StringBuffer(format);
-		
-		for( Object o : varags )
+	public static String format(String format) {
+		return format;		
+	};
+
+	public static String format(String format,Object p0) {
+		return format(format, new Object[] {p0});		
+	};
+
+	
+	public static String format(String format,Object[] varags) {
+		String ret = format;
+		log( "MessageFormat [A]:" + ret);
+		for( int i = 0 ; i < varags.length ; i++ )
 		{
-			sb.append("ARG:" + o + ":,");
+			log( "MessageFormat [E]:" + ret);
+			ret = ret.replaceAll("\\{"+i+"\\}", String.valueOf(varags[i]));
+			log( "MessageFormat ["+i+"]:" + ret);
+
 		}
-		log( sb.toString() );
-		return sb.toString();		
+		log( "MessageFormat [Z]:" + ret);
+		return ret;		
 	};
 	
 	private static native void log( String str )
 	/*-{
-		if( typeof(console) == 'object' && console && console.info )
-		{
 			console.info( str ) ;
-		}
 	}-*/;
 }

@@ -18,7 +18,7 @@ public class Messages
 {
 	static JavaScriptObject map = null;
 
-	static
+	static void initialize()
 	{
 		String url = GWT.getModuleBaseURL() + "/messages/messages_en.json";
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
@@ -65,8 +65,8 @@ public class Messages
 
 	public static String getString(String key)
 	{
-		//String ret = getNativeString(key, map);
-		String ret = null;
+		String ret = getNativeString(key, map);
+		//String ret = null;
 		return ret != null ? ret : '!' + key + '!';
 	}
 

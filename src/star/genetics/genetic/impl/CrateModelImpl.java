@@ -2,6 +2,7 @@ package star.genetics.genetic.impl;
 
 import java.io.Serializable;
 
+import star.genetics.client.MessageFormat;
 import star.genetics.client.Messages;
 import star.genetics.genetic.model.CrateExperimentMetadata;
 import star.genetics.genetic.model.CrateModel;
@@ -19,7 +20,7 @@ public class CrateModelImpl implements CrateModel, Serializable
 
 	public CrateModelImpl(int id)
 	{
-		name = Messages.getString("CrateModelImpl.0")+ id; //$NON-NLS-1$
+		name = MessageFormat.format(Messages.getString("CrateModelImpl.0"),id); //$NON-NLS-1$
 		this.uuid = generateUUID();
 	}
 

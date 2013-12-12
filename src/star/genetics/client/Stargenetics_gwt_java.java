@@ -17,6 +17,7 @@ public class Stargenetics_gwt_java implements EntryPoint
 
 	public void onModuleLoad()
 	{
+		Messages.initialize();
 		setupInterface();
 	}
 	
