@@ -65,8 +65,9 @@ public class CrateSetImpl implements CrateSet, Serializable
 	public CrateModel newCrateModel()
 	{
 		clearInvisibleCrates();
-		add(new CrateModelImpl(id++));
-		return current();
+		CrateModel ret = new CrateModelImpl(id++);
+		add(ret);
+		return ret;
 	}
 
 	private void clearInvisibleCrates()
