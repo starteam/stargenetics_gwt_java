@@ -1,6 +1,7 @@
 package star.genetics.genetic.impl;
 
 import java.io.Serializable;
+
 import star.genetics.visualizers.Visualizer;
 import star.genetics.visualizers.VisualizerFactory;
 

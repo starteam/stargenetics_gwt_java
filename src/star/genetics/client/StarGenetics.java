@@ -1,24 +1,16 @@
 package star.genetics.client;
 
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
-import com.google.gwt.json.client.JSONString;
-
 import star.genetics.client.messages.Exec;
-import star.genetics.client.messages.Experiment;
 import star.genetics.client.messages.Open;
 import star.genetics.client.messages.UpdateExperiment;
 import star.genetics.client.messages.UpdateExperimentImpl;
-import star.genetics.genetic.model.CrateModel;
-import star.genetics.genetic.model.Creature;
-import star.genetics.genetic.model.CreatureSet;
 import star.genetics.genetic.model.Model;
-import star.genetics.parser.ModelParser;
+
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
 
 public class StarGenetics
 {
@@ -90,9 +82,10 @@ public class StarGenetics
 
 	private void updateExperiment(Exec exec)
     {
-		System.out.println( "ERROR");
 		UpdateExperiment cmd = exec.cast();
+		log( "updateExperiment 2, model is:" + getModel());
 		new UpdateExperimentImpl(cmd).execute(getModel());
+		log( "updateExperiment 3");
     }
 
 

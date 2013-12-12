@@ -1,25 +1,12 @@
 package star.genetics.client;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import star.genetics.client.messages.Exec;
-import star.genetics.genetic.impl.ChromosomeImpl;
-import star.genetics.genetic.impl.GeneImpl;
-import star.genetics.genetic.impl.GenomeImpl;
-import star.genetics.genetic.impl.MatingEngineImpl_XY;
-import star.genetics.genetic.impl.ModelImpl;
-import star.genetics.genetic.model.GeneticModel;
-import star.genetics.genetic.model.MatingEngine;
-import star.genetics.shared.FieldVerifier;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
-import com.google.gwt.json.client.JSONValue;
 
 public class Stargenetics_gwt_java implements EntryPoint
 {	
@@ -30,7 +17,6 @@ public class Stargenetics_gwt_java implements EntryPoint
 
 	public void onModuleLoad()
 	{
-		Messages.getString("Initialize"); 
 		setupInterface();
 	}
 	
@@ -67,8 +53,7 @@ public class Stargenetics_gwt_java implements EntryPoint
 				{
 					logger.log( Level.INFO, "Loading existing StarGenetics backend for token " + token );
 				}
-				StarGenetics g = map.get(token);
-				g.execute(obj);
+				map.get(token).execute(obj);
 			}
 			else
 			{

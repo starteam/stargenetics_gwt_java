@@ -3,12 +3,11 @@ package star.genetics.client;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import star.genetics.genetic.model.Creature;
+import star.genetics.genetic.model.RuleSet;
+
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
-
-import star.genetics.genetic.model.Creature;
-import star.genetics.genetic.model.Rule;
-import star.genetics.genetic.model.RuleSet;
 
 public class StrainHelper
 {

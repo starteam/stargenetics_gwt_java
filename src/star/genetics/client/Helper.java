@@ -6,9 +6,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import star.genetics.genetic.model.Creature;
-import star.genetics.genetic.model.ModelModifiedProvider;
 import star.genetics.visualizers.Visualizer;
-import star.genetics.visualizers.VisualizerFactory;
 
 public class Helper
 {

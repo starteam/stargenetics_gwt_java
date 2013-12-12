@@ -1,8 +1,5 @@
 package star.genetics.parser;
 
-import com.google.gwt.json.client.JSONNumber;
-import com.google.gwt.json.client.JSONObject;
-
 import star.genetics.genetic.impl.AlleleImpl;
 import star.genetics.genetic.impl.ChromosomeImpl;
 import star.genetics.genetic.impl.GeneImpl;
@@ -11,6 +8,9 @@ import star.genetics.genetic.impl.ModelImpl;
 import star.genetics.genetic.model.Chromosome;
 import star.genetics.genetic.model.Gene;
 import star.genetics.genetic.model.Genome;
+
+import com.google.gwt.json.client.JSONNumber;
+import com.google.gwt.json.client.JSONObject;
 
 public class EngineParser
 {

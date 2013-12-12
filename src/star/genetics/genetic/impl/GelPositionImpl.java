@@ -1,7 +1,6 @@
 package star.genetics.genetic.impl;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 import star.genetics.genetic.model.Allele;
 import star.genetics.genetic.model.Gel;

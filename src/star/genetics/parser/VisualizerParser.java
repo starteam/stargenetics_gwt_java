@@ -1,8 +1,8 @@
 package star.genetics.parser;
 
-import com.google.gwt.json.client.JSONObject;
-
 import star.genetics.genetic.impl.ModelImpl;
+
+import com.google.gwt.json.client.JSONObject;
 
 public class VisualizerParser
 {

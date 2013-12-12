@@ -1,11 +1,11 @@
 package star.genetics.client;
 
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
-
 import star.genetics.client.messages.Exec;
 import star.genetics.genetic.model.CreatureSet;
 import star.genetics.genetic.model.Model;
+
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
 
 public class ListStrains extends Exec
 {

@@ -2,7 +2,6 @@ package star.genetics.client.messages;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
 
 public class Experiment extends JavaScriptObject
 {

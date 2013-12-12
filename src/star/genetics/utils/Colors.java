@@ -1,7 +1,6 @@
 package star.genetics.utils;
 
 import java.util.HashMap;
-import java.util.StringTokenizer;
 
 public class Colors
 {

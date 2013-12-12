@@ -1,6 +1,5 @@
 package star.genetics.client.messages;
 
-import com.google.gwt.core.client.JavaScriptObject;
 
 public class UpdateExperiment extends Exec
 {

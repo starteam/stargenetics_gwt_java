@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import star.genetics.client.Messages;
 import star.genetics.genetic.model.Creature;
 import star.genetics.genetic.model.CreatureSet;
 import star.genetics.genetic.model.GeneticMakeup;

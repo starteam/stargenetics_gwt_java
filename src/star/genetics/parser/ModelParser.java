@@ -1,16 +1,11 @@
 package star.genetics.parser;
 
-import com.google.gwt.json.client.JSONArray;
+import star.genetics.genetic.impl.ModelImpl;
+import star.genetics.genetic.model.Model;
+
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
-
-import star.genetics.genetic.impl.AlleleImpl;
-import star.genetics.genetic.impl.ChromosomeImpl;
-import star.genetics.genetic.impl.GeneImpl;
-import star.genetics.genetic.impl.GenomeImpl;
-import star.genetics.genetic.impl.ModelImpl;
-import star.genetics.genetic.model.Model;
 
 public class ModelParser
 {

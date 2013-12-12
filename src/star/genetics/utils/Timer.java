@@ -1,5 +1,6 @@
 package star.genetics.utils;
 
+
 public class Timer
 {
 	static long start;
