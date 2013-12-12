@@ -2,16 +2,7 @@ package star.genetics.client;
 
 public class MessageFormat
 {
-	public static String format(String format) {
-		return format;		
-	};
-
-	public static String format(String format,Object p0) {
-		return format(format, new Object[] {p0});		
-	};
-
-	
-	public static String format(String format,Object[] varags) {
+	public static String format(String format,Object... varags) {
 		String ret = format;
 		log( "MessageFormat [A]:" + ret);
 		for( int i = 0 ; i < varags.length ; i++ )

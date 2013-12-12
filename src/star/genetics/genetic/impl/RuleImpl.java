@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import star.genetics.beans.StringTokenizer;
+import star.genetics.client.MessageFormat;
 import star.genetics.client.Messages;
 import star.genetics.genetic.model.Allele;
 import star.genetics.genetic.model.Chromosome;
@@ -159,7 +160,7 @@ public class RuleImpl implements star.genetics.genetic.model.Rule, Serializable
 		{
 			if (!"default".equalsIgnoreCase(oneRule.trim())) //$NON-NLS-1$
 			{
-				throw new RuntimeException(Messages.getString("RuleImpl.2") + oneRule); //$NON-NLS-1$
+				throw new RuntimeException(MessageFormat.format(Messages.getString("RuleImpl.2") , oneRule)); //$NON-NLS-1$
 			}
 		}
 	}
@@ -185,7 +186,7 @@ public class RuleImpl implements star.genetics.genetic.model.Rule, Serializable
 				}
 				else
 				{
-					throw new RuntimeException(Messages.getString("RuleImpl.1") + " " + alleleName + " " + rule); //$NON-NLS-1$
+					throw new RuntimeException( MessageFormat.format(Messages.getString("RuleImpl.1") ,alleleName , rule)); //$NON-NLS-1$
 				}
 			}
 			strand++;

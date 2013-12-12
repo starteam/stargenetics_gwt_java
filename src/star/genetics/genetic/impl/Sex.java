@@ -1,6 +1,7 @@
 package star.genetics.genetic.impl;
 
 
+import star.genetics.client.MessageFormat;
 import star.genetics.client.Messages;
 import star.genetics.genetic.model.Chromosome;
 import star.genetics.genetic.model.Creature;
@@ -45,7 +46,7 @@ public class Sex
 				{
 					if (makeup.get(g).getAlleleCount() != 1)
 					{
-						throw new ParseException(Messages.getString("Sex.2") +  name); //$NON-NLS-1$
+						throw new ParseException(MessageFormat.format(Messages.getString("Sex.2") ,  name)); //$NON-NLS-1$
 					}
 				}
 				return Creature.Sex.MALE;
