@@ -65,7 +65,8 @@ public class Messages
 
 	public static String getString(String key)
 	{
-		String ret = getNativeString(key, map);
+		//String ret = getNativeString(key, map);
+		String ret = null;
 		return ret != null ? ret : '!' + key + '!';
 	}
 
