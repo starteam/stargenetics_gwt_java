@@ -36,7 +36,7 @@ public class UpdateExperimentImpl
 			CrateModel cratemodel = model.getCrateSet().newCrateModel();
 			if ("mate".equalsIgnoreCase(exp.getExperimentCommand()))
 			{
-				mate(model, experiment, cratemodel);
+				mate(model, experiment, cratemodel,true);
 			}
 			else if ("metadata".equalsIgnoreCase(exp.getExperimentCommand()))
 			{
@@ -58,7 +58,7 @@ public class UpdateExperimentImpl
 			JSONObject ret = new JSONObject();
 			if ("mate".equalsIgnoreCase(exp.getExperimentCommand()))
 			{
-				mate(model, experiment, cratemodel);				
+				mate(model, experiment, cratemodel,false);				
 				return;
 			}
 			else if ("metadata".equalsIgnoreCase(exp.getExperimentCommand()))
@@ -76,19 +76,21 @@ public class UpdateExperimentImpl
 		}
 	}
 
-	private void mate(Model model, Experiment experiment, CrateModel cratemodel)
+	private void mate(Model model, Experiment experiment, CrateModel cratemodel,boolean isNew)
     {
 	    if( experiment.getName() != null )
 	    {
 	    	cratemodel.setName(experiment.getName());
 	    }
+	    
 	    for (JavaScriptObject so : experiment.getParents())
 	    {
 	    	Strain s = so.cast();
-	    	System.out.println(new JSONObject(s));
 	    	Creature c = getCreature(s, model);
-	    	System.out.println(c);
-	    	cratemodel.getParents().add(c);
+	    	if(!cratemodel.getParents().contains(c))
+	    	{
+	    		cratemodel.getParents().add(c);
+	    	}
 	    }
 	    try
 	    {
@@ -115,17 +117,11 @@ public class UpdateExperimentImpl
 
 	private final JSONValue getCrateSetToJSON(CreatureSet creatures, Model model)
 	{
-		logger.log(Level.INFO, " getCrateSetToJSON " + creatures + " " + model);
 		JSONArray ret = new JSONArray();
-		logger.log(Level.INFO, " getCrateSetToJSON 2");
 		for (Creature c : creatures)
 		{
-			logger.log(Level.INFO, " getCrateSetToJSON 3 ");
-			logger.log(Level.INFO, " getCrateSetToJSON 3 " + c);
-			logger.log(Level.INFO, " getCrateSetToJSON 3 " + model.getRules());
 			ret.set(ret.size(), StrainHelper.getLong(c, model.getRules()));
 		}
-		logger.log(Level.INFO, " getCrateSetToJSON 4");
 		return ret;
 	}
 
