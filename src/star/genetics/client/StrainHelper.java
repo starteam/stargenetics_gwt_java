@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import star.genetics.genetic.model.Creature;
 import star.genetics.genetic.model.RuleSet;
 
+import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 
@@ -36,6 +37,8 @@ public class StrainHelper
 			ret.put("id", new JSONString(creature.getUUID()));
 			ret.put("export_type", new JSONString("long"));
 			ret.put("sex", new JSONString(creature.getSex().name()));
+			ret.put("matings_available", new JSONNumber(creature.getMatingsAvailable()));
+			
 		}
 		return ret;
 

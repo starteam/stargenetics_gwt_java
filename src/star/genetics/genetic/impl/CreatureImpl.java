@@ -127,7 +127,7 @@ public class CreatureImpl implements star.genetics.genetic.model.Creature, Seria
 		return ret;
 	}
 
-	private int getMatingsAvailable()
+	public int getMatingsAvailable()
 	{
 		return matingsAvailable;
 	}

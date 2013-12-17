@@ -36,4 +36,6 @@ public interface Creature extends Comparable<Creature>
 	public CreatureSet getParents();
 
 	public String getUUID();
+	
+	public int getMatingsAvailable();
 }

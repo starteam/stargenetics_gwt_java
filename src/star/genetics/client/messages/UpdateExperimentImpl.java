@@ -78,6 +78,8 @@ public class UpdateExperimentImpl
 
 	private void mate(Model model, Experiment experiment, CrateModel cratemodel,boolean isNew)
     {
+		int starting = cratemodel.getProgenies().size();
+		int iter = -1 ;
 	    if( experiment.getName() != null )
 	    {
 	    	cratemodel.setName(experiment.getName());
@@ -94,7 +96,9 @@ public class UpdateExperimentImpl
 	    }
 	    try
 	    {
-	    	CreatureSet children = model.getMatingEngine().getProgenies(cratemodel.getName(), cratemodel.getParents(), cratemodel.getProgenies().size() + 1, 1, model.getRules());
+	    	int matings = model.getMatingsCount();
+	    	CreatureSet children = model.getMatingEngine().getProgenies(cratemodel.getName(), cratemodel.getParents(), cratemodel.getProgenies().size() + 1, matings, model.getRules());
+	    	iter = children.size();
 	    	for (Creature c : children)
 	    	{
 	    		cratemodel.getProgenies().add(c);
@@ -107,11 +111,13 @@ public class UpdateExperimentImpl
 	    	exp.onError(err.getJavaScriptObject());
 	    	e.printStackTrace();
 	    }
+		int ending = cratemodel.getProgenies().size();
 	    JSONObject ret = new JSONObject();
 	    ret.put("name", new JSONString(cratemodel.getName() != null ? cratemodel.getName() : "-- No Name --"));
 	    ret.put("id", new JSONString(cratemodel.getUUID()));
 	    ret.put("parents", getCrateSetToJSON(cratemodel.getParents(), model));
 	    ret.put("children", getCrateSetToJSON(cratemodel.getProgenies(), model));
+	    ret.put("children_count" , new JSONString("starting: " + starting + " ending: " + ending + " iter:" + iter));
 	    exp.onSuccess(ret.getJavaScriptObject());
     }
 
