@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import star.genetics.client.messages.Exec;
 import star.genetics.client.messages.Open;
+import star.genetics.client.messages.Save;
 import star.genetics.client.messages.UpdateExperiment;
 import star.genetics.client.messages.UpdateExperimentImpl;
 import star.genetics.genetic.model.Model;
@@ -16,7 +17,7 @@ public class StarGenetics
 {
 	enum Commands
 	{
-		Open, ListStrains, UpdateExperiment;
+		Open, Save, ListStrains, UpdateExperiment;
 
 		public boolean is(String command)
 		{
@@ -56,6 +57,10 @@ public class StarGenetics
 			{
 				updateExperiment(exec);
 			}
+			else if ((Commands.Save.is(command)))
+			{
+				save(exec);
+			}
 		}
 		catch (Throwable t)
 		{
@@ -67,6 +72,13 @@ public class StarGenetics
 		}
 	}
 
+
+	private void save(Exec exec)
+    {
+		Save cmd = exec.cast();
+		cmd.execute(this,getModel());
+	    
+    }
 
 	private void open(Exec exec)
 	{
