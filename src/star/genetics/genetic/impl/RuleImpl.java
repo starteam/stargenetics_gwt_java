@@ -27,7 +27,7 @@ public class RuleImpl implements star.genetics.genetic.model.Rule, Serializable
 	{
 		this.rule = rule;
 		this.properties = properties;
-		if(!isDefault())
+		if (!isDefault())
 		{
 			parseRules(rule, g);
 		}
@@ -160,7 +160,7 @@ public class RuleImpl implements star.genetics.genetic.model.Rule, Serializable
 		{
 			if (!"default".equalsIgnoreCase(oneRule.trim())) //$NON-NLS-1$
 			{
-				throw new RuntimeException(MessageFormat.format(Messages.getString("RuleImpl.2") , oneRule)); //$NON-NLS-1$
+				throw new RuntimeException(MessageFormat.format(Messages.getString("RuleImpl.2"), oneRule)); //$NON-NLS-1$
 			}
 		}
 	}
@@ -186,7 +186,7 @@ public class RuleImpl implements star.genetics.genetic.model.Rule, Serializable
 				}
 				else
 				{
-					throw new RuntimeException( MessageFormat.format(Messages.getString("RuleImpl.1") ,alleleName , rule)); //$NON-NLS-1$
+					throw new RuntimeException(MessageFormat.format(Messages.getString("RuleImpl.1"), alleleName, rule)); //$NON-NLS-1$
 				}
 			}
 			strand++;

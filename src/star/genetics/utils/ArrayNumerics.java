@@ -3,59 +3,58 @@ package star.genetics.utils;
 public class ArrayNumerics
 {
 
-	public static boolean containsNaN(float[] array )
+	public static boolean containsNaN(float[] array)
 	{
-		for( float f : array )
+		for (float f : array)
 		{
-			if( Float.isNaN( f ) )
+			if (Float.isNaN(f))
 			{
-				return true ;
+				return true;
 			}
 		}
-		return false ;
+		return false;
 	}
-	
-	
-	public static float average(float[] array , boolean ignoreSpecial )
+
+	public static float average(float[] array, boolean ignoreSpecial)
 	{
 		float ret = 0;
-		int count = 0 ;
+		int count = 0;
 		for (int i = 0; i < array.length; i++)
 		{
-			if( ignoreSpecial )
+			if (ignoreSpecial)
 			{
-				if( !Float.isNaN(array[i]) && !Float.isInfinite(array[i]) )
+				if (!Float.isNaN(array[i]) && !Float.isInfinite(array[i]))
 				{
 					ret += array[i];
-					count++ ;
+					count++;
 				}
 			}
 			else
 			{
 				ret += array[i];
-				count++ ;
+				count++;
 			}
 		}
-		return ret/count;
-		
+		return ret / count;
+
 	}
-	
-	public static void normalRange( float[] array )
+
+	public static void normalRange(float[] array)
 	{
 		float max = array[0];
 		float min = array[0];
 		for (int i = 0; i < array.length; i++)
 		{
 			max = Math.max(array[i], max);
-			min = Math.min(array[i], min);			
+			min = Math.min(array[i], min);
 		}
-		float scale = max - min ;
+		float scale = max - min;
 		for (int i = 0; i < array.length; i++)
 		{
-			array[i] = (array[i]-min)/scale;
+			array[i] = (array[i] - min) / scale;
 		}
 	}
-	
+
 	public static void normalize(float[] array)
 	{
 		float sum = sum(array, true);
@@ -67,30 +66,29 @@ public class ArrayNumerics
 
 	public static void normalize(float[][] array)
 	{
-		float sum = 0 ;
+		float sum = 0;
 		for (int i = 0; i < array.length; i++)
 		{
-			sum += sum( array[i] , true );
+			sum += sum(array[i], true);
 		}
 		for (int i = 0; i < array.length; i++)
 		{
 			float[] f = array[i];
-			for( int j = 0 ; j < f.length ; j++ )
+			for (int j = 0; j < f.length; j++)
 			{
 				f[j] /= sum;
 			}
 		}
 	}
 
-	
 	public static float sum(float[] array, boolean ignoreSpecial)
 	{
 		float ret = 0;
 		for (int i = 0; i < array.length; i++)
 		{
-			if( ignoreSpecial )
+			if (ignoreSpecial)
 			{
-				if( !Float.isNaN(array[i]) && !Float.isInfinite(array[i]) )
+				if (!Float.isNaN(array[i]) && !Float.isInfinite(array[i]))
 				{
 					ret += array[i];
 				}
@@ -102,15 +100,15 @@ public class ArrayNumerics
 		}
 		return ret;
 	}
-	
+
 	public static float sum(Float[] array, boolean ignoreSpecial)
 	{
 		float ret = 0;
 		for (int i = 0; i < array.length; i++)
 		{
-			if( ignoreSpecial )
+			if (ignoreSpecial)
 			{
-				if( !Float.isNaN(array[i]) && !Float.isInfinite(array[i]) )
+				if (!Float.isNaN(array[i]) && !Float.isInfinite(array[i]))
 				{
 					ret += array[i];
 				}
@@ -122,13 +120,11 @@ public class ArrayNumerics
 		}
 		return ret;
 	}
-	
-	
 
 	public static int findLastNonZero(float[] src)
 	{
 		int ret = src.length;
-		while( src[ret - 1] == 0 && ret > 0 )
+		while (src[ret - 1] == 0 && ret > 0)
 		{
 			ret--;
 		}
@@ -137,9 +133,9 @@ public class ArrayNumerics
 
 	public static float[] trimFloatArray(float[] src, int len)
 	{
-		if( src != null )
+		if (src != null)
 		{
-			if( src.length > len )
+			if (src.length > len)
 			{
 				float[] ret = new float[len];
 				System.arraycopy(src, 0, ret, 0, len);
@@ -159,9 +155,9 @@ public class ArrayNumerics
 
 	public static int[] trimIntArray(int[] src, int len)
 	{
-		if( src != null )
+		if (src != null)
 		{
-			if( src.length > len )
+			if (src.length > len)
 			{
 				int[] ret = new int[len];
 				System.arraycopy(src, 0, ret, 0, len);
@@ -178,22 +174,22 @@ public class ArrayNumerics
 			return null;
 		}
 	}
-	
-	public static int intMin( int a, int b )
+
+	public static int intMin(int a, int b)
 	{
-		return a > b ? b : a ;
+		return a > b ? b : a;
 	}
 
-	public static int intMax( int a, int b )
+	public static int intMax(int a, int b)
 	{
-		return a > b ? a : b ;
+		return a > b ? a : b;
 	}
 
-	public static void multiply( float[] array , float scalar )
+	public static void multiply(float[] array, float scalar)
 	{
-		for( int i = 0 ; i != array.length ; i++ )
+		for (int i = 0; i != array.length; i++)
 		{
-			array[i] *= scalar ;
+			array[i] *= scalar;
 		}
 	}
 }

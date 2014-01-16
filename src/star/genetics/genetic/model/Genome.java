@@ -2,9 +2,13 @@ package star.genetics.genetic.model;
 
 import java.util.Collection;
 
+import star.genetics.client.Helper;
+import star.genetics.client.JSONable;
 import star.genetics.genetic.model.Creature.Sex;
 
-public interface Genome extends Iterable<Chromosome>
+import com.google.gwt.json.client.JSONValue;
+
+public interface Genome extends Iterable<Chromosome>, JSONable
 {
 	public static enum SexType
 	{
@@ -51,11 +55,19 @@ public interface Genome extends Iterable<Chromosome>
 			return ret;
 		}
 
+		public JSONValue getJSON()
+		{
+			return Helper.wrapString(this.name());
+		}
+
+		public static SexType fromJSON(JSONValue value)
+		{
+			return SexType.parse(Helper.unwrapString(value));
+		}
+
 	};
 
 	Chromosome getChromosomeByName(String name);
-
-	void removeChromosome(Chromosome c);
 
 	void addChromosome(Chromosome c);
 
@@ -65,7 +77,4 @@ public interface Genome extends Iterable<Chromosome>
 
 	void setSexType(String x);
 
-	String getName();
-
-	void setName(String name);
 }

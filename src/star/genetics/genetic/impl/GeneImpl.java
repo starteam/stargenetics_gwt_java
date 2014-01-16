@@ -1,45 +1,60 @@
 package star.genetics.genetic.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import star.genetics.client.Helper;
+import star.genetics.client.JSONableList;
+import star.genetics.genetic.model.Allele;
 import star.genetics.genetic.model.Chromosome;
+import star.genetics.genetic.model.Gene;
+
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
 
 public class GeneImpl implements star.genetics.genetic.model.Gene
 {
 	private static final long serialVersionUID = 1L;
 
-	private final String name;
-	private final Chromosome chromosome;
-	private final float position;
-	private final List<star.genetics.genetic.model.Allele> geneTypes = new ArrayList<star.genetics.genetic.model.Allele>();
+	private JSONObject data;
+
+	GeneImpl(JSONObject data)
+	{
+		this.data = data;
+	}
 
 	public GeneImpl(String name, float position, Chromosome chromosome)
 	{
-		this.name = name;
-		this.position = position;
-		this.chromosome = chromosome;
+		data.put(NAME, Helper.wrapString(name));
+		data.put(POSITON, Helper.wrapNumber(position));
+		data.put(CHROMOSOME, chromosome.getJSON());
+		data.put(GENETYPES, new JSONArray());
 		chromosome.getGenes().add(this);
 	}
 
 	public star.genetics.genetic.model.Chromosome getChromosome()
 	{
-		return chromosome;
+		return new ChromosomeImpl(data.get(CHROMOSOME).isObject());
 	}
 
 	public String getName()
 	{
-		return name;
+		return Helper.unwrapString(data.get(NAME));
 	}
 
 	public float getPosition()
 	{
-		return position;
+		return Helper.unwrapNumber(data.get(POSITON));
 	}
 
-	public List<star.genetics.genetic.model.Allele> getGeneTypes()
+	public JSONableList<Allele> getGeneTypes()
 	{
-		return geneTypes;
+		return new JSONableList<Allele>(data.get(GENETYPES).isArray())
+		{
+
+			@Override
+			public Allele create(JSONObject data)
+			{
+				return new AlleleImpl(data);
+			}
+		};
 	}
 
 	public String getId()
@@ -65,7 +80,7 @@ public class GeneImpl implements star.genetics.genetic.model.Gene
 	{
 		if (this.getChromosome() != null && that.getChromosome() != null && this.getChromosome().equals(that.getChromosome()))
 		{
-			int ret = Float.compare(this.getPosition(), that.getPosition());
+			int ret = Double.compare(this.getPosition(), that.getPosition());
 			return ret != 0 ? ret : this.getId().compareTo(that.getId());
 		}
 		return getId().compareTo(that.getId());
@@ -87,6 +102,17 @@ public class GeneImpl implements star.genetics.genetic.model.Gene
 	public int hashCode()
 	{
 		return getId().hashCode();
+	}
+
+	@Override
+	public JSONObject getJSON()
+	{
+		return data;
+	}
+
+	public static Gene fromJSON(JSONObject value)
+	{
+		return new GeneImpl(value);
 	}
 
 }

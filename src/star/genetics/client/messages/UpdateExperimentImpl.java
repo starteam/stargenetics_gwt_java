@@ -1,6 +1,5 @@
 package star.genetics.client.messages;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import star.genetics.client.StrainHelper;
@@ -36,7 +35,7 @@ public class UpdateExperimentImpl
 			CrateModel cratemodel = model.getCrateSet().newCrateModel();
 			if ("mate".equalsIgnoreCase(exp.getExperimentCommand()))
 			{
-				mate(model, experiment, cratemodel,true);
+				mate(model, experiment, cratemodel, true);
 			}
 			else if ("metadata".equalsIgnoreCase(exp.getExperimentCommand()))
 			{
@@ -58,7 +57,7 @@ public class UpdateExperimentImpl
 			JSONObject ret = new JSONObject();
 			if ("mate".equalsIgnoreCase(exp.getExperimentCommand()))
 			{
-				mate(model, experiment, cratemodel,false);				
+				mate(model, experiment, cratemodel, false);
 				return;
 			}
 			else if ("metadata".equalsIgnoreCase(exp.getExperimentCommand()))
@@ -76,50 +75,50 @@ public class UpdateExperimentImpl
 		}
 	}
 
-	private void mate(Model model, Experiment experiment, CrateModel cratemodel,boolean isNew)
-    {
+	private void mate(Model model, Experiment experiment, CrateModel cratemodel, boolean isNew)
+	{
 		int starting = cratemodel.getProgenies().size();
-		int iter = -1 ;
-	    if( experiment.getName() != null )
-	    {
-	    	cratemodel.setName(experiment.getName());
-	    }
-	    
-	    for (JavaScriptObject so : experiment.getParents())
-	    {
-	    	Strain s = so.cast();
-	    	Creature c = getCreature(s, model);
-	    	if(!cratemodel.getParents().contains(c))
-	    	{
-	    		cratemodel.getParents().add(c);
-	    	}
-	    }
-	    try
-	    {
-	    	int matings = model.getMatingsCount();
-	    	CreatureSet children = model.getMatingEngine().getProgenies(cratemodel.getName(), cratemodel.getParents(), cratemodel.getProgenies().size() + 1, matings, model.getRules());
-	    	iter = children.size();
-	    	for (Creature c : children)
-	    	{
-	    		cratemodel.getProgenies().add(c);
-	    	}
-	    }
-	    catch (MatingException e)
-	    {
-	    	JSONObject err = new JSONObject();
-	    	err.put("error", new JSONString("Mating exception." + e.getMessage()));
-	    	exp.onError(err.getJavaScriptObject());
-	    	e.printStackTrace();
-	    }
+		int iter = -1;
+		if (experiment.getName() != null)
+		{
+			cratemodel.setName(experiment.getName());
+		}
+
+		for (JavaScriptObject so : experiment.getParents())
+		{
+			Strain s = so.cast();
+			Creature c = getCreature(s, model);
+			if (!cratemodel.getParents().contains(c))
+			{
+				cratemodel.getParents().add(c);
+			}
+		}
+		try
+		{
+			int matings = model.getMatingsCount();
+			CreatureSet children = model.getMatingEngine().getProgenies(cratemodel.getName(), cratemodel.getParents(), cratemodel.getProgenies().size() + 1, matings, model.getRules());
+			iter = children.size();
+			for (Creature c : children)
+			{
+				cratemodel.getProgenies().add(c);
+			}
+		}
+		catch (MatingException e)
+		{
+			JSONObject err = new JSONObject();
+			err.put("error", new JSONString("Mating exception." + e.getMessage()));
+			exp.onError(err.getJavaScriptObject());
+			e.printStackTrace();
+		}
 		int ending = cratemodel.getProgenies().size();
-	    JSONObject ret = new JSONObject();
-	    ret.put("name", new JSONString(cratemodel.getName() != null ? cratemodel.getName() : "-- No Name --"));
-	    ret.put("id", new JSONString(cratemodel.getUUID()));
-	    ret.put("parents", getCrateSetToJSON(cratemodel.getParents(), model));
-	    ret.put("children", getCrateSetToJSON(cratemodel.getProgenies(), model));
-	    ret.put("children_count" , new JSONString("starting: " + starting + " ending: " + ending + " iter:" + iter));
-	    exp.onSuccess(ret.getJavaScriptObject());
-    }
+		JSONObject ret = new JSONObject();
+		ret.put("name", new JSONString(cratemodel.getName() != null ? cratemodel.getName() : "-- No Name --"));
+		ret.put("id", new JSONString(cratemodel.getUUID()));
+		ret.put("parents", getCrateSetToJSON(cratemodel.getParents(), model));
+		ret.put("children", getCrateSetToJSON(cratemodel.getProgenies(), model));
+		ret.put("children_count", new JSONString("starting: " + starting + " ending: " + ending + " iter:" + iter));
+		exp.onSuccess(ret.getJavaScriptObject());
+	}
 
 	private final JSONValue getCrateSetToJSON(CreatureSet creatures, Model model)
 	{

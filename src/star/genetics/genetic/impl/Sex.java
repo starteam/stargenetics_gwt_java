@@ -1,6 +1,5 @@
 package star.genetics.genetic.impl;
 
-
 import star.genetics.client.MessageFormat;
 import star.genetics.client.Messages;
 import star.genetics.genetic.model.Chromosome;
@@ -38,7 +37,7 @@ public class Sex
 			{
 				// all y chromosome genes DiploidAlleles have one gene on them -- male
 				Chromosome c2 = genome.getChromosomeByName("X"); //$NON-NLS-1$
-				if( c2 == null )
+				if (c2 == null)
 				{
 					return null;
 				}
@@ -46,7 +45,7 @@ public class Sex
 				{
 					if (makeup.get(g).getAlleleCount() != 1)
 					{
-						throw new ParseException(MessageFormat.format(Messages.getString("Sex.2") ,  name)); //$NON-NLS-1$
+						throw new ParseException(MessageFormat.format(Messages.getString("Sex.2"), name)); //$NON-NLS-1$
 					}
 				}
 				return Creature.Sex.MALE;
@@ -55,7 +54,7 @@ public class Sex
 			{
 				// all y chromosome genes DiploidAlleles have no gene on them -- female
 				Chromosome c2 = genome.getChromosomeByName("X"); //$NON-NLS-1$
-				if( c2 == null )
+				if (c2 == null)
 				{
 					return null;
 				}
@@ -99,7 +98,7 @@ public class Sex
 			}
 			if (xx != 0 && x != 0)
 			{
-				throw new ParseException(Messages.getString("Sex.9")+ " "+ name); //$NON-NLS-1$
+				throw new ParseException(Messages.getString("Sex.9") + " " + name); //$NON-NLS-1$
 			}
 			return x != 0 ? Creature.Sex.MALE : Creature.Sex.FEMALE;
 		}

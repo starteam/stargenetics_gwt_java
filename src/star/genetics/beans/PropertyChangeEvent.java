@@ -9,25 +9,25 @@ public class PropertyChangeEvent
 	private Object newValue;
 
 	public PropertyChangeEvent(Object source, String name, Object oldValue, Object newValue)
-    {
+	{
 		this.source = source;
 		this.name = name;
 		this.oldValue = oldValue;
 		this.newValue = newValue;
-    }
+	}
 
 	public String getPropertyName()
-    {
-	    return name;
-    }
-	
+	{
+		return name;
+	}
+
 	public Object getOldValue()
-    {
-	    return oldValue;
-    }
-		
+	{
+		return oldValue;
+	}
+
 	public Object getNewValue()
-    {
-	    return newValue;
-    }
+	{
+		return newValue;
+	}
 }

@@ -21,20 +21,20 @@ public class VisualizerFactoryImpl implements VisualizerFactory, Serializable
 	{
 		return null;
 		// TODO: switch statement
-		
-//		if (visualizerClass == null)
-//		{
-//			initializeClass();
-//		}
-//		try
-//		{
-//			return visualizerClass.newInstance();
-//		}
-//		catch (Exception ex)
-//		{
-//			ex.printStackTrace();
-//			throw new RuntimeException(ex);
-//		}
+
+		// if (visualizerClass == null)
+		// {
+		// initializeClass();
+		// }
+		// try
+		// {
+		// return visualizerClass.newInstance();
+		// }
+		// catch (Exception ex)
+		// {
+		// ex.printStackTrace();
+		// throw new RuntimeException(ex);
+		// }
 	}
 
 }

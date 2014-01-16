@@ -42,12 +42,12 @@ public class Summary implements Iterable<String>
 			count.put(key, 1);
 			v.setName(""); //$NON-NLS-1$
 			v.setSex(null);
-			//JComponent c = v.getJComponent();
+			// JComponent c = v.getJComponent();
 			Object c = v;
-			//Dimension d = c.getPreferredSize();
-//			d.height = d.height * 3 / 4;
-//			d.width = d.width * 3 / 4;
-//			c.setSize(d);
+			// Dimension d = c.getPreferredSize();
+			// d.height = d.height * 3 / 4;
+			// d.width = d.width * 3 / 4;
+			// c.setSize(d);
 			maps.put(key, c);
 			stringMap.put(key, tooltipProperties);
 			allProperties.addAll(tooltipProperties.keySet());

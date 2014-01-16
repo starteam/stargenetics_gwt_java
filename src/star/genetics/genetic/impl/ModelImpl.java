@@ -2,6 +2,7 @@ package star.genetics.genetic.impl;
 
 import java.io.Serializable;
 
+import star.genetics.client.Helper;
 import star.genetics.genetic.model.CrateSet;
 import star.genetics.genetic.model.Creature.Sex;
 import star.genetics.genetic.model.GelRules;
@@ -10,12 +11,13 @@ import star.genetics.genetic.model.MatingEngine;
 import star.genetics.genetic.model.ModelMetadata;
 import star.genetics.visualizers.VisualizerFactory;
 
+import com.google.gwt.json.client.JSONObject;
+
 public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Serializable
 {
 	private static final long serialVersionUID = 1L;
 
 	private Genome genome;
-	private star.genetics.genetic.model.CreatureSet creatures;
 	private star.genetics.genetic.model.RuleSet rules;
 	private MatingEngine mater = null;
 	private float maleRecombinationRate = 1f;
@@ -23,19 +25,20 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 	private int progeniesCount = 50;
 	private int matingsCount = Integer.MAX_VALUE;
 	private CrateSet crateSet = new CrateSetImpl();
-	private VisualizerFactory visualFactory = null;
 	private GelRules gelRules;
 	private float spontaniousMales = 0.001f;
 	private ModelMetadata modelMetadata = new ModelMetadataImpl();
 
+	private JSONObject data;
+
 	public void setVisualizerClass(String className)
 	{
-		visualFactory = new VisualizerFactoryImpl(className);
+		data.put(visualFactory, Helper.wrapString(className));
 	}
 
 	public void setCreatures(star.genetics.genetic.model.CreatureSet creatures)
 	{
-		this.creatures = creatures;
+		data.put(CREATURES, creatures.getJSON());
 	}
 
 	public void setRules(star.genetics.genetic.model.RuleSet rules)
@@ -110,7 +113,7 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 
 	public star.genetics.genetic.model.CreatureSet getCreatures()
 	{
-		return creatures;
+		return new CreatureSetImpl(data.get(CREATURES).isObject());
 	}
 
 	public float getRecombinationRate(Sex sex)
@@ -130,7 +133,7 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 
 	public VisualizerFactory getVisualizerFactory()
 	{
-		return visualFactory;
+		return new VisualizerFactoryImpl(Helper.unwrapString(data.get(visualFactory)));
 	}
 
 	public void setProgeniesCount(int progeniesCount)
@@ -171,5 +174,16 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 	public ModelMetadata getModelMetadata()
 	{
 		return modelMetadata;
+	}
+
+	public JSONObject getJSON()
+	{
+		return data;
+	}
+
+	public void setJSON(JSONObject value)
+	{
+		this.data = data;
+
 	}
 }

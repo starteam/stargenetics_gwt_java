@@ -10,19 +10,21 @@ import com.google.gwt.json.client.JSONObject;
 public class ListStrains extends Exec
 {
 
-	protected ListStrains() {};
-	
+	protected ListStrains()
+	{
+	};
+
 	public final void execute(Model model)
-    {
+	{
 		JSONObject ret = new JSONObject();
 		JSONArray retset = new JSONArray();
-		ret.put("strains", retset);		
+		ret.put("strains", retset);
 		CreatureSet strains = model.getCreatures();
 		for (int i = 0; i < strains.size(); i++)
 		{
-			retset.set(i, StrainHelper.getLong(strains.get(i),model.getRules()));
+			retset.set(i, StrainHelper.getLong(strains.get(i), model.getRules()));
 		}
 		this.onSuccess(ret.getJavaScriptObject());
-    }
+	}
 
 }

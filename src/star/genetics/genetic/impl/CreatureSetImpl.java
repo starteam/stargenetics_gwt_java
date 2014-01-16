@@ -1,78 +1,67 @@
 package star.genetics.genetic.impl;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Iterator;
 
-import star.genetics.beans.PropertyChangeEvent;
-import star.genetics.beans.PropertyChangeListener;
-import star.genetics.beans.PropertyChangeSupport;
+import star.genetics.client.JSONableList;
 import star.genetics.genetic.model.Creature;
+
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
 
 public class CreatureSetImpl implements star.genetics.genetic.model.CreatureSet, Serializable
 {
 	private static final long serialVersionUID = 1L;
-	ArrayList<Creature> creatures = new ArrayList<Creature>();
-	PropertyChangeSupport support = new PropertyChangeSupport(this);
+	private JSONObject data;
+
+	CreatureSetImpl(JSONObject data)
+	{
+		this.data = data;
+	}
+
+	public CreatureSetImpl()
+	{
+		data = new JSONObject();
+		data.put(CREATURES, new JSONArray());
+	}
+
+	JSONableList<Creature> getCreatures()
+	{
+		return new JSONableList<Creature>(data.get(CREATURES).isArray())
+		{
+
+			@Override
+			public Creature create(JSONObject data)
+			{
+				return new CreatureImpl(data);
+			}
+
+		};
+	}
 
 	public Iterator<Creature> iterator()
 	{
-		return creatures.iterator();
+		return getCreatures().iterator();
 	}
 
 	public void add(Creature c)
 	{
-		creatures.add(c);
-		modelChanged();
-	}
-
-	public void add(Creature c, int index)
-	{
-		creatures.add(index, c);
-		modelChanged();
-	}
-
-	public void set(Creature c, int index)
-	{
-		creatures.set(index, c);
-		modelChanged();
-	}
-
-	public void remove(Creature c)
-	{
-		creatures.remove(c);
-		modelChanged();
+		getCreatures().add(c);
 	}
 
 	public boolean contains(Creature c)
 	{
-		return creatures.contains(c);
-	}
-
-	public void move(Creature c, int newIndex)
-	{
-		int oldIndex = creatures.indexOf(c);
-		if (oldIndex != newIndex)
-		{
-			creatures.remove(oldIndex);
-			creatures.add(newIndex + (newIndex > oldIndex ? -1 : 0), c);
-		}
+		return getCreatures().contains(c);
 	}
 
 	public Creature get(int index)
 	{
-		return creatures.get(index);
+		return getCreatures().get(index);
 	}
 
 	public int size()
 	{
-		return creatures.size();
-	}
-
-	public void clear()
-	{
-		creatures.clear();
-		modelChanged();
+		return getCreatures().size();
 	}
 
 	@Override
@@ -90,26 +79,17 @@ public class CreatureSetImpl implements star.genetics.genetic.model.CreatureSet,
 	public String toShortString()
 	{
 		StringBuffer sb = new StringBuffer();
-		for (int i = 0; i < creatures.size(); i++)
+		for (int i = 0; i < getCreatures().size(); i++)
 		{
-			sb.append(" " + creatures.get(i).getName()); //$NON-NLS-1$
+			sb.append(" " + getCreatures().get(i).getName()); //$NON-NLS-1$
 		}
 		return sb.toString();
 	}
 
-	public void addPropertyChangeListener(PropertyChangeListener listener)
+	@Override
+	public JSONObject getJSON()
 	{
-		support.addPropertyChangeListener(listener);
-
+		return this.data;
 	}
 
-	public void removePropertyChangeListener(PropertyChangeListener listener)
-	{
-		support.removePropertyChangeListener(listener);
-	}
-
-	void modelChanged()
-	{
-		support.firePropertyChange(new PropertyChangeEvent(this, "", null, null)); //$NON-NLS-1$
-	}
 }

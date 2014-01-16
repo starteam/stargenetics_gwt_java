@@ -1,12 +1,26 @@
 package star.genetics.genetic.model;
 
-import java.util.Map;
+import star.genetics.client.Helper;
+import star.genetics.client.JSONable;
+import star.genetics.client.JSONableMap;
 
-public interface Creature extends Comparable<Creature>
+import com.google.gwt.json.client.JSONValue;
+
+public interface Creature extends Comparable<Creature>, JSONable
 {
 	public static enum Sex
 	{
 		MALE, FEMALE;
+
+		public static Sex get(JSONValue value)
+		{
+			return Sex.valueOf(Helper.unwrapString(value));
+		}
+
+		public JSONValue getJSON()
+		{
+			return Helper.wrapString(this.name());
+		}
 	};
 
 	public String getName();
@@ -17,25 +31,17 @@ public interface Creature extends Comparable<Creature>
 
 	public Sex getSex();
 
-	public boolean isReadOnly();
-
 	public void setName(String string);
-
-	public void setReadOnly(boolean selected);
-
-	public String getNote();
-
-	public void setNote(String string);
 
 	public boolean isMateable();
 
 	public void mated();
 
-	public Map<String, String> getProperties();
+	public JSONableMap getProperties();
 
 	public CreatureSet getParents();
 
 	public String getUUID();
-	
+
 	public int getMatingsAvailable();
 }

@@ -2,67 +2,62 @@ package star.genetics.genetic.impl;
 
 import java.io.Serializable;
 
+import star.genetics.client.Helper;
 import star.genetics.client.MessageFormat;
 import star.genetics.client.Messages;
-import star.genetics.genetic.model.CrateExperimentMetadata;
 import star.genetics.genetic.model.CrateModel;
 import star.genetics.genetic.model.CreatureSet;
+
+import com.google.gwt.json.client.JSONObject;
 
 public class CrateModelImpl implements CrateModel, Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private String name;
-	private final CreatureSet parents = new CreatureSetImpl();
-	private final CreatureSet progenies = new CreatureSetImpl();
-	private final CrateExperimentMetadata experimentMetadata = new CrateExperimentMetadataImpl();
-	private boolean visible = true;
-	private String uuid;
+	private JSONObject data;
 
 	public CrateModelImpl(int id)
 	{
-		name = MessageFormat.format(Messages.getString("CrateModelImpl.0"),id); //$NON-NLS-1$
-		this.uuid = generateUUID();
+		data.put(PARENTS, new JSONObject());
+		data.put(PROGENIES, new JSONObject());
+		data.put(NAME, Helper.wrapString(MessageFormat.format(Messages.getString("CrateModelImpl.0"), id))); //$NON-NLS-1$
+		data.put(UUID, Helper.wrapString(generateUUID()));
+	}
+
+	CrateModelImpl(JSONObject data)
+	{
+		this.data = data;
+	}
+
+	@Override
+	public JSONObject getJSON()
+	{
+		return data;
 	}
 
 	public void setName(String name)
 	{
-		this.name = name;
+		data.put(NAME, Helper.wrapString(name));
 	}
 
 	public String getName()
 	{
-		return name;
+		return Helper.unwrapString(data.get(NAME));
 	}
 
 	public CreatureSet getParents()
 	{
-		return parents;
+		return new CreatureSetImpl(data.get(PARENTS).isObject());
 	}
 
 	public CreatureSet getProgenies()
 	{
-		return progenies;
-	}
-
-	public boolean isVisible()
-	{
-		return visible;
-	}
-
-	public void setVisible(boolean visible)
-	{
-		this.visible = visible;
+		return new CreatureSetImpl(data.get(PROGENIES).isObject());
 	}
 
 	@Override
 	public String toString()
 	{
 		return getName();
-	}
-
-	public CrateExperimentMetadata getMetadata()
-	{
-		return experimentMetadata;
 	}
 
 	private String generateUUID()
@@ -76,7 +71,7 @@ public class CrateModelImpl implements CrateModel, Serializable
 	@Override
 	public String getUUID()
 	{
-		return uuid;
+		return Helper.unwrapString(data.get(UUID));
 	}
 
 }

@@ -72,13 +72,12 @@ public class StarGenetics
 		}
 	}
 
-
 	private void save(Exec exec)
-    {
+	{
 		Save cmd = exec.cast();
-		cmd.execute(this,getModel());
-	    
-    }
+		cmd.execute(this, getModel());
+
+	}
 
 	private void open(Exec exec)
 	{
@@ -89,19 +88,18 @@ public class StarGenetics
 	private void listStrains(Exec exec)
 	{
 		ListStrains cmd = exec.cast();
-		cmd.execute(getModel());		
+		cmd.execute(getModel());
 	}
 
 	private void updateExperiment(Exec exec)
-    {
+	{
 		UpdateExperiment cmd = exec.cast();
-		log( "updateExperiment 2, model is:" + getModel());
+		log("updateExperiment 2, model is:" + getModel());
 		new UpdateExperimentImpl(cmd).execute(getModel());
-		log( "updateExperiment 3");
-    }
+		log("updateExperiment 3");
+	}
 
-
-	private static native void log( String str )
+	private static native void log(String str)
 	/*-{
 		if( typeof(console) == 'object' && console && console.info )
 		{

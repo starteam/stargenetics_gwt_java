@@ -96,7 +96,7 @@ public abstract class MatingEngineImpl_Common implements Serializable
 
 	private Creature clone(String name, Creature source, int matings)
 	{
-		return new star.genetics.genetic.impl.CreatureImpl(name, source.getGenome(), source.getSex(), source.getMakeup(), matings, source.getProperties(), source.getParents());
+		return new star.genetics.genetic.impl.CreatureImpl(name, source.getGenome(), source.getSex(), source.getMakeup(), matings, source.getProperties().asMap(), source.getParents());
 	}
 
 	protected abstract GeneticMakeup mate(Genome genome, GeneticMakeup makeup1, Creature.Sex sex1, GeneticMakeup makeup2, Creature.Sex sex2);

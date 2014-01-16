@@ -9,9 +9,50 @@ import star.genetics.genetic.model.Chromosome;
 import star.genetics.genetic.model.DiploidAlleles;
 import star.genetics.genetic.model.Gene;
 
-public class GeneticMakeupImpl extends TreeMap<Gene, DiploidAlleles> implements star.genetics.genetic.model.GeneticMakeup
+import com.google.gwt.json.client.JSONObject;
+
+public class GeneticMakeupImpl implements star.genetics.genetic.model.GeneticMakeup
 {
 	private static final long serialVersionUID = 1L;
+	TreeMap<Gene, DiploidAlleles> q = new TreeMap<Gene, DiploidAlleles>();
+	private JSONObject data;
+
+	GeneticMakeupImpl(JSONObject data)
+	{
+		this.data = data;
+	}
+
+	public GeneticMakeupImpl()
+	{
+		this.data = new JSONObject();
+		data.put("MAKEUP", new JSONObject());
+	}
+
+	@Override
+	public JSONObject getJSON()
+	{
+		return data;
+	}
+
+	public void put(Gene g, DiploidAlleles d)
+	{
+		data.get(MAKEUP).isObject().put(g.getJSON().toString(), d.getJSON());
+	}
+
+	public DiploidAlleles get(Gene g)
+	{
+		return new DiploidAllelesImpl(data.get(MAKEUP).isObject().get(g.getJSON().toString()).isObject());
+	}
+
+	public DiploidAlleles get(String g)
+	{
+		return new DiploidAllelesImpl(data.get(MAKEUP).isObject().get(g).isObject());
+	}
+
+	int size()
+	{
+		return data.get(MAKEUP).isObject().size();
+	}
 
 	@Override
 	public boolean equals(Object other)
@@ -23,7 +64,7 @@ public class GeneticMakeupImpl extends TreeMap<Gene, DiploidAlleles> implements 
 			if (that.size() == this.size())
 			{
 				ret = true;
-				for (Gene g : this.keySet())
+				for (String g : data.get(MAKEUP).isObject().keySet())
 				{
 					DiploidAlleles thisDiploid = this.get(g);
 					DiploidAlleles thatDiploid = that.get(g);
@@ -41,16 +82,6 @@ public class GeneticMakeupImpl extends TreeMap<Gene, DiploidAlleles> implements 
 			}
 		}
 		return ret;
-	}
-
-	public boolean containsKey(Gene g)
-	{
-		return super.containsKey(g);
-	}
-
-	public DiploidAlleles get(Gene g)
-	{
-		return super.get(g);
 	}
 
 	private boolean test(Allele a, Allele b, Allele x, Allele y)
@@ -119,9 +150,9 @@ public class GeneticMakeupImpl extends TreeMap<Gene, DiploidAlleles> implements 
 	public String toShortString()
 	{
 		StringBuilder sb = new StringBuilder();
-		for (Entry<Gene, DiploidAlleles> entry : this.entrySet())
+		for (String g : data.get(MAKEUP).isObject().keySet())
 		{
-			DiploidAlleles alleles = entry.getValue();
+			DiploidAlleles alleles = get(g);
 			if (alleles instanceof DiploidAllelesImpl)
 			{
 				sb.append(((DiploidAllelesImpl) alleles).toStortString());

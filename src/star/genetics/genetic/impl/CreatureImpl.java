@@ -1,86 +1,79 @@
 package star.genetics.genetic.impl;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import star.genetics.client.Helper;
+import star.genetics.client.JSONableMap;
 import star.genetics.genetic.model.Creature;
 import star.genetics.genetic.model.CreatureSet;
 import star.genetics.genetic.model.GeneticMakeup;
 import star.genetics.genetic.model.GeneticModel;
 import star.genetics.genetic.model.Genome;
 
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONBoolean;
+import com.google.gwt.json.client.JSONObject;
+
 public class CreatureImpl implements star.genetics.genetic.model.Creature, Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private String name;
-	private final Genome genome;
-	private Sex sex;
-	private final GeneticMakeup makeup;
-	private boolean readOnly = false;
-	private String note;
-	private int matingsAvailable = Integer.MAX_VALUE;
-	private Map<String, String> properties;
-	final private CreatureSet parents;
-	private String uuid;
+	private JSONObject data;
+
+	CreatureImpl(JSONObject data)
+	{
+		this.data = data;
+	}
 
 	public CreatureImpl(String name, Genome genome, Sex sex, GeneticMakeup makeup, int matingsAvailable, Map<String, String> properties, CreatureSet parents)
 	{
-		this.name = name;
-		this.genome = genome;
-		this.sex = sex;
-		this.makeup = makeup;
-		this.matingsAvailable = matingsAvailable;
-		this.properties = new LinkedHashMap<String, String>();
-		this.parents = parents;
+		this.data = new JSONObject();
+		data.put(NAME, Helper.wrapString(name));
+		data.put(GENOME, genome.getJSON());
+		data.put(SEX, sex.getJSON());
+		data.put(MAKEUP, makeup.getJSON());
+		data.put(MATINGSAVAILABLE, Helper.wrapNumber(matingsAvailable));
+		data.put(PROPERTIES, new JSONObject());
+		data.put(PARENTS, new JSONArray());
+		data.put(READONLY, JSONBoolean.getInstance(false));
 		addProperties(properties);
-		this.uuid = generateUUID();
+		data.put(UUID, Helper.wrapString(generateUUID()));
 	}
 
 	public CreatureSet getParents()
 	{
-		return parents;
+		return new CreatureSetImpl(data.get(PARENTS).isObject());
 	}
 
 	public Genome getGenome()
 	{
-		return genome;
+		return new GenomeImpl(data.get(GENOME).isObject());
 	}
 
 	public GeneticMakeup getMakeup()
 	{
-		return makeup;
+		return new GeneticMakeupImpl(data.get(MAKEUP).isObject());
 	}
 
 	public String getName()
 	{
-		return name;
+		return Helper.unwrapString(data.get(NAME));
 	}
 
 	public void setName(String name)
 	{
-		this.name = name;
+		data.put(NAME, Helper.wrapString(name));
 	}
 
 	public Sex getSex()
 	{
-		return sex;
+		return Sex.get(data.get(SEX));
 	}
 
 	public void setSex(Sex sex)
 	{
-		this.sex = sex;
-	}
-
-	public boolean isReadOnly()
-	{
-		return readOnly;
-	}
-
-	public void setReadOnly(boolean ro)
-	{
-		readOnly = ro;
+		data.put(SEX, sex.getJSON());
 	}
 
 	// TODO: May be a problem - REVISIT
@@ -101,16 +94,6 @@ public class CreatureImpl implements star.genetics.genetic.model.Creature, Seria
 		return super.hashCode() >> 1;
 	}
 
-	public String getNote()
-	{
-		return this.note;
-	}
-
-	public void setNote(String string)
-	{
-		this.note = string;
-	}
-
 	public boolean isMateable()
 	{
 		return !isSterile() && getMatingsAvailable() != 0;
@@ -129,12 +112,14 @@ public class CreatureImpl implements star.genetics.genetic.model.Creature, Seria
 
 	public int getMatingsAvailable()
 	{
-		return matingsAvailable;
+		return Math.round(Helper.unwrapNumber(data.get(MATINGSAVAILABLE)));
 	}
 
 	public void mated()
 	{
+		int matingsAvailable = getMatingsAvailable();
 		matingsAvailable--;
+		data.put(MATINGSAVAILABLE, Helper.wrapNumber(matingsAvailable));
 		updateMatings();
 	}
 
@@ -142,19 +127,19 @@ public class CreatureImpl implements star.genetics.genetic.model.Creature, Seria
 	{
 		for (Entry<String, String> entry : properties.entrySet())
 		{
-			this.properties.put(entry.getKey(), entry.getValue());
+			getProperties().put(entry.getKey(), entry.getValue());
 		}
 		updateMatings();
 	}
 
-	public Map<String, String> getProperties()
+	public JSONableMap getProperties()
 	{
-		return properties;
+		return new JSONableMap(data.get(PROPERTIES).isObject());
 	}
 
 	private void updateMatings()
 	{
-		properties.put(GeneticModel.matings, (matingsAvailable > 100 ? "100+" : Integer.toString(matingsAvailable))); //$NON-NLS-1$
+		getProperties().put(GeneticModel.matings, (getMatingsAvailable() > 100 ? "100+" : Integer.toString(getMatingsAvailable()))); //$NON-NLS-1$
 	}
 
 	private String generateUUID()
@@ -168,6 +153,12 @@ public class CreatureImpl implements star.genetics.genetic.model.Creature, Seria
 	@Override
 	public String getUUID()
 	{
-		return uuid;
+		return Helper.unwrapString(data.get(UUID));
 	}
+
+	public JSONObject getJSON()
+	{
+		return data;
+	}
+
 }

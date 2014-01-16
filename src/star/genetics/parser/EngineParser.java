@@ -49,25 +49,25 @@ public class EngineParser
 		MatingEngineImpl_XY xy = new MatingEngineImpl_XY(maleRecombinationRate, femaleRecombinationRate, femaleSexRatio, progeniesCount, twinningFrequency, identicalTwinsFrequency);
 		model.setMater(xy);
 		// fix genome
-		fixGenome_XY( model.getGenome() );
+		fixGenome_XY(model.getGenome());
 	}
 
 	private static void fixGenome_XY(Genome genome)
-    {
+	{
 		Chromosome cx = genome.getChromosomeByName("X");
-		if( cx == null )
+		if (cx == null)
 		{
 			cx = new ChromosomeImpl("X", genome);
 			Gene gx = new GeneImpl("x", 0, cx);
 			new AlleleImpl("x", gx);
 		}
 		Chromosome cy = genome.getChromosomeByName("Y");
-		if( cy == null )
+		if (cy == null)
 		{
 			cy = new ChromosomeImpl("Y", genome);
 			Gene gy = new GeneImpl("y", 0, cy);
 			new AlleleImpl("x", gy);
 		}
-		
-    }
+
+	}
 }

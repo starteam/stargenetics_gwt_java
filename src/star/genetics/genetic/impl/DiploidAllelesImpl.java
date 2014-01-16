@@ -5,17 +5,26 @@ import java.io.Serializable;
 import star.genetics.client.Messages;
 import star.genetics.genetic.model.Allele;
 
+import com.google.gwt.json.client.JSONNull;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONValue;
+
 public class DiploidAllelesImpl implements star.genetics.genetic.model.DiploidAlleles, Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private final Allele a1, a2;
+	private JSONObject data;
+
+	DiploidAllelesImpl(JSONObject data)
+	{
+		this.data = data;
+	}
 
 	public DiploidAllelesImpl(Allele[] alleles)
 	{
 		if (alleles != null && (alleles.length == 1 || alleles.length == 2))
 		{
-			a1 = alleles[0];
-			a2 = alleles.length == 2 ? alleles[1] : null;
+			data.put(ALLELE_1, alleles[0].getJSON());
+			data.put(ALLELE_2, alleles.length == 2 ? alleles[1].getJSON() : JSONNull.getInstance());
 		}
 		else
 		{
@@ -25,25 +34,40 @@ public class DiploidAllelesImpl implements star.genetics.genetic.model.DiploidAl
 
 	public DiploidAllelesImpl(Allele a1, Allele a2)
 	{
-		this.a1 = a1;
-		this.a2 = a2;
+		this(new Allele[] { a1, a2 });
+	}
+
+	Allele get(JSONValue data)
+	{
+		JSONObject o = data.isObject();
+		return o != null ? new AlleleImpl(o) : null;
+	}
+
+	Allele a1()
+	{
+		return get(data.get(ALLELE_1));
+	}
+
+	Allele a2()
+	{
+		return get(data.get(ALLELE_2));
 	}
 
 	Allele meiosis()
 	{
-		return (java.lang.Math.random() < .5) ? a1 : a2;
+		return (java.lang.Math.random() < .5) ? a1() : a2();
 	}
 
 	public String toStortString()
 	{
-		return "(" + (a1 != null ? a1.getName() : "-") + "," + (a2 != null ? a2.getName() : "-") + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return "(" + (a1() != null ? a1().getName() : "-") + "," + (a2() != null ? a2().getName() : "-") + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	public int getAlleleCount()
 	{
 		int ret = 0;
-		ret += a1 != null ? 1 : 0;
-		ret += a2 != null ? 1 : 0;
+		ret += a1() != null ? 1 : 0;
+		ret += a2() != null ? 1 : 0;
 		return ret;
 	}
 
@@ -52,11 +76,11 @@ public class DiploidAllelesImpl implements star.genetics.genetic.model.DiploidAl
 		Allele ret = null;
 		if (i == 0)
 		{
-			ret = a1;
+			ret = a1();
 		}
 		else if (i == 1)
 		{
-			ret = a2;
+			ret = a2();
 		}
 		return ret;
 	}
@@ -81,4 +105,11 @@ public class DiploidAllelesImpl implements star.genetics.genetic.model.DiploidAl
 	{
 		return toStortString().hashCode();
 	}
+
+	@Override
+	public JSONObject getJSON()
+	{
+		return data;
+	}
+
 }

@@ -1,15 +1,17 @@
 package star.genetics.genetic.model;
 
 import java.io.Serializable;
-import java.util.List;
 
-public interface Gene extends Serializable, Comparable<Gene>
+import star.genetics.client.JSONable;
+import star.genetics.client.JSONableList;
+
+public interface Gene extends Serializable, Comparable<Gene>, JSONable
 {
 	Chromosome getChromosome();
 
 	Allele getAlleleByName(String name);
 
-	List<Allele> getGeneTypes();
+	JSONableList<Allele> getGeneTypes();
 
 	String getId();
 

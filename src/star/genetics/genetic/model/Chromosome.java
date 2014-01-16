@@ -1,8 +1,9 @@
 package star.genetics.genetic.model;
 
-import java.util.Collection;
+import star.genetics.client.JSONable;
+import star.genetics.client.JSONableList;
 
-public interface Chromosome
+public interface Chromosome extends JSONable
 {
 	public String getName();
 
@@ -10,5 +11,5 @@ public interface Chromosome
 
 	public Gene getGeneByName(String name);
 
-	public Collection<Gene> getGenes();
+	public JSONableList<Gene> getGenes();
 }
