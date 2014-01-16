@@ -8,28 +8,29 @@ import star.genetics.genetic.model.Creature.Sex;
 import star.genetics.genetic.model.GelRules;
 import star.genetics.genetic.model.Genome;
 import star.genetics.genetic.model.MatingEngine;
-import star.genetics.genetic.model.ModelMetadata;
 import star.genetics.visualizers.VisualizerFactory;
 
+import com.google.gwt.json.client.JSONNull;
 import com.google.gwt.json.client.JSONObject;
 
 public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Serializable
 {
 	private static final long serialVersionUID = 1L;
-
-	private Genome genome;
-	private star.genetics.genetic.model.RuleSet rules;
-	private MatingEngine mater = null;
-	private float maleRecombinationRate = 1f;
-	private float femaleRecombinationRate = 1f;
-	private int progeniesCount = 50;
-	private int matingsCount = Integer.MAX_VALUE;
-	private CrateSet crateSet = new CrateSetImpl();
-	private GelRules gelRules;
-	private float spontaniousMales = 0.001f;
-	private ModelMetadata modelMetadata = new ModelMetadataImpl();
-
+	
 	private JSONObject data;
+
+	public ModelImpl()
+	{
+		data = new JSONObject();
+		data.put(MALERECOMBINATIONRATE, Helper.wrapNumber(1f));
+		data.put(FEMALERECOMBINATIONRATE, Helper.wrapNumber(1f));
+		data.put(SPONTANIOUSMALES, Helper.wrapNumber(0.001f));
+		data.put(MATINGSCOUNT, Helper.wrapNumber(Integer.MAX_VALUE));
+		data.put(PROGENIESCOUNT, Helper.wrapNumber(50));
+		data.put(CRATESET, new CrateSetImpl().getJSON());
+		data.put(RULESET, JSONNull.getInstance());
+		data.put(GENOME, JSONNull.getInstance());
+	}
 
 	public void setVisualizerClass(String className)
 	{
@@ -43,69 +44,75 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 
 	public void setRules(star.genetics.genetic.model.RuleSet rules)
 	{
-		this.rules = rules;
+		data.put(RULESET, rules.getJSON());
 
 	}
 
 	public star.genetics.genetic.model.RuleSet getRules()
 	{
-		return rules;
+		return new RuleSetImpl(data.get(RULESET).isObject());
 	}
 
 	public void setMater(MatingEngineImpl_XY mater)
 	{
-		this.mater = mater;
+		data.put( MATER , mater.getJSON());
 	}
 
 	public void setRecombinationRate(float rate, Sex sex)
 	{
 		if (Sex.MALE.equals(sex))
 		{
-			maleRecombinationRate = rate;
+			data.put(MALERECOMBINATIONRATE, Helper.wrapNumber(rate));
 		}
 		else
 		{
-			femaleRecombinationRate = rate;
+			data.put(FEMALERECOMBINATIONRATE, Helper.wrapNumber(rate));
 		}
 	}
 
 	public void setGenome(Genome genome)
 	{
-		this.genome = genome;
+		data.put(GENOME,genome.getJSON());
 	}
 
 	public Genome getGenome()
 	{
-		return genome;
+		return new GenomeImpl(data.get(GENOME).isObject());
 	}
 
 	public MatingEngine getMatingEngine()
 	{
-		if (mater == null)
+		MatingEngine mater = null;
+		if (data.get(MATER).isObject() == null)
 		{
 			if (Genome.SexType.XY.equals(getGenome().getSexType()))
 			{
 				float twinning = 0;
 				float identical = 0;
-				MatingEngineMetadata md = (MatingEngineMetadata) modelMetadata.get(MatingEngineMetadata.class);
-				if (md != null)
-				{
-					twinning = md.getTwinningFrequency();
-					identical = md.getIdenticalTwinsFrequency();
-				}
-				mater = new MatingEngineImpl_XY(maleRecombinationRate, femaleRecombinationRate, 0.5f, progeniesCount, twinning, identical);
+				// MatingEngineMetadata md = (MatingEngineMetadata) modelMetadata.get(MatingEngineMetadata.class);
+				// if (md != null)
+				// {
+				// twinning = md.getTwinningFrequency();
+				// identical = md.getIdenticalTwinsFrequency();
+				// }
+				mater = new MatingEngineImpl_XY(maleRecombinationRate(), femaleRecombinationRate(), 0.5f, getProgeniesCount(), twinning, identical);
 			}
 			else if (Genome.SexType.XO.equals(getGenome().getSexType()))
 			{
-				mater = new MatingEngineImpl_XO(maleRecombinationRate, femaleRecombinationRate, 0.5f, progeniesCount, spontaniousMales);
+				mater = new MatingEngineImpl_XO(maleRecombinationRate(), femaleRecombinationRate(), 0.5f, getProgeniesCount(), getSpontaniousMales());
 			}
 			else if (Genome.SexType.Aa.equals(getGenome().getSexType()))
 			{
-				mater = new MatingEngineImpl_MAT(maleRecombinationRate, femaleRecombinationRate, 0.5f, progeniesCount);
+				mater = new MatingEngineImpl_MAT(maleRecombinationRate(), femaleRecombinationRate(), 0.5f, getProgeniesCount());
 			}
 			else if (Genome.SexType.UNISEX.equals(getGenome().getSexType()))
 			{
-				mater = new MatingEngineImpl_UNISEX(femaleRecombinationRate, progeniesCount);
+				mater = new MatingEngineImpl_UNISEX(femaleRecombinationRate(), getProgeniesCount());
+			}
+		} else {
+			if (Genome.SexType.XY.equals(getGenome().getSexType()))
+			{
+				mater = new MatingEngineImpl_XY(data.get(MATER).isObject());
 			}
 		}
 		return mater;
@@ -118,17 +125,27 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 
 	public float getRecombinationRate(Sex sex)
 	{
-		return (Sex.MALE.equals(sex)) ? maleRecombinationRate : femaleRecombinationRate;
+		return (Sex.MALE.equals(sex)) ? maleRecombinationRate() : femaleRecombinationRate();
+	}
+
+	private float maleRecombinationRate()
+	{
+		return Helper.unwrapNumber(data.get(MALERECOMBINATIONRATE));
+	}
+
+	private float femaleRecombinationRate()
+	{
+		return Helper.unwrapNumber(data.get(FEMALERECOMBINATIONRATE));
 	}
 
 	public CrateSet getCrateSet()
 	{
-		return crateSet;
+		return new CrateSetImpl(data.get(CRATESET).isObject());
 	}
 
 	public int getProgeniesCount()
 	{
-		return progeniesCount;
+		return Math.round(Helper.unwrapNumber(data.get(PROGENIESCOUNT)));
 	}
 
 	public VisualizerFactory getVisualizerFactory()
@@ -138,52 +155,41 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 
 	public void setProgeniesCount(int progeniesCount)
 	{
-		this.progeniesCount = progeniesCount;
-		if (this.progeniesCount < 1)
-		{
-			this.progeniesCount = 1;
-		}
+		data.put(PROGENIESCOUNT, Helper.wrapNumber(progeniesCount > 1 ? progeniesCount : 1));
 	}
 
 	public void setMatingsCount(int matingsCount)
 	{
-		this.matingsCount = matingsCount;
+		data.put(MATINGSCOUNT, Helper.wrapNumber(matingsCount));
 	}
 
 	public int getMatingsCount()
 	{
-		return matingsCount;
+		return Math.round(Helper.unwrapNumber(data.get(MATINGSCOUNT)));
 	}
 
 	public void setSpontaniousMales(float ratio)
 	{
-		this.spontaniousMales = ratio;
+		data.put(SPONTANIOUSMALES, Helper.wrapNumber(ratio));
+	}
+
+	public float getSpontaniousMales()
+	{
+		return Helper.unwrapNumber(data.get(SPONTANIOUSMALES));
 	}
 
 	public void setGelRules(GelRules gri)
 	{
-		this.gelRules = gri;
+		data.put(GELRULESET, gri.getJSON());
 	}
 
 	public GelRules getGelRules()
 	{
-		return gelRules;
-	}
-
-	@Override
-	public ModelMetadata getModelMetadata()
-	{
-		return modelMetadata;
+		return new GelRulesImpl(data.get(GELRULESET).isObject());
 	}
 
 	public JSONObject getJSON()
 	{
 		return data;
-	}
-
-	public void setJSON(JSONObject value)
-	{
-		this.data = data;
-
 	}
 }

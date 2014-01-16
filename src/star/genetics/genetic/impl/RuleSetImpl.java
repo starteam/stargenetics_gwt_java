@@ -9,7 +9,11 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
+
 import star.genetics.client.Helper;
+import star.genetics.client.JSONableList;
 import star.genetics.genetic.model.Creature;
 import star.genetics.genetic.model.GeneticMakeup;
 import star.genetics.genetic.model.Rule;
@@ -18,16 +22,53 @@ public class RuleSetImpl extends ArrayList<Rule> implements star.genetics.geneti
 {
 	private static final long serialVersionUID = 1L;
 
-	LinkedHashSet<String> propertyNames = new LinkedHashSet<String>();
+	private JSONObject data;
 
 	public RuleSetImpl(LinkedHashSet<String> orderedSet)
 	{
-		propertyNames = orderedSet;
+		JSONArray d = new JSONArray();
+		JSONableList<String> q = new JSONableList<String>(d)
+		{
+
+			@Override
+			public String create(JSONObject data)
+			{
+				return Helper.unwrapString(data);
+			}
+		};
+		for (String s : orderedSet)
+		{
+			q.add(s);
+		}
+	}
+
+	public JSONObject getJSON()
+	{
+		return data;
+	}
+
+	JSONableList<String> propertyNames()
+	{
+		return new JSONableList<String>(data.get("propertyNames").isArray())
+		{
+			@Override
+			public String create(JSONObject data)
+			{
+				return Helper.unwrapString(data);
+			}
+		};
 	}
 
 	public RuleSetImpl()
 	{
+		this.data = new JSONObject();
+		data.put("propertyNames", new JSONArray());
 	}
+
+	public RuleSetImpl(JSONObject data)
+    {
+		this.data =data;
+    }
 
 	public Map<String, String> getProperties(GeneticMakeup genotype, Creature.Sex sex)
 	{
@@ -41,7 +82,7 @@ public class RuleSetImpl extends ArrayList<Rule> implements star.genetics.geneti
 			}
 		}
 		LinkedHashMap<String, String> retRule = new LinkedHashMap<String, String>();
-		for (String key : propertyNames)
+		for (String key : propertyNames())
 		{
 			if (ret.containsKey(key))
 			{
@@ -72,7 +113,11 @@ public class RuleSetImpl extends ArrayList<Rule> implements star.genetics.geneti
 	@Override
 	public boolean add(Rule rule)
 	{
-		propertyNames.addAll(rule.getProperties().keySet());
+		JSONableList<String> propertyNames = propertyNames();
+		for (String s : rule.getProperties().keySet())
+		{
+			propertyNames.add(s);
+		}
 		return super.add(rule);
 	}
 
@@ -89,7 +134,12 @@ public class RuleSetImpl extends ArrayList<Rule> implements star.genetics.geneti
 
 	public Set<String> getPropertyNames()
 	{
-		return Collections.unmodifiableSet(propertyNames);
+		LinkedHashSet<String> ret = new LinkedHashSet<String>();
+		for (String s : propertyNames())
+		{
+			ret.add(s);
+		}
+		return ret;
 	}
 
 }

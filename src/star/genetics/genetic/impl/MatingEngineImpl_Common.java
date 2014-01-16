@@ -3,6 +3,10 @@ package star.genetics.genetic.impl;
 import java.io.Serializable;
 import java.util.Map;
 
+import com.google.gwt.json.client.JSONObject;
+
+import star.genetics.client.Helper;
+import star.genetics.client.JSONable;
 import star.genetics.client.Messages;
 import star.genetics.genetic.model.Creature;
 import star.genetics.genetic.model.CreatureSet;
@@ -12,21 +16,45 @@ import star.genetics.genetic.model.Genome;
 import star.genetics.genetic.model.RuleSet;
 import star.genetics.xls.ParseException;
 
-public abstract class MatingEngineImpl_Common implements Serializable
+public abstract class MatingEngineImpl_Common implements Serializable, JSONable
 {
 	private static final long serialVersionUID = 1L;
 	final static String sterileString = GeneticModel.sterile;
-	private int progeniesCount;
-	private float twinningFrequency;
-	private float identicalTwinsFrequency;
+	JSONObject data;
 
+	MatingEngineImpl_Common(JSONObject data)
+	{
+		this.data = data;
+	}
+
+	public JSONObject getJSON() {
+		return data;
+	};
+	
 	MatingEngineImpl_Common(int progeniesCount, float twinningFrequency, float identicalTwinsFrequency)
 	{
-		this.progeniesCount = progeniesCount;
-		this.twinningFrequency = twinningFrequency;
-		this.identicalTwinsFrequency = identicalTwinsFrequency;
-
+		data = new JSONObject();
+		data.put("progeniesCount", Helper.wrapNumber(progeniesCount));
+		data.put("twinningFrequency", Helper.wrapNumber(twinningFrequency));
+		data.put("identicalTwinsFrequency", Helper.wrapNumber(identicalTwinsFrequency));
 	}
+
+	private int progeniesCount()
+	{
+		return Math.round(Helper.unwrapNumber(data.get("progeniesCount")));
+	};
+
+	private float twinningFrequency()
+	{
+		return Helper.unwrapNumber(data.get("twinningFrequency"));
+
+	};
+
+	private float identicalTwinsFrequency()
+	{
+		return Helper.unwrapNumber(data.get("identicalTwinsFrequency"));
+
+	};
 
 	public CreatureSet getProgenies(String crateName, CreatureSet parents, int countFrom, int matings, RuleSet rules) throws MatingException
 	{
@@ -41,7 +69,7 @@ public abstract class MatingEngineImpl_Common implements Serializable
 			}
 			int creature_count = 0;
 			int lethal_count = 0;
-			LOOP: for (int j = 0; j < progeniesCount; j++)
+			LOOP: for (int j = 0; j < progeniesCount(); j++)
 			{
 				Creature c = mate(crateName, parentArray[0], parentArray[1], "-" + (countFrom + creature_count), matings, rules); //$NON-NLS-1$
 				boolean isLethal = (c == null);
@@ -49,7 +77,7 @@ public abstract class MatingEngineImpl_Common implements Serializable
 				{
 					j--;
 					lethal_count++;
-					if (lethal_count > progeniesCount * 10 && set.size() == 0)
+					if (lethal_count > progeniesCount() * 10 && set.size() == 0)
 					{
 						break LOOP;
 					}
@@ -59,9 +87,9 @@ public abstract class MatingEngineImpl_Common implements Serializable
 				set.add(c);
 				creature_count++;
 
-				if (Math.random() < twinningFrequency / 100)
+				if (Math.random() < twinningFrequency() / 100)
 				{
-					if (Math.random() < identicalTwinsFrequency / 100)
+					if (Math.random() < identicalTwinsFrequency() / 100)
 					{
 						String name = crateName + "-" + (countFrom + creature_count); //$NON-NLS-1$
 						set.add(clone(name, c, matings));

@@ -12,7 +12,7 @@ public class AlleleImpl implements star.genetics.genetic.model.Allele, Serializa
 	private static final long serialVersionUID = 1L;
 	JSONObject data = new JSONObject();
 
-	AlleleImpl(JSONObject data)
+	public AlleleImpl(JSONObject data)
 	{
 		this.data = data;
 	}

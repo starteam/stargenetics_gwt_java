@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeSet;
 
+import com.google.gwt.json.client.JSONObject;
+
+import star.genetics.client.Helper;
 import star.genetics.genetic.model.Allele;
 import star.genetics.genetic.model.Chromosome;
 import star.genetics.genetic.model.Creature;
@@ -20,24 +23,44 @@ import star.genetics.xls.ParseException;
 public class MatingEngineImpl_XY extends MatingEngineImpl_Common implements MatingEngine, Serializable
 {
 	private static final long serialVersionUID = 1L;
-	float maleRecombinationRate;
-	float femaleRecombinationRate;
-	float femaleSexRatio;
+
+	float maleRecombinationRate()
+	{
+		return Math.round(Helper.unwrapNumber(data.get(MALERECOMBINATIONRATE)));
+
+	};
+
+	float femaleRecombinationRate()
+	{
+		return Math.round(Helper.unwrapNumber(data.get(FEMALERECOMBINATIONRATE)));
+
+	};
+
+	float femaleSexRatio()
+	{
+		return Math.round(Helper.unwrapNumber(data.get("femaleSexRatio")));
+
+	};
 
 	public MatingEngineImpl_XY()
 	{
 		super(20, 0, 0);
-		this.maleRecombinationRate = 1f;
-		this.femaleRecombinationRate = 1f;
-		this.femaleSexRatio = .5f;
+		data.put(MALERECOMBINATIONRATE, Helper.wrapNumber(1f));
+		data.put(FEMALERECOMBINATIONRATE, Helper.wrapNumber(1f));
+		data.put("femaleSexRatio", Helper.wrapNumber(.5f));
 	}
 
 	public MatingEngineImpl_XY(float maleRecombinationRate, float femaleRecombinationRate, float femaleSexRatio, int progeniesCount, float twinningFrequency, float identicalTwinsFrequency)
 	{
 		super(progeniesCount, twinningFrequency, identicalTwinsFrequency);
-		this.maleRecombinationRate = maleRecombinationRate;
-		this.femaleRecombinationRate = femaleRecombinationRate;
-		this.femaleSexRatio = femaleSexRatio;
+		data.put(MALERECOMBINATIONRATE, Helper.wrapNumber(maleRecombinationRate));
+		data.put(FEMALERECOMBINATIONRATE, Helper.wrapNumber(femaleRecombinationRate));
+		data.put("femaleSexRatio", Helper.wrapNumber(femaleSexRatio));
+	}
+
+	public MatingEngineImpl_XY(JSONObject data)
+	{
+		super(data);
 	}
 
 	protected Creature mate(String crateName, Creature p1, Creature p2, String suffix, int matings, RuleSet rules)
@@ -82,7 +105,7 @@ public class MatingEngineImpl_XY extends MatingEngineImpl_Common implements Mati
 		GeneticMakeup makeup = new star.genetics.genetic.impl.GeneticMakeupImpl();
 		boolean position1 = Math.random() < .5f;
 		boolean position2 = Math.random() < .5f;
-		star.genetics.genetic.model.Creature.Sex sex = Math.random() < femaleSexRatio ? star.genetics.genetic.model.Creature.Sex.FEMALE : star.genetics.genetic.model.Creature.Sex.MALE;
+		star.genetics.genetic.model.Creature.Sex sex = Math.random() < femaleSexRatio() ? star.genetics.genetic.model.Creature.Sex.FEMALE : star.genetics.genetic.model.Creature.Sex.MALE;
 
 		float previousGenePosition = 0;
 		Chromosome previousChromosome = null;
@@ -163,7 +186,7 @@ public class MatingEngineImpl_XY extends MatingEngineImpl_Common implements Mati
 
 	private boolean randomize(boolean original, float distance, Creature.Sex sex)
 	{
-		return randomizeInternal(original, distance * (Creature.Sex.MALE.equals(sex) ? maleRecombinationRate : femaleRecombinationRate), sex);
+		return randomizeInternal(original, distance * (Creature.Sex.MALE.equals(sex) ? maleRecombinationRate() : femaleRecombinationRate()), sex);
 	}
 
 }

@@ -28,6 +28,21 @@ public interface JSONable
 	static final String UUID = "uuid";
 	static final String READONLY = "readonly";
 	static final String PROGENIES = "progenies";
-
+	static final String MALERECOMBINATIONRATE = "MALERECOMBINATIONRATE";
+	static final String FEMALERECOMBINATIONRATE = "FEMALERECOMBINATIONRATE";
+	static final String SPONTANIOUSMALES = "spontaniousMales";
+	static final String MATINGSCOUNT = "MATINGSCOUNT";
+	static final String PROGENIESCOUNT = "PROGENIESCOUNT";
+	static final String CRATESET = "CRATESET";
+	static final String RULESET = "RULESET";
+	static final String GELRULESET = "GELRULESET";
+	static final String MATER = "MATER";
+	static final String GELS = "gels";
+	static final String POS = "pos";
+	static final String GEL = "gel";
+	static final String POSITION = "POSITION";
+	static final String ALLELES = "ALLELES";
+	static final String INDEX = "index";
+	
 	JSONObject getJSON();
 }
