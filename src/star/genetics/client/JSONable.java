@@ -43,6 +43,9 @@ public interface JSONable
 	static final String POSITION = "POSITION";
 	static final String ALLELES = "ALLELES";
 	static final String INDEX = "index";
+	static final String RULES = "rules";
+	static final String COMPILEDRULES = "COMPILEDRULES";
+	static final String KIND = "kind";
 	
 	JSONObject getJSON();
 }

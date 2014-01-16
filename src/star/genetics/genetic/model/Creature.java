@@ -12,15 +12,15 @@ public interface Creature extends Comparable<Creature>, JSONable
 	{
 		MALE, FEMALE;
 
-		public static Sex get(JSONValue value)
-		{
-			return Sex.valueOf(Helper.unwrapString(value));
-		}
-
 		public JSONValue getJSON()
 		{
 			return Helper.wrapString(this.name());
 		}
+
+		public static Sex fromJSON(JSONValue value)
+        {
+			return Sex.valueOf(Helper.unwrapString(value));	        
+        }
 	};
 
 	public String getName();

@@ -1,6 +1,7 @@
 package star.genetics.genetic.model;
 
 import star.genetics.client.JSONable;
+import star.genetics.genetic.impl.RuleMakeup;
 
 public interface GeneticMakeup extends JSONable
 {
@@ -9,6 +10,6 @@ public interface GeneticMakeup extends JSONable
 
 	void put(Gene g, DiploidAlleles d);
 
-	boolean test(Chromosome c, java.util.Map<Gene, DiploidAlleles> map);
+	boolean test(Chromosome c, RuleMakeup map);
 
 }

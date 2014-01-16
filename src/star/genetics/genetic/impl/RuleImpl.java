@@ -3,8 +3,16 @@ package star.genetics.genetic.impl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
 
 import star.genetics.beans.StringTokenizer;
+import star.genetics.client.Helper;
+import star.genetics.client.JSONableList;
+import star.genetics.client.JSONableMap;
 import star.genetics.client.MessageFormat;
 import star.genetics.client.Messages;
 import star.genetics.genetic.model.Allele;
@@ -19,23 +27,105 @@ public class RuleImpl implements star.genetics.genetic.model.Rule, Serializable
 {
 	private static final long serialVersionUID = 1L;
 
-	private final String rule;
-	private final HashMap<String, String> properties;
-	private final ArrayList<IndividualRule> compiledRules = new ArrayList<IndividualRule>();
+	private JSONableList<IndividualRule> compiledRules()
+	{
+		return new JSONableList<IndividualRule>(data.get(COMPILEDRULES).isArray())
+		{
+
+			@Override
+			public IndividualRule create(JSONObject data)
+			{
+				String kind = Helper.unwrapString(data.get(KIND));
+				if( kind == "ChromosomeRuleImpl")
+				{
+					return new ChromosomeRuleImpl(data);
+				}
+				else if( kind == "HaploidRuleImpl" )
+				{
+					return new HaploidRuleImpl(data);
+				}
+				else if( kind == "SexRuleImpl")
+				{
+					return new SexRuleImpl(data);
+				}
+				else
+				{
+					throw new RuntimeException("Missing rule kind");
+				}
+			}
+
+			@Override
+			public void add(IndividualRule element)
+			{
+				JSONObject data = element.getJSON();
+				if (element instanceof ChromosomeRuleImpl)
+				{
+					data.put(KIND, Helper.wrapString("ChromosomeRuleImpl"));
+				}
+				else if (element instanceof HaploidRuleImpl)
+				{
+					data.put(KIND, Helper.wrapString("HaploidRuleImpl"));
+
+				}
+				else if (element instanceof SexRuleImpl)
+				{
+					data.put(KIND, Helper.wrapString("SexRuleImpl"));
+				}
+				else
+				{
+					throw new RuntimeException("Unknown rule type");
+				}
+				super.add(element);
+			}
+		};
+	}
+
+	private JSONObject data;
+
+	public RuleImpl(JSONObject data)
+	{
+		this.data = data;
+	}
 
 	public RuleImpl(String rule, HashMap<String, String> properties, Genome g)
 	{
-		this.rule = rule;
-		this.properties = properties;
+		data = new JSONObject();
+		data.put(NAME, Helper.wrapString(rule));
+		data.put(COMPILEDRULES, new JSONArray());
+		addProperties(properties);
 		if (!isDefault())
 		{
 			parseRules(rule, g);
 		}
 	}
 
+	@Override
+	public JSONObject getJSON()
+	{
+	    return data;
+	}
+	
+	public void addProperties(Map<String, String> properties)
+	{
+		for (Entry<String, String> entry : properties.entrySet())
+		{
+			getProperties().put(entry.getKey(), entry.getValue());
+		}
+	}
+
+	public JSONableMap getProperties()
+	{
+		return new JSONableMap(data.get(PROPERTIES).isObject());
+	}
+
+	String getName()
+	{
+		return Helper.unwrapString(data.get(NAME));
+	}
+
 	private void parseRules(String rule, Genome g)
 	{
-		compiledRules.clear();
+		data.put(COMPILEDRULES, new JSONArray());
 		StringTokenizer ruleSplit = new StringTokenizer(rule, ";"); //$NON-NLS-1$
 		while (ruleSplit.hasMoreTokens())
 		{
@@ -65,7 +155,7 @@ public class RuleImpl implements star.genetics.genetic.model.Rule, Serializable
 			if (s.startsWith("haploid")) //$NON-NLS-1$
 			{
 				ret = true;
-				compiledRules.add(new HaploidRuleImpl());
+				compiledRules().add(new HaploidRuleImpl());
 			}
 		}
 		return ret;
@@ -84,12 +174,12 @@ public class RuleImpl implements star.genetics.genetic.model.Rule, Serializable
 				if (s.equals("sex:male")) //$NON-NLS-1$
 				{
 					ret = true;
-					compiledRules.add(new SexRuleImpl(Creature.Sex.MALE));
+					compiledRules().add(new SexRuleImpl(Creature.Sex.MALE));
 				}
 				else if (s.equals("sex:female")) //$NON-NLS-1$
 				{
 					ret = true;
-					compiledRules.add(new SexRuleImpl(Creature.Sex.FEMALE));
+					compiledRules().add(new SexRuleImpl(Creature.Sex.FEMALE));
 				}
 			}
 		}
@@ -101,12 +191,12 @@ public class RuleImpl implements star.genetics.genetic.model.Rule, Serializable
 				if (s.equals("sex:mata")) //$NON-NLS-1$
 				{
 					ret = true;
-					compiledRules.add(new SexRuleImpl(Creature.Sex.MALE));
+					compiledRules().add(new SexRuleImpl(Creature.Sex.MALE));
 				}
 				else if (s.equals("sex:matalpha")) //$NON-NLS-1$
 				{
 					ret = true;
-					compiledRules.add(new SexRuleImpl(Creature.Sex.FEMALE));
+					compiledRules().add(new SexRuleImpl(Creature.Sex.FEMALE));
 				}
 			}
 		}
@@ -153,7 +243,7 @@ public class RuleImpl implements star.genetics.genetic.model.Rule, Serializable
 			ChromosomeRuleImpl cr = makeChromosomeRule(alleles, chromosome);
 			if (cr != null)
 			{
-				compiledRules.add(cr);
+				compiledRules().add(cr);
 			}
 		}
 		else
@@ -186,7 +276,7 @@ public class RuleImpl implements star.genetics.genetic.model.Rule, Serializable
 				}
 				else
 				{
-					throw new RuntimeException(MessageFormat.format(Messages.getString("RuleImpl.1"), alleleName, rule)); //$NON-NLS-1$
+					throw new RuntimeException(MessageFormat.format(Messages.getString("RuleImpl.1"), alleleName, getName())); //$NON-NLS-1$
 				}
 			}
 			strand++;
@@ -196,22 +286,17 @@ public class RuleImpl implements star.genetics.genetic.model.Rule, Serializable
 
 	public boolean isDefault()
 	{
-		return DEFAULT.equalsIgnoreCase(rule) || "*".equalsIgnoreCase(rule);
+		return DEFAULT.equalsIgnoreCase(getName()) || "*".equalsIgnoreCase(getName());
 	}
 
 	public boolean isMatching(GeneticMakeup makeup, Creature.Sex sex)
 	{
-		boolean ret = compiledRules.size() > 0;
-		for (IndividualRule c : compiledRules)
+		boolean ret = compiledRules().size() > 0;
+		for (IndividualRule c : compiledRules())
 		{
 			ret &= c.test(makeup, sex);
 		}
 		return ret;
-	}
-
-	public HashMap<String, String> getProperties()
-	{
-		return properties;
 	}
 
 }

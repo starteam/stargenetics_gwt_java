@@ -78,5 +78,4 @@ public abstract class JSONableList<T> implements Iterable<T>
 		}
 		return false;
 	}
-
 }

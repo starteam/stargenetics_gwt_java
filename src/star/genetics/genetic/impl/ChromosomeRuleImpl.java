@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.google.gwt.json.client.JSONObject;
+
 import star.genetics.genetic.model.Allele;
 import star.genetics.genetic.model.Chromosome;
 import star.genetics.genetic.model.Creature;
@@ -14,36 +16,58 @@ import star.genetics.genetic.model.GeneticMakeup;
 class ChromosomeRuleImpl implements Serializable, IndividualRule
 {
 	private static final long serialVersionUID = 1L;
-	private final Chromosome chromosome;
-	private final Map<Gene, DiploidAlleles> map = new TreeMap<Gene, DiploidAlleles>();
+
+	private final Chromosome chromosome()
+	{
+		return new ChromosomeImpl(data.get(CHROMOSOME).isObject());
+	};
+
+	private JSONObject data;
+
+	ChromosomeRuleImpl(JSONObject data)
+	{
+		this.data = data;
+	}
 
 	ChromosomeRuleImpl(Chromosome c)
 	{
-		this.chromosome = c;
+		data = new JSONObject();
+		data.put(CHROMOSOME, c.getJSON());
+		data.put("MAKEUP", new JSONObject());
+	}
+
+	public JSONObject getJSON()
+	{
+		return data;
+	};
+
+	RuleMakeup get()
+	{
+		return new RuleMakeup(data);
 	}
 
 	public boolean test(GeneticMakeup makeup, Creature.Sex sex)
 	{
-		return makeup.test(chromosome, map);
+		return makeup.test(chromosome(), get());
 	}
 
 	void addAllele(int strand, Allele a)
 	{
 		if (strand == 0)
 		{
-			map.put(a.getGene(), new DiploidAllelesImpl(a, null));
+			get().put(a.getGene(), new DiploidAllelesImpl(a, null));
 		}
 		else
 		{
-			DiploidAlleles diploid = map.get(a.getGene());
-			map.put(a.getGene(), new DiploidAllelesImpl(diploid != null ? diploid.get(0) : null, a));
+			DiploidAlleles diploid = get().get(a.getGene());
+			get().put(a.getGene(), new DiploidAllelesImpl(diploid != null ? diploid.get(0) : null, a));
 		}
 
 	}
 
 	private Chromosome getChromosome()
 	{
-		return chromosome;
+		return chromosome();
 	}
 
 }

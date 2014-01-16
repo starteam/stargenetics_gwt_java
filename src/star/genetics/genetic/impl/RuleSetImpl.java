@@ -18,12 +18,23 @@ import star.genetics.genetic.model.Creature;
 import star.genetics.genetic.model.GeneticMakeup;
 import star.genetics.genetic.model.Rule;
 
-public class RuleSetImpl extends ArrayList<Rule> implements star.genetics.genetic.model.RuleSet
+public class RuleSetImpl implements star.genetics.genetic.model.RuleSet
 {
 	private static final long serialVersionUID = 1L;
 
 	private JSONObject data;
 
+	JSONableList<Rule> getRules() {
+		return new JSONableList<Rule>(data.get(RULES).isArray())
+		{
+
+			@Override
+            public Rule create(JSONObject data)
+            {
+	            return new RuleImpl(data);
+            }
+		};
+	}
 	public RuleSetImpl(LinkedHashSet<String> orderedSet)
 	{
 		JSONArray d = new JSONArray();
@@ -40,6 +51,8 @@ public class RuleSetImpl extends ArrayList<Rule> implements star.genetics.geneti
 		{
 			q.add(s);
 		}
+		data.put( "propertyNames" , d);
+		data.put( RULES, new JSONArray());
 	}
 
 	public JSONObject getJSON()
@@ -74,11 +87,11 @@ public class RuleSetImpl extends ArrayList<Rule> implements star.genetics.geneti
 	{
 		Map<String, String> ret = new TreeMap<String, String>();
 		initialize(ret);
-		for (Rule r : this)
+		for (Rule r : getRules())
 		{
 			if (r.isMatching(genotype, sex))
 			{
-				combine(ret, r.getProperties());
+				combine(ret, r.getProperties().asMap());
 			}
 		}
 		LinkedHashMap<String, String> retRule = new LinkedHashMap<String, String>();
@@ -114,20 +127,21 @@ public class RuleSetImpl extends ArrayList<Rule> implements star.genetics.geneti
 	public boolean add(Rule rule)
 	{
 		JSONableList<String> propertyNames = propertyNames();
-		for (String s : rule.getProperties().keySet())
+		for (String s : rule.getProperties().asMap().keySet())
 		{
 			propertyNames.add(s);
 		}
-		return super.add(rule);
+		getRules().add(rule);
+		return true;
 	}
 
 	private void initialize(Map<String, String> ret)
 	{
-		for (Rule r : this)
+		for (Rule r : getRules())
 		{
 			if (r.isDefault())
 			{
-				ret.putAll(r.getProperties());
+				ret.putAll(r.getProperties().asMap());
 			}
 		}
 	}

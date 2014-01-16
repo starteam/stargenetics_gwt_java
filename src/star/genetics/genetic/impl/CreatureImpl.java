@@ -68,7 +68,7 @@ public class CreatureImpl implements star.genetics.genetic.model.Creature, Seria
 
 	public Sex getSex()
 	{
-		return Sex.get(data.get(SEX));
+		return Sex.fromJSON(data.get(SEX));
 	}
 
 	public void setSex(Sex sex)

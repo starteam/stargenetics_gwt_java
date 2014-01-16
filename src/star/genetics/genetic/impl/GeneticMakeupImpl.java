@@ -14,7 +14,6 @@ import com.google.gwt.json.client.JSONObject;
 public class GeneticMakeupImpl implements star.genetics.genetic.model.GeneticMakeup
 {
 	private static final long serialVersionUID = 1L;
-	TreeMap<Gene, DiploidAlleles> q = new TreeMap<Gene, DiploidAlleles>();
 	private JSONObject data;
 
 	GeneticMakeupImpl(JSONObject data)
@@ -106,15 +105,19 @@ public class GeneticMakeupImpl implements star.genetics.genetic.model.GeneticMak
 		return ax & by;
 	}
 
-	private boolean test(Map<Gene, DiploidAlleles> map, boolean swap)
+	private boolean test(RuleMakeup map, boolean swap)
 	{
 		boolean ret = true;
 		try
 		{
-			for (Entry<Gene, DiploidAlleles> entry : map.entrySet())
+			for( String s : map.keySet() )
 			{
-				DiploidAlleles rule = entry.getValue();
-				DiploidAlleles organism = get(entry.getKey());
+				DiploidAlleles rule = map.get(s);
+				DiploidAlleles organism = get(s);
+//			for (Entry<Gene, DiploidAlleles> entry : map.entrySet())
+//			{
+//				DiploidAlleles rule = entry.getValue();
+//				DiploidAlleles organism = get(entry.getKey());
 
 				if (organism == null)
 				{
@@ -141,7 +144,7 @@ public class GeneticMakeupImpl implements star.genetics.genetic.model.GeneticMak
 		return ret;
 	}
 
-	public boolean test(Chromosome chromosome, Map<Gene, DiploidAlleles> map)
+	public boolean test(Chromosome chromosome, RuleMakeup map)
 	{
 		boolean ret = test(map, false) || test(map, true);
 		return ret;
