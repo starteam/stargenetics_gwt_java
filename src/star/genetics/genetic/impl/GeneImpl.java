@@ -5,6 +5,7 @@ import star.genetics.client.JSONableList;
 import star.genetics.genetic.model.Allele;
 import star.genetics.genetic.model.Chromosome;
 import star.genetics.genetic.model.Gene;
+import star.genetics.genetic.model.Model;
 
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
@@ -13,25 +14,34 @@ public class GeneImpl implements star.genetics.genetic.model.Gene
 {
 	private static final long serialVersionUID = 1L;
 
-	private JSONObject data;
+	private final JSONObject data;
+	private final Model model;
 
-	GeneImpl(JSONObject data)
+	public Model getModel()
 	{
-		this.data = data;
+		return model;
 	}
 
-	public GeneImpl(String name, float position, Chromosome chromosome)
+	public GeneImpl(JSONObject data, Model model)
 	{
+		this.data = data;
+		this.model = model;
+	}
+
+	public GeneImpl(String name, float position, Chromosome chromosome, Model model)
+	{
+		data = new JSONObject();
 		data.put(NAME, Helper.wrapString(name));
 		data.put(POSITON, Helper.wrapNumber(position));
-		data.put(CHROMOSOME, chromosome.getJSON());
+		data.put(CHROMOSOME, Helper.wrapString(chromosome.getName()));
 		data.put(GENETYPES, new JSONArray());
 		chromosome.getGenes().add(this);
+		this.model = model;
 	}
 
 	public star.genetics.genetic.model.Chromosome getChromosome()
 	{
-		return new ChromosomeImpl(data.get(CHROMOSOME).isObject());
+		return getModel().getGenome().getChromosomeByName(Helper.unwrapString(data.get(CHROMOSOME)));
 	}
 
 	public String getName()
@@ -52,7 +62,7 @@ public class GeneImpl implements star.genetics.genetic.model.Gene
 			@Override
 			public Allele create(JSONObject data)
 			{
-				return new AlleleImpl(data);
+				return new AlleleImpl(data, getModel());
 			}
 		};
 	}
@@ -108,11 +118,6 @@ public class GeneImpl implements star.genetics.genetic.model.Gene
 	public JSONObject getJSON()
 	{
 		return data;
-	}
-
-	public static Gene fromJSON(JSONObject value)
-	{
-		return new GeneImpl(value);
 	}
 
 }

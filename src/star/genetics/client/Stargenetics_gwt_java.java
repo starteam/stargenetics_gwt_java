@@ -49,12 +49,15 @@ public class Stargenetics_gwt_java implements EntryPoint
 				{
 					logger.log(Level.INFO, "New StarGenetics backend for token " + token);
 					map.put(token, new StarGenetics());
+
 				}
 				else
 				{
 					logger.log(Level.INFO, "Loading existing StarGenetics backend for token " + token);
 				}
+				logger.log(Level.INFO, "New StarGenetics backend for token " + token + " pre exec.");
 				map.get(token).execute(obj);
+				logger.log(Level.INFO, "New StarGenetics backend for token " + token + " post exec.");
 			}
 			else
 			{

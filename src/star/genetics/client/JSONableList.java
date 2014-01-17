@@ -19,8 +19,15 @@ public abstract class JSONableList<T> implements Iterable<T>
 
 	public void add(T element)
 	{
+		if( element instanceof String)
+		{
+			data.set(data.size(), Helper.wrapString((String)element));
+		}
+		else
+		{
 		JSONable e = (JSONable) element;
 		data.set(data.size(), e.getJSON());
+		}
 	}
 
 	public int size()
@@ -51,6 +58,10 @@ public abstract class JSONableList<T> implements Iterable<T>
 			{
 				JSONValue element = data.get(index);
 				index++;
+				if( element.isString() != null)
+				{
+					return (T)Helper.unwrapString(element);
+				}
 				return create(element.isObject());
 			}
 

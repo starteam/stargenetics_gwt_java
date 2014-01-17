@@ -7,6 +7,7 @@ import star.genetics.client.JSONableList;
 import star.genetics.genetic.model.Allele;
 import star.genetics.genetic.model.Gene;
 import star.genetics.genetic.model.Genome;
+import star.genetics.genetic.model.Model;
 
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
@@ -15,17 +16,25 @@ public class ChromosomeImpl implements star.genetics.genetic.model.Chromosome, S
 {
 	private static final long serialVersionUID = 1L;
 	private JSONObject data;
-
-	public ChromosomeImpl(JSONObject data)
+	private Model model ;
+	public Model getModel()
+    {
+	    return model;
+    }
+	
+	public ChromosomeImpl(JSONObject data, Model model)
 	{
 		this.data = data;
+		this.model = model;
 	}
 
-	public ChromosomeImpl(String name, Genome genome)
+	public ChromosomeImpl(String name, Genome genome, Model model )
 	{
+		data = new JSONObject();
 		data.put(NAME, Helper.wrapString(name));
 		data.put(GENES, new JSONArray());
 		genome.addChromosome(this);
+		this.model = model;
 	}
 
 	public String getName()
@@ -39,7 +48,7 @@ public class ChromosomeImpl implements star.genetics.genetic.model.Chromosome, S
 		{
 			public Gene create(JSONObject d)
 			{
-				return new GeneImpl(d);
+				return new GeneImpl(d, getModel());
 			}
 		};
 	}

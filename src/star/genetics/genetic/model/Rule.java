@@ -1,7 +1,5 @@
 package star.genetics.genetic.model;
 
-import java.util.HashMap;
-
 import star.genetics.client.JSONable;
 import star.genetics.client.JSONableMap;
 

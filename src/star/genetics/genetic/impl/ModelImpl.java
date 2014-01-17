@@ -8,9 +8,9 @@ import star.genetics.genetic.model.Creature.Sex;
 import star.genetics.genetic.model.GelRules;
 import star.genetics.genetic.model.Genome;
 import star.genetics.genetic.model.MatingEngine;
+import star.genetics.genetic.model.Model;
 import star.genetics.visualizers.VisualizerFactory;
 
-import com.google.gwt.json.client.JSONNull;
 import com.google.gwt.json.client.JSONObject;
 
 public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Serializable
@@ -27,9 +27,9 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 		data.put(SPONTANIOUSMALES, Helper.wrapNumber(0.001f));
 		data.put(MATINGSCOUNT, Helper.wrapNumber(Integer.MAX_VALUE));
 		data.put(PROGENIESCOUNT, Helper.wrapNumber(50));
-		data.put(CRATESET, new CrateSetImpl().getJSON());
-		data.put(RULESET, JSONNull.getInstance());
-		data.put(GENOME, JSONNull.getInstance());
+		data.put(CRATESET, (new CrateSetImpl(getModel())).getJSON());
+		data.put(RULESET, new JSONObject());
+		data.put(GENOME, new JSONObject());
 	}
 
 	public void setVisualizerClass(String className)
@@ -50,7 +50,7 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 
 	public star.genetics.genetic.model.RuleSet getRules()
 	{
-		return new RuleSetImpl(data.get(RULESET).isObject());
+		return new RuleSetImpl(data.get(RULESET).isObject(), getModel());
 	}
 
 	public void setMater(MatingEngineImpl_XY mater)
@@ -77,7 +77,7 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 
 	public Genome getGenome()
 	{
-		return new GenomeImpl(data.get(GENOME).isObject());
+		return new GenomeImpl(data.get(GENOME).isObject(),getModel());
 	}
 
 	public MatingEngine getMatingEngine()
@@ -95,24 +95,24 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 				// twinning = md.getTwinningFrequency();
 				// identical = md.getIdenticalTwinsFrequency();
 				// }
-				mater = new MatingEngineImpl_XY(maleRecombinationRate(), femaleRecombinationRate(), 0.5f, getProgeniesCount(), twinning, identical);
+				mater = new MatingEngineImpl_XY(maleRecombinationRate(), femaleRecombinationRate(), 0.5f, getProgeniesCount(), twinning, identical, getModel());
 			}
 			else if (Genome.SexType.XO.equals(getGenome().getSexType()))
 			{
-				mater = new MatingEngineImpl_XO(maleRecombinationRate(), femaleRecombinationRate(), 0.5f, getProgeniesCount(), getSpontaniousMales());
+				mater = new MatingEngineImpl_XO(maleRecombinationRate(), femaleRecombinationRate(), 0.5f, getProgeniesCount(), getSpontaniousMales(),getModel());
 			}
 			else if (Genome.SexType.Aa.equals(getGenome().getSexType()))
 			{
-				mater = new MatingEngineImpl_MAT(maleRecombinationRate(), femaleRecombinationRate(), 0.5f, getProgeniesCount());
+				mater = new MatingEngineImpl_MAT(maleRecombinationRate(), femaleRecombinationRate(), 0.5f, getProgeniesCount(), getModel());
 			}
 			else if (Genome.SexType.UNISEX.equals(getGenome().getSexType()))
 			{
-				mater = new MatingEngineImpl_UNISEX(femaleRecombinationRate(), getProgeniesCount());
+				mater = new MatingEngineImpl_UNISEX(femaleRecombinationRate(), getProgeniesCount(), getModel());
 			}
 		} else {
 			if (Genome.SexType.XY.equals(getGenome().getSexType()))
 			{
-				mater = new MatingEngineImpl_XY(data.get(MATER).isObject());
+				mater = new MatingEngineImpl_XY(data.get(MATER).isObject(),getModel());
 			}
 		}
 		return mater;
@@ -120,7 +120,7 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 
 	public star.genetics.genetic.model.CreatureSet getCreatures()
 	{
-		return new CreatureSetImpl(data.get(CREATURES).isObject());
+		return new CreatureSetImpl(data.get(CREATURES).isObject(), getModel());
 	}
 
 	public float getRecombinationRate(Sex sex)
@@ -140,7 +140,7 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 
 	public CrateSet getCrateSet()
 	{
-		return new CrateSetImpl(data.get(CRATESET).isObject());
+		return new CrateSetImpl(data.get(CRATESET).isObject(), getModel());
 	}
 
 	public int getProgeniesCount()
@@ -185,11 +185,17 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 
 	public GelRules getGelRules()
 	{
-		return new GelRulesImpl(data.get(GELRULESET).isObject());
+		return new GelRulesImpl(data.get(GELRULESET).isObject(),getModel());
 	}
 
 	public JSONObject getJSON()
 	{
 		return data;
+	}
+	
+	@Override
+	public Model getModel()
+	{
+	    return this;
 	}
 }

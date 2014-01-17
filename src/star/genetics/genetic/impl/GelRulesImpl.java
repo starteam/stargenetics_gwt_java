@@ -3,28 +3,37 @@ package star.genetics.genetic.impl;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
-
 import star.genetics.client.JSONableList;
 import star.genetics.genetic.model.Allele;
 import star.genetics.genetic.model.Gel;
 import star.genetics.genetic.model.GelPosition;
 import star.genetics.genetic.model.GelRules;
+import star.genetics.genetic.model.Model;
+
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
 
 public class GelRulesImpl implements GelRules, Serializable
 {
 	private static final long serialVersionUID = 1L;
 
-	private JSONObject data;
+	private final JSONObject data;
+	private final Model model;
 
-	public GelRulesImpl(JSONObject data)
+	public Model getModel()
 	{
-		this.data = data;
+		return model;
 	}
 
-	public GelRulesImpl()
+	public GelRulesImpl(JSONObject data, Model model)
 	{
+		this.data = data;
+		this.model = model;
+	}
+
+	public GelRulesImpl(Model model)
+	{
+		this.model = model;
 		data = new JSONObject();
 		data.put(GELS, new JSONArray());
 		data.put(POS, new JSONArray());
@@ -43,7 +52,7 @@ public class GelRulesImpl implements GelRules, Serializable
 			@Override
 			public Gel create(JSONObject data)
 			{
-				return new GelImpl(data);
+				return new GelImpl(data, getModel());
 			}
 		};
 	}
@@ -56,7 +65,7 @@ public class GelRulesImpl implements GelRules, Serializable
 			@Override
 			public GelPosition create(JSONObject data)
 			{
-				return new GelPositionImpl(data);
+				return new GelPositionImpl(data, getModel());
 			}
 		};
 	}
@@ -70,7 +79,7 @@ public class GelRulesImpl implements GelRules, Serializable
 				return g;
 			}
 		}
-		GelImpl gi = new GelImpl(name, gels().size());
+		GelImpl gi = new GelImpl(name, gels().size(), getModel());
 		gels().add(gi);
 		return gi;
 	}
@@ -83,7 +92,7 @@ public class GelRulesImpl implements GelRules, Serializable
 	public void addGel(String gelName, Allele allele, Float[] position)
 	{
 		Gel g = getOrCreateGel(gelName);
-		GelPositionImpl gpi = new GelPositionImpl(g, position, allele);
+		GelPositionImpl gpi = new GelPositionImpl(g, position, allele,getModel());
 		g.addGelPosition(gpi);
 		pos().add(gpi);
 	}

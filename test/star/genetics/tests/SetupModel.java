@@ -35,7 +35,7 @@ public class SetupModel extends GWTTestCase
 		Creature c0 = m.getCreatures().get(0);
 		Creature c1 = m.getCreatures().get(1);
 		assertTrue(c0.getSex() != c1.getSex() );
-		CreatureSetImpl parents = new CreatureSetImpl();
+		CreatureSetImpl parents = new CreatureSetImpl(null);
 		parents.add(c0);
 		parents.add(c1);		
 		try

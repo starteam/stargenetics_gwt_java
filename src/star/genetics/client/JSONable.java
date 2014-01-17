@@ -1,5 +1,7 @@
 package star.genetics.client;
 
+import star.genetics.genetic.model.Model;
+
 import com.google.gwt.json.client.JSONObject;
 
 public interface JSONable
@@ -48,4 +50,5 @@ public interface JSONable
 	static final String KIND = "kind";
 	
 	JSONObject getJSON();
+	Model getModel();
 }

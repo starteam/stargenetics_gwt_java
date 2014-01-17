@@ -19,6 +19,7 @@ import star.genetics.genetic.model.Gene;
 import star.genetics.genetic.model.GeneticMakeup;
 import star.genetics.genetic.model.Genome;
 import star.genetics.genetic.model.MatingEngine;
+import star.genetics.genetic.model.Model;
 import star.genetics.genetic.model.RuleSet;
 
 public class MatingEngineImpl_MAT implements MatingEngine, Serializable
@@ -71,9 +72,15 @@ public class MatingEngineImpl_MAT implements MatingEngine, Serializable
 	float femaleRecombinationRate;
 	float femaleSexRatio;
 	int progeniesCount;
-
-	public MatingEngineImpl_MAT(float maleRecombinationRate, float femaleRecombinationRate, float femaleSexRatio, int progeniesCount)
+	private final Model model;
+	public Model getModel()
+    {
+	    return model;
+    }
+	
+	public MatingEngineImpl_MAT(float maleRecombinationRate, float femaleRecombinationRate, float femaleSexRatio, int progeniesCount, Model model)
 	{
+		this.model = model;
 		this.maleRecombinationRate = maleRecombinationRate;
 		this.femaleRecombinationRate = femaleRecombinationRate;
 		this.femaleSexRatio = femaleSexRatio;
@@ -167,14 +174,14 @@ public class MatingEngineImpl_MAT implements MatingEngine, Serializable
 		Creature c2 = parents.get(1);
 
 		Random rng = new Random();
-		CreatureSetImpl ret = new CreatureSetImpl();
+		CreatureSetImpl ret = new CreatureSetImpl(getModel());
 		Genome genome = c1.getGenome();
 		for (int pIndex = 0; pIndex < progeniesCount; pIndex++)
 		{
 			GeneticMakeupImpl[] makeups = new GeneticMakeupImpl[4];
 			for (int i = 0; i < 4; i++)
 			{
-				makeups[i] = new GeneticMakeupImpl();
+				makeups[i] = new GeneticMakeupImpl(getModel());
 			}
 			for (Chromosome c : genome)
 			{
@@ -201,7 +208,7 @@ public class MatingEngineImpl_MAT implements MatingEngine, Serializable
 						default:
 							throw new RuntimeException(Messages.getString("MatingEngineImpl_MAT.0")); //$NON-NLS-1$
 						}
-						makeup.put(gene, new DiploidAllelesImpl(allele, null));
+						makeup.put(gene, new DiploidAllelesImpl(allele, null,getModel()));
 					}
 				}
 			}
@@ -226,7 +233,7 @@ public class MatingEngineImpl_MAT implements MatingEngine, Serializable
 				int i = (x + offset) % 4;
 				GeneticMakeup makeup = makeups[i];
 				Map<String, String> properties = rules.getProperties(makeup, thisSex);
-				CreatureImpl creature = new CreatureImpl(crateName + "-" + (countFrom / 4 + pIndex + 1) + D[x], genome, thisSex, makeup, matings, properties, parents); //$NON-NLS-1$
+				CreatureImpl creature = new CreatureImpl(crateName + "-" + (countFrom / 4 + pIndex + 1) + D[x], genome, thisSex, makeup, matings, properties, parents, getModel()); //$NON-NLS-1$
 				ret.add(creature);
 			}
 

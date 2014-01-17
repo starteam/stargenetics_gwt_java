@@ -1,42 +1,52 @@
 package star.genetics.genetic.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import star.genetics.client.Helper;
 import star.genetics.client.JSONableList;
 import star.genetics.genetic.model.Creature;
 import star.genetics.genetic.model.GeneticMakeup;
+import star.genetics.genetic.model.Model;
 import star.genetics.genetic.model.Rule;
+
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
 
 public class RuleSetImpl implements star.genetics.genetic.model.RuleSet
 {
 	private static final long serialVersionUID = 1L;
 
-	private JSONObject data;
-
-	JSONableList<Rule> getRules() {
+	private final JSONObject data;
+	private final Model model;
+	public Model getModel()
+    {
+	    return model;
+    }
+	JSONableList<Rule> getRules()
+	{
 		return new JSONableList<Rule>(data.get(RULES).isArray())
 		{
 
 			@Override
-            public Rule create(JSONObject data)
-            {
-	            return new RuleImpl(data);
-            }
+			public Rule create(JSONObject data)
+			{
+				return new RuleImpl(data,getModel());
+			}
 		};
 	}
-	public RuleSetImpl(LinkedHashSet<String> orderedSet)
+
+	public RuleSetImpl(LinkedHashSet<String> orderedSet, Model model)
 	{
+		this.data = new JSONObject();
+		this.model = model;
 		JSONArray d = new JSONArray();
 		JSONableList<String> q = new JSONableList<String>(d)
 		{
@@ -51,8 +61,8 @@ public class RuleSetImpl implements star.genetics.genetic.model.RuleSet
 		{
 			q.add(s);
 		}
-		data.put( "propertyNames" , d);
-		data.put( RULES, new JSONArray());
+		data.put(PROPERTIES, d);
+		data.put(RULES, new JSONArray());
 	}
 
 	public JSONObject getJSON()
@@ -62,26 +72,36 @@ public class RuleSetImpl implements star.genetics.genetic.model.RuleSet
 
 	JSONableList<String> propertyNames()
 	{
-		return new JSONableList<String>(data.get("propertyNames").isArray())
+		return new JSONableList<String>(data.get(PROPERTIES).isArray())
 		{
 			@Override
 			public String create(JSONObject data)
 			{
 				return Helper.unwrapString(data);
 			}
+			
+			@Override
+			public Iterator<String> iterator()
+			{
+			    return super.iterator();
+			}
 		};
 	}
 
-	public RuleSetImpl()
+	public RuleSetImpl(Model model)
 	{
+		this.model = model;
 		this.data = new JSONObject();
-		data.put("propertyNames", new JSONArray());
+		data.put(PROPERTIES, new JSONArray());
+		data.put(RULES, new JSONArray());
+
 	}
 
-	public RuleSetImpl(JSONObject data)
-    {
-		this.data =data;
-    }
+	public RuleSetImpl(JSONObject data, Model model)
+	{
+		this.model = model;
+		this.data = data;
+	}
 
 	public Map<String, String> getProperties(GeneticMakeup genotype, Creature.Sex sex)
 	{
@@ -123,15 +143,23 @@ public class RuleSetImpl implements star.genetics.genetic.model.RuleSet
 		}
 	}
 
+	static Logger logger = Logger.getLogger("RuleSetImpl");
+
 	@Override
 	public boolean add(Rule rule)
 	{
+		logger.log( Level.INFO, "step 1");
 		JSONableList<String> propertyNames = propertyNames();
+		logger.log( Level.INFO, "step 2:" + data.get(PROPERTIES));
 		for (String s : rule.getProperties().asMap().keySet())
 		{
+			logger.log( Level.INFO, "step 2a " + propertyNames);
 			propertyNames.add(s);
+			logger.log( Level.INFO, "step 2b");
 		}
+		logger.log( Level.INFO, "step 3");
 		getRules().add(rule);
+		logger.log( Level.INFO, "step 4");
 		return true;
 	}
 

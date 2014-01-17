@@ -46,27 +46,27 @@ public class EngineParser
 		float twinningFrequency = get(engine, "twinning", 0.0f);
 		float identicalTwinsFrequency = get(engine, "identical_twins_frequency", 0.0f);
 
-		MatingEngineImpl_XY xy = new MatingEngineImpl_XY(maleRecombinationRate, femaleRecombinationRate, femaleSexRatio, progeniesCount, twinningFrequency, identicalTwinsFrequency);
+		MatingEngineImpl_XY xy = new MatingEngineImpl_XY(maleRecombinationRate, femaleRecombinationRate, femaleSexRatio, progeniesCount, twinningFrequency, identicalTwinsFrequency,model);
 		model.setMater(xy);
 		// fix genome
-		fixGenome_XY(model.getGenome());
+		fixGenome_XY(model.getGenome(), model);
 	}
 
-	private static void fixGenome_XY(Genome genome)
+	private static void fixGenome_XY(Genome genome, ModelImpl model)
 	{
 		Chromosome cx = genome.getChromosomeByName("X");
 		if (cx == null)
 		{
-			cx = new ChromosomeImpl("X", genome);
-			Gene gx = new GeneImpl("x", 0, cx);
-			new AlleleImpl("x", gx);
+			cx = new ChromosomeImpl("X", genome, model);
+			Gene gx = new GeneImpl("x", 0, cx, model);
+			new AlleleImpl("x", gx,model);
 		}
 		Chromosome cy = genome.getChromosomeByName("Y");
 		if (cy == null)
 		{
-			cy = new ChromosomeImpl("Y", genome);
-			Gene gy = new GeneImpl("y", 0, cy);
-			new AlleleImpl("x", gy);
+			cy = new ChromosomeImpl("Y", genome, model);
+			Gene gy = new GeneImpl("y", 0, cy, model);
+			new AlleleImpl("x", gy,model);
 		}
 
 	}

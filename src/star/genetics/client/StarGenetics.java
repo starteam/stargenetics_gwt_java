@@ -42,11 +42,12 @@ public class StarGenetics
 	{
 		try
 		{
-			logger.log(Level.FINE, "in Execute.");
+			logger.log(Level.INFO, "in Execute.");
 			String command = exec.getCommand();
-			System.out.println("command " + command);
+			logger.log(Level.INFO, "in Command:" + command);
 			if (Commands.Open.is(command))
 			{
+				logger.log(Level.INFO, "in Command: OPEN -- " + command);
 				open(exec);
 			}
 			else if (Commands.ListStrains.is(command))
@@ -81,8 +82,11 @@ public class StarGenetics
 
 	private void open(Exec exec)
 	{
+		logger.log(Level.INFO, "in Command: QQ Open");
 		Open cmd = exec.cast();
+		logger.log(Level.INFO, "in Command: AA Open");
 		cmd.execute(this);
+		logger.log(Level.INFO, "in Command: WW Open");
 	}
 
 	private void listStrains(Exec exec)
@@ -101,9 +105,8 @@ public class StarGenetics
 
 	private static native void log(String str)
 	/*-{
-		if( typeof(console) == 'object' && console && console.info )
-		{
-			console.info( str ) ;
+		if (typeof (console) == 'object' && console && console.info) {
+			console.info(str);
 		}
 	}-*/;
 

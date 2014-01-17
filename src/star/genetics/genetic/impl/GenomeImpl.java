@@ -8,6 +8,7 @@ import java.util.List;
 import star.genetics.client.JSONableList;
 import star.genetics.genetic.model.Chromosome;
 import star.genetics.genetic.model.Gene;
+import star.genetics.genetic.model.Model;
 
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
@@ -15,16 +16,23 @@ import com.google.gwt.json.client.JSONObject;
 public class GenomeImpl implements star.genetics.genetic.model.Genome, Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private String name;
-	private JSONObject data;
+	private final JSONObject data;
+	private final Model model;
 
-	public GenomeImpl(JSONObject data)
+	public Model getModel()
 	{
-		this.data = data;
+		return model;
 	}
 
-	public GenomeImpl()
+	public GenomeImpl(JSONObject data, Model model)
 	{
+		this.data = data;
+		this.model = model;
+	}
+
+	public GenomeImpl(Model model)
+	{
+		this.model = model;
 		this.data = new JSONObject();
 		data.put(SEX, SexType.XY.getJSON());
 		data.put(CHROMOSOMES, new JSONArray());
@@ -70,12 +78,21 @@ public class GenomeImpl implements star.genetics.genetic.model.Genome, Serializa
 
 	JSONableList<Chromosome> getChromosomes()
 	{
+		if( data == null )
+		{
+			throw new NullPointerException();
+		}
+		if( data.get(CHROMOSOMES) == null )
+		{
+			throw new NullPointerException();
+		}
+		
 		return new JSONableList<Chromosome>(data.get(CHROMOSOMES).isArray())
 		{
 			@Override
 			public Chromosome create(JSONObject data)
 			{
-				return new ChromosomeImpl(data);
+				return new ChromosomeImpl(data, getModel());
 			}
 		};
 	}

@@ -2,42 +2,51 @@ package star.genetics.genetic.impl;
 
 import java.io.Serializable;
 
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
-
 import star.genetics.client.Helper;
 import star.genetics.genetic.model.Allele;
 import star.genetics.genetic.model.Gel;
 import star.genetics.genetic.model.GelPosition;
+import star.genetics.genetic.model.Model;
+
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
 
 public class GelPositionImpl implements GelPosition, Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private JSONObject data;
+	private final JSONObject data;
+	private final Model model;
 
-	public GelPositionImpl(Gel gel, Float[] position, Allele allele)
+	public Model getModel()
 	{
+		return model;
+	}
+
+	public GelPositionImpl(Gel gel, Float[] position, Allele allele, Model model)
+	{
+		this.model = model;
 		data = new JSONObject();
 		data.put(GEL, gel.getJSON());
 		setPosition(position);
 		data.put(ALLELES, allele.getJSON());
 	}
 
-	public GelPositionImpl(JSONObject data)
+	public GelPositionImpl(JSONObject data, Model model)
 	{
 		this.data = data;
+		this.model = model;
 	}
 
 	@Override
 	public JSONObject getJSON()
 	{
-	    return data;
+		return data;
 	}
-	
+
 	@Override
 	public Gel getGel()
 	{
-		return new GelImpl(data.get(GEL).isObject());
+		return new GelImpl(data.get(GEL).isObject(), getModel());
 	}
 
 	@Override
@@ -67,7 +76,7 @@ public class GelPositionImpl implements GelPosition, Serializable
 	@Override
 	public Allele getAllele()
 	{
-		return new AlleleImpl(data.get(ALLELES).isObject());
+		return new AlleleImpl(data.get(ALLELES).isObject(), getModel());
 	}
 
 }

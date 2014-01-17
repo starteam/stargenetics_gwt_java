@@ -7,6 +7,7 @@ import star.genetics.client.MessageFormat;
 import star.genetics.client.Messages;
 import star.genetics.genetic.model.CrateModel;
 import star.genetics.genetic.model.CreatureSet;
+import star.genetics.genetic.model.Model;
 
 import com.google.gwt.json.client.JSONObject;
 
@@ -14,18 +15,25 @@ public class CrateModelImpl implements CrateModel, Serializable
 {
 	private static final long serialVersionUID = 1L;
 	private JSONObject data;
+	private final Model model;
+	public Model getModel()
+    {
+	    return model;
+    }
 
-	public CrateModelImpl(int id)
+	public CrateModelImpl(int id, Model model)
 	{
 		data.put(PARENTS, new JSONObject());
 		data.put(PROGENIES, new JSONObject());
 		data.put(NAME, Helper.wrapString(MessageFormat.format(Messages.getString("CrateModelImpl.0"), id))); //$NON-NLS-1$
 		data.put(UUID, Helper.wrapString(generateUUID()));
+		this.model = model;
 	}
 
-	CrateModelImpl(JSONObject data)
+	CrateModelImpl(JSONObject data, Model model)
 	{
 		this.data = data;
+		this.model = model;
 	}
 
 	@Override
@@ -46,12 +54,12 @@ public class CrateModelImpl implements CrateModel, Serializable
 
 	public CreatureSet getParents()
 	{
-		return new CreatureSetImpl(data.get(PARENTS).isObject());
+		return new CreatureSetImpl(data.get(PARENTS).isObject(), getModel());
 	}
 
 	public CreatureSet getProgenies()
 	{
-		return new CreatureSetImpl(data.get(PROGENIES).isObject());
+		return new CreatureSetImpl(data.get(PROGENIES).isObject(), getModel());
 	}
 
 	@Override

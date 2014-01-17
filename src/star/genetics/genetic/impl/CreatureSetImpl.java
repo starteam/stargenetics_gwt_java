@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import star.genetics.client.JSONableList;
 import star.genetics.genetic.model.Creature;
+import star.genetics.genetic.model.Model;
 
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
@@ -12,15 +13,23 @@ import com.google.gwt.json.client.JSONObject;
 public class CreatureSetImpl implements star.genetics.genetic.model.CreatureSet, Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private JSONObject data;
+	private final JSONObject data;
+	private final Model model;
 
-	CreatureSetImpl(JSONObject data)
+	public Model getModel()
+    {
+	    return model;
+    }
+	
+	CreatureSetImpl(JSONObject data, Model model)
 	{
 		this.data = data;
+		this.model = model;
 	}
 
-	public CreatureSetImpl()
+	public CreatureSetImpl(Model model)
 	{
+		this.model = model;
 		data = new JSONObject();
 		data.put(CREATURES, new JSONArray());
 	}
@@ -33,7 +42,7 @@ public class CreatureSetImpl implements star.genetics.genetic.model.CreatureSet,
 			@Override
 			public Creature create(JSONObject data)
 			{
-				return new CreatureImpl(data);
+				return new CreatureImpl(data, getModel());
 			}
 
 		};

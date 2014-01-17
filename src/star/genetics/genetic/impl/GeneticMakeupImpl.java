@@ -1,30 +1,37 @@
 package star.genetics.genetic.impl;
 
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
-
+import star.genetics.client.Helper;
 import star.genetics.genetic.model.Allele;
 import star.genetics.genetic.model.Chromosome;
 import star.genetics.genetic.model.DiploidAlleles;
 import star.genetics.genetic.model.Gene;
+import star.genetics.genetic.model.Model;
 
 import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONValue;
 
 public class GeneticMakeupImpl implements star.genetics.genetic.model.GeneticMakeup
 {
 	private static final long serialVersionUID = 1L;
-	private JSONObject data;
+	private final JSONObject data;
+	private final Model model;
+	public Model getModel()
+	    {
+	    return model;
+	    }
 
-	GeneticMakeupImpl(JSONObject data)
+	GeneticMakeupImpl(JSONObject data, Model model)
 	{
+		this.model = model;
 		this.data = data;
 	}
 
-	public GeneticMakeupImpl()
+	public GeneticMakeupImpl(Model model)
 	{
+		this.model = model;
 		this.data = new JSONObject();
-		data.put("MAKEUP", new JSONObject());
+		data.put(MAKEUP, new JSONObject());
 	}
 
 	@Override
@@ -32,20 +39,44 @@ public class GeneticMakeupImpl implements star.genetics.genetic.model.GeneticMak
 	{
 		return data;
 	}
-
+	
+	public String toStr( Gene g )
+	{
+		JSONObject ret = new JSONObject();
+		ret.put("chromosome", Helper.wrapString(g.getChromosome().getName()));
+		ret.put("gene", Helper.wrapString(g.getName()));
+		return ret.toString();
+	}
+	
 	public void put(Gene g, DiploidAlleles d)
 	{
-		data.get(MAKEUP).isObject().put(g.getJSON().toString(), d.getJSON());
+		data.get(MAKEUP).isObject().put(toStr(g), d.getJSON());
 	}
 
 	public DiploidAlleles get(Gene g)
 	{
-		return new DiploidAllelesImpl(data.get(MAKEUP).isObject().get(g.getJSON().toString()).isObject());
+		JSONValue value = data.get(MAKEUP).isObject().get(toStr(g));
+		if( value != null )
+		{
+		return new DiploidAllelesImpl(value.isObject(),getModel());
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	public DiploidAlleles get(String g)
 	{
-		return new DiploidAllelesImpl(data.get(MAKEUP).isObject().get(g).isObject());
+ 		JSONValue value = data.get(MAKEUP).isObject().get(g);
+		if(value != null )
+		{
+		return new DiploidAllelesImpl(value.isObject(),getModel());
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	int size()

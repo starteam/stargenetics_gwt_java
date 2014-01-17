@@ -23,7 +23,7 @@ public class StrainsParser
 
 	public static void parse(ModelImpl model, JSONObject strains)
 	{
-		CreatureSetImpl set = new CreatureSetImpl();
+		CreatureSetImpl set = new CreatureSetImpl(model);
 		parseStrains(model, set, strains.get("initial").isObject());
 		model.setCreatures(set);
 	}
@@ -43,14 +43,13 @@ public class StrainsParser
 		String ssex = strain.get("sex").isString().stringValue();
 		Sex sex = "M".equalsIgnoreCase(ssex) ? Sex.MALE : Sex.FEMALE;
 		GeneticMakeupImpl makeup = parseGeneticMakeup(model, strain.get("alleles").isArray());
-		fixMakeup_XY(model.getGenome(), makeup, sex);
+		fixMakeup_XY(model.getGenome(), makeup, sex, model);
 		Map<String, String> properties = new HashMap<String, String>();
-		CreatureImpl c = new CreatureImpl(name, model.getGenome(), sex, makeup, model.getMatingsCount(), properties, null);
-
+		CreatureImpl c = new CreatureImpl(name, model.getGenome(), sex, makeup, model.getMatingsCount(), properties, null, model);
 		set.add(c);
 	}
 
-	private static void fixMakeup_XY(Genome genome, GeneticMakeupImpl makeup, Sex sex)
+	private static void fixMakeup_XY(Genome genome, GeneticMakeupImpl makeup, Sex sex, ModelImpl model)
 	{
 		Chromosome cx = genome.getChromosomeByName("X");
 		if (cx != null && cx.getGenes().size() == 1)
@@ -60,7 +59,7 @@ public class StrainsParser
 			if (da == null)
 			{
 				Allele x = gx.getGeneTypes().iterator().next();
-				makeup.put(gx, new DiploidAllelesImpl(x, Sex.MALE.equals(sex) ? null : x));
+				makeup.put(gx, new DiploidAllelesImpl(x, Sex.MALE.equals(sex) ? null : x, model));
 			}
 		}
 		Chromosome cy = genome.getChromosomeByName("Y");
@@ -71,14 +70,14 @@ public class StrainsParser
 			if (da == null)
 			{
 				Allele y = gy.getGeneTypes().iterator().next();
-				makeup.put(gy, new DiploidAllelesImpl(null, Sex.MALE.equals(sex) ? y : null));
+				makeup.put(gy, new DiploidAllelesImpl(null, Sex.MALE.equals(sex) ? y : null, model));
 			}
 		}
 	}
 
 	private static GeneticMakeupImpl parseGeneticMakeup(ModelImpl model, JSONArray array)
 	{
-		GeneticMakeupImpl ret = new GeneticMakeupImpl();
+		GeneticMakeupImpl ret = new GeneticMakeupImpl(model);
 		for (int i = 0; i < array.size(); i++)
 		{
 			parseAlleles(model, ret, array.get(i).isString().stringValue());
@@ -95,7 +94,7 @@ public class StrainsParser
 		{
 			alleles[i] = getAllele(genome, alleleStr[i]);
 		}
-		ret.put(alleles[0].getGene(), new DiploidAllelesImpl(alleles));
+		ret.put(alleles[0].getGene(), new DiploidAllelesImpl(alleles, model));
 	}
 
 	private static Allele getAllele(star.genetics.genetic.model.Genome g, String allele)

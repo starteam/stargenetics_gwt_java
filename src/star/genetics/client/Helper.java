@@ -8,7 +8,6 @@ import java.util.TreeMap;
 import star.genetics.genetic.model.Creature;
 import star.genetics.visualizers.Visualizer;
 
-import com.google.gwt.json.client.JSONNull;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
@@ -80,11 +79,15 @@ public class Helper
 		{
 			return new JSONString(value);
 		}
-		return JSONNull.getInstance();
+		return new JSONString("");
 	}
 
 	public static final String unwrapString(JSONValue value)
 	{
+		if (value == null)
+		{
+			return null;
+		}
 		JSONString s = value.isString();
 		return s != null ? s.stringValue() : null;
 	}

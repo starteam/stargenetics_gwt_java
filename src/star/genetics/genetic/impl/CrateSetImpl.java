@@ -7,6 +7,7 @@ import star.genetics.client.Helper;
 import star.genetics.client.JSONableList;
 import star.genetics.genetic.model.CrateModel;
 import star.genetics.genetic.model.CrateSet;
+import star.genetics.genetic.model.Model;
 
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
@@ -14,16 +15,23 @@ import com.google.gwt.json.client.JSONObject;
 public class CrateSetImpl implements CrateSet, Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private static final String ID = null;
 	private JSONObject data;
+	private final Model model;
 
-	CrateSetImpl(JSONObject data)
+	public Model getModel()
 	{
-		this.data = data;
+		return model;
 	}
 
-	CrateSetImpl()
+	CrateSetImpl(JSONObject data, Model model)
 	{
+		this.data = data;
+		this.model = model;
+	}
+
+	CrateSetImpl(Model model)
+	{
+		this.model = model;
 		this.data = new JSONObject();
 		data.put(ID, Helper.wrapNumber(1));
 		data.put(SET, new JSONArray());
@@ -45,7 +53,7 @@ public class CrateSetImpl implements CrateSet, Serializable
 		{
 			public CrateModel create(JSONObject data)
 			{
-				return new CrateModelImpl(data);
+				return new CrateModelImpl(data, getModel());
 			}
 		};
 	}
@@ -102,7 +110,7 @@ public class CrateSetImpl implements CrateSet, Serializable
 	public CrateModel newCrateModel()
 	{
 		int id = Math.round(Helper.unwrapNumber(data.get(ID)));
-		CrateModel ret = new CrateModelImpl(id);
+		CrateModel ret = new CrateModelImpl(id, getModel());
 		id++;
 		data.put(ID, Helper.wrapNumber(id));
 		add(ret);

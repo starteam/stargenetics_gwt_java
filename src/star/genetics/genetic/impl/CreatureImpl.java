@@ -11,6 +11,7 @@ import star.genetics.genetic.model.CreatureSet;
 import star.genetics.genetic.model.GeneticMakeup;
 import star.genetics.genetic.model.GeneticModel;
 import star.genetics.genetic.model.Genome;
+import star.genetics.genetic.model.Model;
 
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONBoolean;
@@ -19,18 +20,25 @@ import com.google.gwt.json.client.JSONObject;
 public class CreatureImpl implements star.genetics.genetic.model.Creature, Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private JSONObject data;
+	private final JSONObject data;
+	private final Model model;
 
-	CreatureImpl(JSONObject data)
+	public Model getModel()
+    {
+	    return model;
+    }
+	CreatureImpl(JSONObject data, Model model)
 	{
+		this.model = model;
 		this.data = data;
 	}
 
-	public CreatureImpl(String name, Genome genome, Sex sex, GeneticMakeup makeup, int matingsAvailable, Map<String, String> properties, CreatureSet parents)
+	public CreatureImpl(String name, Genome genome, Sex sex, GeneticMakeup makeup, int matingsAvailable, Map<String, String> properties, CreatureSet parents, Model model)
 	{
+		this.model = model;
 		this.data = new JSONObject();
 		data.put(NAME, Helper.wrapString(name));
-		data.put(GENOME, genome.getJSON());
+//		data.put(GENOME, genome.getJSON());
 		data.put(SEX, sex.getJSON());
 		data.put(MAKEUP, makeup.getJSON());
 		data.put(MATINGSAVAILABLE, Helper.wrapNumber(matingsAvailable));
@@ -43,17 +51,17 @@ public class CreatureImpl implements star.genetics.genetic.model.Creature, Seria
 
 	public CreatureSet getParents()
 	{
-		return new CreatureSetImpl(data.get(PARENTS).isObject());
+		return new CreatureSetImpl(data.get(PARENTS).isObject(), getModel());
 	}
 
 	public Genome getGenome()
 	{
-		return new GenomeImpl(data.get(GENOME).isObject());
+		return getModel().getGenome();
 	}
 
 	public GeneticMakeup getMakeup()
 	{
-		return new GeneticMakeupImpl(data.get(MAKEUP).isObject());
+		return new GeneticMakeupImpl(data.get(MAKEUP).isObject(), getModel());
 	}
 
 	public String getName()

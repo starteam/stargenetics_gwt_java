@@ -3,7 +3,10 @@ package star.genetics.genetic.impl;
 import java.io.Serializable;
 
 import star.genetics.client.Helper;
+import star.genetics.genetic.model.Chromosome;
 import star.genetics.genetic.model.Gene;
+import star.genetics.genetic.model.Genome;
+import star.genetics.genetic.model.Model;
 
 import com.google.gwt.json.client.JSONObject;
 
@@ -12,16 +15,27 @@ public class AlleleImpl implements star.genetics.genetic.model.Allele, Serializa
 	private static final long serialVersionUID = 1L;
 	JSONObject data = new JSONObject();
 
-	public AlleleImpl(JSONObject data)
+	Model model;
+
+	@Override
+	public Model getModel()
 	{
-		this.data = data;
+		return model;
 	}
 
-	public AlleleImpl(String name, Gene gene)
+	public AlleleImpl(JSONObject data, Model model)
+	{
+		this.data = data;
+		this.model = model;
+	}
+
+	public AlleleImpl(String name, Gene gene, Model model)
 	{
 		data.put(NAME, Helper.wrapString(name));
-		data.put(GENE, gene.getJSON());
+		data.put(CHROMOSOME, Helper.wrapString(gene.getChromosome().getName()));
+		data.put(GENE, Helper.wrapString(gene.getName()));
 		gene.getGeneTypes().add(this);
+		this.model = model;
 	}
 
 	public String getName()
@@ -31,7 +45,10 @@ public class AlleleImpl implements star.genetics.genetic.model.Allele, Serializa
 
 	public Gene getGene()
 	{
-		return new GeneImpl(data.get(GENE).isObject());
+		Genome g = getModel().getGenome();
+		Chromosome c= g.getChromosomeByName(Helper.unwrapString(data.get(CHROMOSOME)));
+		Gene gene = c.getGeneByName(Helper.unwrapString(data.get(GENE)));
+		return gene;
 	}
 
 	@Override

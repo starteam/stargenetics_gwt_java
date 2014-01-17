@@ -1,46 +1,93 @@
 package star.genetics.genetic.impl;
 
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import star.genetics.client.Messages;
 import star.genetics.genetic.model.Allele;
+import star.genetics.genetic.model.Model;
 
-import com.google.gwt.json.client.JSONNull;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
 
 public class DiploidAllelesImpl implements star.genetics.genetic.model.DiploidAlleles, Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private JSONObject data;
-
-	DiploidAllelesImpl(JSONObject data)
+	private final JSONObject data;
+	private final Model model;
+public Model getModel()
+{
+	return model;
+}
+	
+	DiploidAllelesImpl(JSONObject data, Model model)
 	{
 		this.data = data;
+		this.model = model;
 	}
 
-	public DiploidAllelesImpl(Allele[] alleles)
+	static Logger logger = Logger.getLogger("DiploidAllelesImpl");
+
+	public DiploidAllelesImpl(Allele[] alleles, Model model)
 	{
+		this.model = model;
+		logger.log(Level.INFO, "a 1");
+
 		if (alleles != null && (alleles.length == 1 || alleles.length == 2))
 		{
-			data.put(ALLELE_1, alleles[0].getJSON());
-			data.put(ALLELE_2, alleles.length == 2 ? alleles[1].getJSON() : JSONNull.getInstance());
+			logger.log(Level.INFO, "a 3");
+
+			data = new JSONObject();
+			if (alleles[0] != null)
+			{
+				data.put(ALLELE_1, alleles[0].getJSON());
+			}
+			logger.log(Level.INFO, "a 4");
+			if (alleles.length == 2 && alleles[1] != null)
+			{
+				data.put(ALLELE_2, alleles[1].getJSON());
+			}
+			logger.log(Level.INFO, "a 5");
+
 		}
 		else
 		{
 			throw new RuntimeException(Messages.getString("DiploidAllelesImpl.0")); //$NON-NLS-1$
 		}
+		logger.log(Level.INFO, "a 2");
+
 	}
 
-	public DiploidAllelesImpl(Allele a1, Allele a2)
+	public DiploidAllelesImpl(Allele a1, Allele a2, Model model)
 	{
-		this(new Allele[] { a1, a2 });
+		this.model = model;
+		logger.log(Level.INFO, "a 7a A");
+		data = new JSONObject();
+		if (a1 != null)
+		{
+			data.put(ALLELE_1, a1.getJSON());
+		}
+		logger.log(Level.INFO, "a 7b B");
+		if (a2 != null)
+		{
+			data.put(ALLELE_2, a2.getJSON());
+		}
+		logger.log(Level.INFO, "a 7c C");
 	}
 
 	Allele get(JSONValue data)
 	{
+		if( data != null) 
+		{
 		JSONObject o = data.isObject();
-		return o != null ? new AlleleImpl(o) : null;
+		return o != null ? new AlleleImpl(o,getModel()) : null;
+		}
+		else
+		{
+			return null;
+		}
+		
 	}
 
 	Allele a1()
