@@ -1,6 +1,8 @@
 package star.genetics.genetic.model;
 
-public interface DiploidAlleles
+import star.genetics.client.JSONable;
+
+public interface DiploidAlleles extends JSONable
 {
 	public int getAlleleCount();
 

@@ -1,6 +1,8 @@
 package star.genetics.genetic.model;
 
-public interface Allele
+import star.genetics.client.JSONable;
+
+public interface Allele extends JSONable
 {
 	public String getName();
 

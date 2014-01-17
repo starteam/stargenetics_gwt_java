@@ -1,17 +1,89 @@
 package star.genetics.genetic.impl;
 
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
-
+import star.genetics.client.Helper;
 import star.genetics.genetic.model.Allele;
 import star.genetics.genetic.model.Chromosome;
 import star.genetics.genetic.model.DiploidAlleles;
 import star.genetics.genetic.model.Gene;
+import star.genetics.genetic.model.Model;
 
-public class GeneticMakeupImpl extends TreeMap<Gene, DiploidAlleles> implements star.genetics.genetic.model.GeneticMakeup
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONValue;
+
+public class GeneticMakeupImpl implements star.genetics.genetic.model.GeneticMakeup
 {
 	private static final long serialVersionUID = 1L;
+	private final JSONObject data;
+	private final Model model;
+
+	public Model getModel()
+	{
+		return model;
+	}
+
+	GeneticMakeupImpl(JSONObject data, Model model)
+	{
+		this.model = model;
+		this.data = data;
+	}
+
+	public GeneticMakeupImpl(Model model)
+	{
+		this.model = model;
+		this.data = new JSONObject();
+		data.put(MAKEUP, new JSONObject());
+	}
+
+	@Override
+	public JSONObject getJSON()
+	{
+		return data;
+	}
+
+	public String toStr(Gene g)
+	{
+		JSONObject ret = new JSONObject();
+		ret.put("chromosome", Helper.wrapString(g.getChromosome().getName()));
+		ret.put("gene", Helper.wrapString(g.getName()));
+		return ret.toString();
+	}
+
+	public void put(Gene g, DiploidAlleles d)
+	{
+		data.get(MAKEUP).isObject().put(toStr(g), d.getJSON());
+	}
+
+	public DiploidAlleles get(Gene g)
+	{
+		JSONValue value = data.get(MAKEUP).isObject().get(toStr(g));
+		if (value != null)
+		{
+			return new DiploidAllelesImpl(value.isObject(), getModel());
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public DiploidAlleles get(String g)
+	{
+		JSONValue value = data.get(MAKEUP).isObject().get(g);
+		if (value != null)
+		{
+			return new DiploidAllelesImpl(value.isObject(), getModel());
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	int size()
+	{
+		return data.get(MAKEUP).isObject().size();
+	}
 
 	@Override
 	public boolean equals(Object other)
@@ -23,7 +95,7 @@ public class GeneticMakeupImpl extends TreeMap<Gene, DiploidAlleles> implements 
 			if (that.size() == this.size())
 			{
 				ret = true;
-				for (Gene g : this.keySet())
+				for (String g : data.get(MAKEUP).isObject().keySet())
 				{
 					DiploidAlleles thisDiploid = this.get(g);
 					DiploidAlleles thatDiploid = that.get(g);
@@ -41,16 +113,6 @@ public class GeneticMakeupImpl extends TreeMap<Gene, DiploidAlleles> implements 
 			}
 		}
 		return ret;
-	}
-
-	public boolean containsKey(Gene g)
-	{
-		return super.containsKey(g);
-	}
-
-	public DiploidAlleles get(Gene g)
-	{
-		return super.get(g);
 	}
 
 	private boolean test(Allele a, Allele b, Allele x, Allele y)
@@ -75,15 +137,19 @@ public class GeneticMakeupImpl extends TreeMap<Gene, DiploidAlleles> implements 
 		return ax & by;
 	}
 
-	private boolean test(Map<Gene, DiploidAlleles> map, boolean swap)
+	private boolean test(RuleMakeup map, boolean swap)
 	{
 		boolean ret = true;
 		try
 		{
-			for (Entry<Gene, DiploidAlleles> entry : map.entrySet())
+			for (String s : map.keySet())
 			{
-				DiploidAlleles rule = entry.getValue();
-				DiploidAlleles organism = get(entry.getKey());
+				DiploidAlleles rule = map.get(s);
+				DiploidAlleles organism = get(s);
+				// for (Entry<Gene, DiploidAlleles> entry : map.entrySet())
+				// {
+				// DiploidAlleles rule = entry.getValue();
+				// DiploidAlleles organism = get(entry.getKey());
 
 				if (organism == null)
 				{
@@ -110,7 +176,7 @@ public class GeneticMakeupImpl extends TreeMap<Gene, DiploidAlleles> implements 
 		return ret;
 	}
 
-	public boolean test(Chromosome chromosome, Map<Gene, DiploidAlleles> map)
+	public boolean test(Chromosome chromosome, RuleMakeup map)
 	{
 		boolean ret = test(map, false) || test(map, true);
 		return ret;
@@ -119,9 +185,9 @@ public class GeneticMakeupImpl extends TreeMap<Gene, DiploidAlleles> implements 
 	public String toShortString()
 	{
 		StringBuilder sb = new StringBuilder();
-		for (Entry<Gene, DiploidAlleles> entry : this.entrySet())
+		for (String g : data.get(MAKEUP).isObject().keySet())
 		{
-			DiploidAlleles alleles = entry.getValue();
+			DiploidAlleles alleles = get(g);
 			if (alleles instanceof DiploidAllelesImpl)
 			{
 				sb.append(((DiploidAllelesImpl) alleles).toStortString());

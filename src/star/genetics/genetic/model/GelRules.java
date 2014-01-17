@@ -1,6 +1,8 @@
 package star.genetics.genetic.model;
 
-public interface GelRules
+import star.genetics.client.JSONable;
+
+public interface GelRules extends JSONable
 {
 	Iterable<Gel> getAllGelNames();
 

@@ -6,34 +6,35 @@ import com.google.gwt.json.client.JSONArray;
 public class Experiment extends JavaScriptObject
 {
 	protected Experiment()
-	{		
+	{
 	}
-	
+
 	public final native String getId() /*-{
-		return this.id; 
-	}-*/;
+	                                   return this.id; 
+	                                   }-*/;
 
 	public final native String getName() /*-{
-		return this.name; 
-	}-*/;
+	                                     return this.name; 
+	                                     }-*/;
 
-	public final JavaScriptObject[] getParents() {
+	public final JavaScriptObject[] getParents()
+	{
 		JavaScriptObject src = getNativeParents();
 		JSONArray array = new JSONArray(src);
 		JavaScriptObject[] ret = new JavaScriptObject[array.size()];
-		for( int i = 0 ; i < ret.length ; i++ )
+		for (int i = 0; i < ret.length; i++)
 		{
 			ret[i] = array.get(i).isObject().getJavaScriptObject();
 		}
-		return ret; 
+		return ret;
 	}
-	
+
 	public final native JavaScriptObject getNativeParents() /*-{
-		return this.parents; 
-	}-*/;
-	
+	                                                        return this.parents; 
+	                                                        }-*/;
+
 	public final native JavaScriptObject[] getProgenies() /*-{
-		return this.progenies; 
-	}-*/;
-	
+	                                                      return this.progenies; 
+	                                                      }-*/;
+
 }

@@ -16,7 +16,5 @@ public interface Model extends GeneticModel
 
 	GelRules getGelRules();
 
-	ModelMetadata getModelMetadata();
-
 	int getProgeniesCount();
 }

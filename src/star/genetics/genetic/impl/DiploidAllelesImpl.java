@@ -1,49 +1,121 @@
 package star.genetics.genetic.impl;
 
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import star.genetics.client.Messages;
 import star.genetics.genetic.model.Allele;
+import star.genetics.genetic.model.Model;
+
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONValue;
 
 public class DiploidAllelesImpl implements star.genetics.genetic.model.DiploidAlleles, Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private final Allele a1, a2;
+	private final JSONObject data;
+	private final Model model;
 
-	public DiploidAllelesImpl(Allele[] alleles)
+	public Model getModel()
 	{
+		return model;
+	}
+
+	DiploidAllelesImpl(JSONObject data, Model model)
+	{
+		this.data = data;
+		this.model = model;
+	}
+
+	static Logger logger = Logger.getLogger("DiploidAllelesImpl");
+
+	public DiploidAllelesImpl(Allele[] alleles, Model model)
+	{
+		this.model = model;
+		logger.log(Level.INFO, "a 1");
+
 		if (alleles != null && (alleles.length == 1 || alleles.length == 2))
 		{
-			a1 = alleles[0];
-			a2 = alleles.length == 2 ? alleles[1] : null;
+			logger.log(Level.INFO, "a 3");
+
+			data = new JSONObject();
+			if (alleles[0] != null)
+			{
+				data.put(ALLELE_1, alleles[0].getJSON());
+			}
+			logger.log(Level.INFO, "a 4");
+			if (alleles.length == 2 && alleles[1] != null)
+			{
+				data.put(ALLELE_2, alleles[1].getJSON());
+			}
+			logger.log(Level.INFO, "a 5");
+
 		}
 		else
 		{
 			throw new RuntimeException(Messages.getString("DiploidAllelesImpl.0")); //$NON-NLS-1$
 		}
+		logger.log(Level.INFO, "a 2");
+
 	}
 
-	public DiploidAllelesImpl(Allele a1, Allele a2)
+	public DiploidAllelesImpl(Allele a1, Allele a2, Model model)
 	{
-		this.a1 = a1;
-		this.a2 = a2;
+		this.model = model;
+		logger.log(Level.INFO, "a 7a A");
+		data = new JSONObject();
+		if (a1 != null)
+		{
+			data.put(ALLELE_1, a1.getJSON());
+		}
+		logger.log(Level.INFO, "a 7b B");
+		if (a2 != null)
+		{
+			data.put(ALLELE_2, a2.getJSON());
+		}
+		logger.log(Level.INFO, "a 7c C");
+	}
+
+	Allele get(JSONValue data)
+	{
+		if (data != null)
+		{
+			JSONObject o = data.isObject();
+			return o != null ? new AlleleImpl(o, getModel()) : null;
+		}
+		else
+		{
+			return null;
+		}
+
+	}
+
+	Allele a1()
+	{
+		return get(data.get(ALLELE_1));
+	}
+
+	Allele a2()
+	{
+		return get(data.get(ALLELE_2));
 	}
 
 	Allele meiosis()
 	{
-		return (java.lang.Math.random() < .5) ? a1 : a2;
+		return (java.lang.Math.random() < .5) ? a1() : a2();
 	}
 
 	public String toStortString()
 	{
-		return "(" + (a1 != null ? a1.getName() : "-") + "," + (a2 != null ? a2.getName() : "-") + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return "(" + (a1() != null ? a1().getName() : "-") + "," + (a2() != null ? a2().getName() : "-") + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	public int getAlleleCount()
 	{
 		int ret = 0;
-		ret += a1 != null ? 1 : 0;
-		ret += a2 != null ? 1 : 0;
+		ret += a1() != null ? 1 : 0;
+		ret += a2() != null ? 1 : 0;
 		return ret;
 	}
 
@@ -52,11 +124,11 @@ public class DiploidAllelesImpl implements star.genetics.genetic.model.DiploidAl
 		Allele ret = null;
 		if (i == 0)
 		{
-			ret = a1;
+			ret = a1();
 		}
 		else if (i == 1)
 		{
-			ret = a2;
+			ret = a2();
 		}
 		return ret;
 	}
@@ -81,4 +153,11 @@ public class DiploidAllelesImpl implements star.genetics.genetic.model.DiploidAl
 	{
 		return toStortString().hashCode();
 	}
+
+	@Override
+	public JSONObject getJSON()
+	{
+		return data;
+	}
+
 }

@@ -43,12 +43,12 @@ public class MapArray<K, V>
 	}
 
 	public Set<K> keySet()
-    {
-	    return map.keySet();
-    }
+	{
+		return map.keySet();
+	}
 
 	public Set<V> get(K key)
-    {
-	    return map.get(key);
-    }
+	{
+		return map.get(key);
+	}
 }

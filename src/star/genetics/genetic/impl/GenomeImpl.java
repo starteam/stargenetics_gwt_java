@@ -5,15 +5,38 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import star.genetics.client.JSONableList;
 import star.genetics.genetic.model.Chromosome;
 import star.genetics.genetic.model.Gene;
+import star.genetics.genetic.model.Model;
+
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
 
 public class GenomeImpl implements star.genetics.genetic.model.Genome, Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private String name;
-	private List<Chromosome> chromosomes = new ArrayList<Chromosome>();
-	private SexType sexType = SexType.XY;
+	private final JSONObject data;
+	private final Model model;
+
+	public Model getModel()
+	{
+		return model;
+	}
+
+	public GenomeImpl(JSONObject data, Model model)
+	{
+		this.data = data;
+		this.model = model;
+	}
+
+	public GenomeImpl(Model model)
+	{
+		this.model = model;
+		this.data = new JSONObject();
+		data.put(SEX, SexType.XY.getJSON());
+		data.put(CHROMOSOMES, new JSONArray());
+	}
 
 	/**
 	 * @param organismName
@@ -21,18 +44,18 @@ public class GenomeImpl implements star.genetics.genetic.model.Genome, Serializa
 	 */
 	public void setSexType(String sexTypeName)
 	{
-		sexType = SexType.parse(sexTypeName);
+		data.put(SEX, SexType.parse(sexTypeName).getJSON());
 	}
 
 	public SexType getSexType()
 	{
-		return sexType;
+		return SexType.fromJSON(data.get(SEX));
 	}
 
 	public Chromosome getChromosomeByName(String name)
 	{
 		Chromosome ret = null;
-		for (Chromosome x : chromosomes)
+		for (Chromosome x : getChromosomes())
 		{
 			if (name.equals(x.getName()))
 			{
@@ -41,11 +64,6 @@ public class GenomeImpl implements star.genetics.genetic.model.Genome, Serializa
 			}
 		}
 		return ret;
-	}
-
-	public void removeChromosome(Chromosome c)
-	{
-		getChromosomes().remove(c);
 	}
 
 	public void addChromosome(Chromosome c)
@@ -58,24 +76,25 @@ public class GenomeImpl implements star.genetics.genetic.model.Genome, Serializa
 		return getChromosomes().iterator();
 	}
 
-	List<Chromosome> getChromosomes()
+	JSONableList<Chromosome> getChromosomes()
 	{
-		return chromosomes;
-	}
+		if (data == null)
+		{
+			throw new NullPointerException();
+		}
+		if (data.get(CHROMOSOMES) == null)
+		{
+			throw new NullPointerException();
+		}
 
-	public void setChromosomes(List<Chromosome> chromosomes)
-	{
-		this.chromosomes = chromosomes;
-	}
-
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-
-	public String getName()
-	{
-		return name;
+		return new JSONableList<Chromosome>(data.get(CHROMOSOMES).isArray())
+		{
+			@Override
+			public Chromosome create(JSONObject data)
+			{
+				return new ChromosomeImpl(data, getModel());
+			}
+		};
 	}
 
 	public List<Gene> getGenes()
@@ -83,9 +102,17 @@ public class GenomeImpl implements star.genetics.genetic.model.Genome, Serializa
 		ArrayList<Gene> genes = new ArrayList<Gene>();
 		for (star.genetics.genetic.model.Chromosome c : getChromosomes())
 		{
-			genes.addAll(c.getGenes());
+			for (Gene g : c.getGenes())
+			{
+				genes.add(g);
+			}
 		}
 		return genes;
 	}
 
+	@Override
+	public JSONObject getJSON()
+	{
+		return data;
+	}
 }

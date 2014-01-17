@@ -4,14 +4,8 @@ import star.genetics.beans.StringTokenizer;
 import star.genetics.client.Stargenetics_gwt_java;
 import star.genetics.client.messages.Exec;
 
-import com.google.gwt.core.client.Callback;
-import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
-import com.google.gwt.junit.client.GWTTestCase;
-
-import static org.junit.Assert.*; 
 
 public class JSONModel extends BaseTest
 {

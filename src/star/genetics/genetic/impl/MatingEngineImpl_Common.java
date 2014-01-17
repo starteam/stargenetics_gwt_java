@@ -3,34 +3,72 @@ package star.genetics.genetic.impl;
 import java.io.Serializable;
 import java.util.Map;
 
+import star.genetics.client.Helper;
+import star.genetics.client.JSONable;
 import star.genetics.client.Messages;
 import star.genetics.genetic.model.Creature;
 import star.genetics.genetic.model.CreatureSet;
 import star.genetics.genetic.model.GeneticMakeup;
 import star.genetics.genetic.model.GeneticModel;
 import star.genetics.genetic.model.Genome;
+import star.genetics.genetic.model.Model;
 import star.genetics.genetic.model.RuleSet;
 import star.genetics.xls.ParseException;
 
-public abstract class MatingEngineImpl_Common implements Serializable
+import com.google.gwt.json.client.JSONObject;
+
+public abstract class MatingEngineImpl_Common implements Serializable, JSONable
 {
 	private static final long serialVersionUID = 1L;
 	final static String sterileString = GeneticModel.sterile;
-	private int progeniesCount;
-	private float twinningFrequency;
-	private float identicalTwinsFrequency;
+	protected final JSONObject data;
+	private final Model model;
 
-	MatingEngineImpl_Common(int progeniesCount, float twinningFrequency, float identicalTwinsFrequency)
+	public Model getModel()
 	{
-		this.progeniesCount = progeniesCount;
-		this.twinningFrequency = twinningFrequency;
-		this.identicalTwinsFrequency = identicalTwinsFrequency;
-
+		return model;
 	}
+
+	MatingEngineImpl_Common(JSONObject data, Model model)
+	{
+		this.data = data;
+		this.model = model;
+	}
+
+	public JSONObject getJSON()
+	{
+		return data;
+	};
+
+	MatingEngineImpl_Common(int progeniesCount, float twinningFrequency, float identicalTwinsFrequency, Model model)
+	{
+		this.model = model;
+		data = new JSONObject();
+		data.put("progeniesCount", Helper.wrapNumber(progeniesCount));
+		data.put("twinningFrequency", Helper.wrapNumber(twinningFrequency));
+		data.put("identicalTwinsFrequency", Helper.wrapNumber(identicalTwinsFrequency));
+	}
+
+	private int progeniesCount()
+	{
+		return Math.round(Helper.unwrapNumber(data.get("progeniesCount")));
+	};
+
+	private float twinningFrequency()
+	{
+		return Helper.unwrapNumber(data.get("twinningFrequency"));
+
+	};
+
+	private float identicalTwinsFrequency()
+	{
+		return Helper.unwrapNumber(data.get("identicalTwinsFrequency"));
+
+	};
 
 	public CreatureSet getProgenies(String crateName, CreatureSet parents, int countFrom, int matings, RuleSet rules) throws MatingException
 	{
-		CreatureSet set = new star.genetics.genetic.impl.CreatureSetImpl();
+		CreatureSet set = new star.genetics.genetic.impl.CreatureSetImpl(getModel());
 		if (canMate(parents))
 		{
 			Creature[] parentArray = new Creature[2];
@@ -41,7 +79,7 @@ public abstract class MatingEngineImpl_Common implements Serializable
 			}
 			int creature_count = 0;
 			int lethal_count = 0;
-			LOOP: for (int j = 0; j < progeniesCount; j++)
+			LOOP: for (int j = 0; j < progeniesCount(); j++)
 			{
 				Creature c = mate(crateName, parentArray[0], parentArray[1], "-" + (countFrom + creature_count), matings, rules); //$NON-NLS-1$
 				boolean isLethal = (c == null);
@@ -49,7 +87,7 @@ public abstract class MatingEngineImpl_Common implements Serializable
 				{
 					j--;
 					lethal_count++;
-					if (lethal_count > progeniesCount * 10 && set.size() == 0)
+					if (lethal_count > progeniesCount() * 10 && set.size() == 0)
 					{
 						break LOOP;
 					}
@@ -59,9 +97,9 @@ public abstract class MatingEngineImpl_Common implements Serializable
 				set.add(c);
 				creature_count++;
 
-				if (Math.random() < twinningFrequency / 100)
+				if (Math.random() < twinningFrequency() / 100)
 				{
-					if (Math.random() < identicalTwinsFrequency / 100)
+					if (Math.random() < identicalTwinsFrequency() / 100)
 					{
 						String name = crateName + "-" + (countFrom + creature_count); //$NON-NLS-1$
 						set.add(clone(name, c, matings));
@@ -96,7 +134,7 @@ public abstract class MatingEngineImpl_Common implements Serializable
 
 	private Creature clone(String name, Creature source, int matings)
 	{
-		return new star.genetics.genetic.impl.CreatureImpl(name, source.getGenome(), source.getSex(), source.getMakeup(), matings, source.getProperties(), source.getParents());
+		return new star.genetics.genetic.impl.CreatureImpl(name, source.getGenome(), source.getSex(), source.getMakeup(), matings, source.getProperties().asMap(), source.getParents(), getModel());
 	}
 
 	protected abstract GeneticMakeup mate(Genome genome, GeneticMakeup makeup1, Creature.Sex sex1, GeneticMakeup makeup2, Creature.Sex sex2);
@@ -111,7 +149,7 @@ public abstract class MatingEngineImpl_Common implements Serializable
 			Genome genome = p1.getGenome();
 			Creature.Sex sex = p1.getSex() != null ? Sex.getSex(makeup, genome, name) : null;
 			Map<String, String> x = rules.getProperties(makeup, sex);
-			CreatureSet parents = new CreatureSetImpl();
+			CreatureSet parents = new CreatureSetImpl(getModel());
 			parents.add(p1);
 			parents.add(p2);
 
@@ -123,7 +161,7 @@ public abstract class MatingEngineImpl_Common implements Serializable
 			}
 			if (!isLethal)
 			{
-				star.genetics.genetic.impl.CreatureImpl ret = new star.genetics.genetic.impl.CreatureImpl(name, genome, sex, makeup, matings, x, parents);
+				star.genetics.genetic.impl.CreatureImpl ret = new star.genetics.genetic.impl.CreatureImpl(name, genome, sex, makeup, matings, x, parents, getModel());
 				return ret;
 			}
 			else
