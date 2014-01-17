@@ -12,19 +12,20 @@ public class SexRuleImpl implements IndividualRule, Serializable
 {
 	private static final long serialVersionUID = 1L;
 
-	Model model;
-	
+	final Model model;
+
 	@Override
 	public Model getModel()
 	{
-	    return model;
+		return model;
 	}
+
 	private Sex s()
 	{
 		return Sex.fromJSON(data.get(SEX));
 	};
 
-	private JSONObject data;
+	private final JSONObject data;
 
 	public SexRuleImpl(Sex s, Model model)
 	{
@@ -38,11 +39,11 @@ public class SexRuleImpl implements IndividualRule, Serializable
 		this.data = data;
 		this.model = model;
 	}
-	
+
 	@Override
 	public JSONObject getJSON()
 	{
-	    return data;
+		return data;
 	}
 
 	public boolean test(GeneticMakeup makeup, Sex sex)

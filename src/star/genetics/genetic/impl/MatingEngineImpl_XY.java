@@ -27,23 +27,22 @@ public class MatingEngineImpl_XY extends MatingEngineImpl_Common implements Mati
 
 	float maleRecombinationRate()
 	{
-		return Math.round(Helper.unwrapNumber(data.get(MALERECOMBINATIONRATE)));
-
+		return Helper.unwrapNumber(data.get(MALERECOMBINATIONRATE));
 	};
 
 	float femaleRecombinationRate()
 	{
-		return Math.round(Helper.unwrapNumber(data.get(FEMALERECOMBINATIONRATE)));
+		return Helper.unwrapNumber(data.get(FEMALERECOMBINATIONRATE));
 
 	};
 
 	float femaleSexRatio()
 	{
-		return Math.round(Helper.unwrapNumber(data.get("femaleSexRatio")));
+		return Helper.unwrapNumber(data.get("femaleSexRatio"));
 
 	};
 
-	public MatingEngineImpl_XY( Model model)
+	public MatingEngineImpl_XY(Model model)
 	{
 		super(20, 0, 0, model);
 		data.put(MALERECOMBINATIONRATE, Helper.wrapNumber(1f));

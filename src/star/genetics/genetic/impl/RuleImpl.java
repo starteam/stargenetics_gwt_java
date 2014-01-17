@@ -84,10 +84,11 @@ public class RuleImpl implements star.genetics.genetic.model.Rule, Serializable
 
 	private final JSONObject data;
 	private final Model model;
+
 	public Model getModel()
-	    {
-	    return model;
-	    }
+	{
+		return model;
+	}
 
 	public RuleImpl(JSONObject data, Model model)
 	{
@@ -229,12 +230,12 @@ public class RuleImpl implements star.genetics.genetic.model.Rule, Serializable
 				if (s.equals("sex:mata")) //$NON-NLS-1$
 				{
 					ret = true;
-					compiledRules().add(new SexRuleImpl(Creature.Sex.MALE,getModel()));
+					compiledRules().add(new SexRuleImpl(Creature.Sex.MALE, getModel()));
 				}
 				else if (s.equals("sex:matalpha")) //$NON-NLS-1$
 				{
 					ret = true;
-					compiledRules().add(new SexRuleImpl(Creature.Sex.FEMALE,getModel()));
+					compiledRules().add(new SexRuleImpl(Creature.Sex.FEMALE, getModel()));
 				}
 			}
 		}

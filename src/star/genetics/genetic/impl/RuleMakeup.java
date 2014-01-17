@@ -9,27 +9,29 @@ import star.genetics.genetic.model.Model;
 
 import com.google.gwt.json.client.JSONObject;
 
-public class RuleMakeup implements JSONable {
+public class RuleMakeup implements JSONable
+{
 
 	private final JSONObject data;
 	private final Model model;
-	public Model getModel()
-	    {
-	    return model;
-	    }
 
-	RuleMakeup( JSONObject data , Model model)
+	public Model getModel()
+	{
+		return model;
+	}
+
+	RuleMakeup(JSONObject data, Model model)
 	{
 		this.data = data;
 		this.model = model;
 	}
-	
+
 	@Override
 	public JSONObject getJSON()
 	{
-	    return data;
+		return data;
 	}
-	
+
 	public void put(Gene g, DiploidAlleles d)
 	{
 		String gene_str = g.getJSON().toString();
@@ -38,21 +40,22 @@ public class RuleMakeup implements JSONable {
 
 	public DiploidAlleles get(Gene g)
 	{
-		return new DiploidAllelesImpl(data.get(MAKEUP).isObject().get(g.getJSON().toString()).isObject(),getModel());
+		return new DiploidAllelesImpl(data.get(MAKEUP).isObject().get(g.getJSON().toString()).isObject(), getModel());
 	}
 
 	public DiploidAlleles get(String g)
 	{
-		return new DiploidAllelesImpl(data.get(MAKEUP).isObject().get(g).isObject(),getModel());
+		return new DiploidAllelesImpl(data.get(MAKEUP).isObject().get(g).isObject(), getModel());
 	}
 
 	int size()
 	{
 		return data.get(MAKEUP).isObject().size();
 	}
-	
-	public Set<String> keySet() {
+
+	public Set<String> keySet()
+	{
 		return data.get(MAKEUP).isObject().keySet();
 	}
-	
+
 }

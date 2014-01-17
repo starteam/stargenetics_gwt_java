@@ -17,12 +17,12 @@ public class GelImpl implements Gel, Serializable
 	private static final long serialVersionUID = 1L;
 	private final JSONObject data;
 	private final Model model;
-	
+
 	public Model getModel()
-    {
-	    return model;
-    }
-	
+	{
+		return model;
+	}
+
 	public GelImpl(String name, int index, Model model)
 	{
 		this.model = model;
@@ -36,12 +36,12 @@ public class GelImpl implements Gel, Serializable
 	{
 		this.model = model;
 		this.data = data;
-    }
-	
+	}
+
 	@Override
 	public JSONObject getJSON()
 	{
-	    return data;
+		return data;
 	}
 
 	@Override
@@ -57,18 +57,19 @@ public class GelImpl implements Gel, Serializable
 		return Math.round(Helper.unwrapNumber(data.get(INDEX)));
 	}
 
-	JSONableList<GelPosition> set() {
-		return new JSONableList<GelPosition>( data.get(SET).isArray())
+	JSONableList<GelPosition> set()
+	{
+		return new JSONableList<GelPosition>(data.get(SET).isArray())
 		{
 
 			@Override
-            public GelPosition create(JSONObject data)
-            {
-	            return new GelPositionImpl(data, getModel());
-            }
+			public GelPosition create(JSONObject data)
+			{
+				return new GelPositionImpl(data, getModel());
+			}
 		};
 	}
-	
+
 	public void addGelPosition(GelPosition gp)
 	{
 		set().add(gp);

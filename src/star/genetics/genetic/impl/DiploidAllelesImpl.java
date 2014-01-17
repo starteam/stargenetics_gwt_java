@@ -16,11 +16,12 @@ public class DiploidAllelesImpl implements star.genetics.genetic.model.DiploidAl
 	private static final long serialVersionUID = 1L;
 	private final JSONObject data;
 	private final Model model;
-public Model getModel()
-{
-	return model;
-}
-	
+
+	public Model getModel()
+	{
+		return model;
+	}
+
 	DiploidAllelesImpl(JSONObject data, Model model)
 	{
 		this.data = data;
@@ -78,16 +79,16 @@ public Model getModel()
 
 	Allele get(JSONValue data)
 	{
-		if( data != null) 
+		if (data != null)
 		{
-		JSONObject o = data.isObject();
-		return o != null ? new AlleleImpl(o,getModel()) : null;
+			JSONObject o = data.isObject();
+			return o != null ? new AlleleImpl(o, getModel()) : null;
 		}
 		else
 		{
 			return null;
 		}
-		
+
 	}
 
 	Allele a1()

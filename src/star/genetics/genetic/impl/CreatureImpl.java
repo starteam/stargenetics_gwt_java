@@ -24,9 +24,10 @@ public class CreatureImpl implements star.genetics.genetic.model.Creature, Seria
 	private final Model model;
 
 	public Model getModel()
-    {
-	    return model;
-    }
+	{
+		return model;
+	}
+
 	CreatureImpl(JSONObject data, Model model)
 	{
 		this.model = model;
@@ -38,7 +39,7 @@ public class CreatureImpl implements star.genetics.genetic.model.Creature, Seria
 		this.model = model;
 		this.data = new JSONObject();
 		data.put(NAME, Helper.wrapString(name));
-//		data.put(GENOME, genome.getJSON());
+		// data.put(GENOME, genome.getJSON());
 		data.put(SEX, sex.getJSON());
 		data.put(MAKEUP, makeup.getJSON());
 		data.put(MATINGSAVAILABLE, Helper.wrapNumber(matingsAvailable));

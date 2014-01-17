@@ -23,10 +23,11 @@ public abstract class MatingEngineImpl_Common implements Serializable, JSONable
 	final static String sterileString = GeneticModel.sterile;
 	protected final JSONObject data;
 	private final Model model;
+
 	public Model getModel()
-	    {
-	    return model;
-	    }
+	{
+		return model;
+	}
 
 	MatingEngineImpl_Common(JSONObject data, Model model)
 	{
@@ -34,10 +35,11 @@ public abstract class MatingEngineImpl_Common implements Serializable, JSONable
 		this.model = model;
 	}
 
-	public JSONObject getJSON() {
+	public JSONObject getJSON()
+	{
 		return data;
 	};
-	
+
 	MatingEngineImpl_Common(int progeniesCount, float twinningFrequency, float identicalTwinsFrequency, Model model)
 	{
 		this.model = model;
@@ -159,7 +161,7 @@ public abstract class MatingEngineImpl_Common implements Serializable, JSONable
 			}
 			if (!isLethal)
 			{
-				star.genetics.genetic.impl.CreatureImpl ret = new star.genetics.genetic.impl.CreatureImpl(name, genome, sex, makeup, matings, x, parents,getModel());
+				star.genetics.genetic.impl.CreatureImpl ret = new star.genetics.genetic.impl.CreatureImpl(name, genome, sex, makeup, matings, x, parents, getModel());
 				return ret;
 			}
 			else

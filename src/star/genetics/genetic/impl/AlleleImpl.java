@@ -13,9 +13,9 @@ import com.google.gwt.json.client.JSONObject;
 public class AlleleImpl implements star.genetics.genetic.model.Allele, Serializable
 {
 	private static final long serialVersionUID = 1L;
-	JSONObject data = new JSONObject();
+	final JSONObject data;
 
-	Model model;
+	final Model model;
 
 	@Override
 	public Model getModel()
@@ -31,6 +31,7 @@ public class AlleleImpl implements star.genetics.genetic.model.Allele, Serializa
 
 	public AlleleImpl(String name, Gene gene, Model model)
 	{
+		data = new JSONObject();
 		data.put(NAME, Helper.wrapString(name));
 		data.put(CHROMOSOME, Helper.wrapString(gene.getChromosome().getName()));
 		data.put(GENE, Helper.wrapString(gene.getName()));
@@ -46,7 +47,7 @@ public class AlleleImpl implements star.genetics.genetic.model.Allele, Serializa
 	public Gene getGene()
 	{
 		Genome g = getModel().getGenome();
-		Chromosome c= g.getChromosomeByName(Helper.unwrapString(data.get(CHROMOSOME)));
+		Chromosome c = g.getChromosomeByName(Helper.unwrapString(data.get(CHROMOSOME)));
 		Gene gene = c.getGeneByName(Helper.unwrapString(data.get(GENE)));
 		return gene;
 	}

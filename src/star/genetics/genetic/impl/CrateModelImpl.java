@@ -14,15 +14,17 @@ import com.google.gwt.json.client.JSONObject;
 public class CrateModelImpl implements CrateModel, Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private JSONObject data;
+	private final JSONObject data;
 	private final Model model;
+
 	public Model getModel()
-    {
-	    return model;
-    }
+	{
+		return model;
+	}
 
 	public CrateModelImpl(int id, Model model)
 	{
+		data = new JSONObject();
 		data.put(PARENTS, new JSONObject());
 		data.put(PROGENIES, new JSONObject());
 		data.put(NAME, Helper.wrapString(MessageFormat.format(Messages.getString("CrateModelImpl.0"), id))); //$NON-NLS-1$

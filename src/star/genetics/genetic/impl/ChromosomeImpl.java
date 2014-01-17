@@ -15,20 +15,21 @@ import com.google.gwt.json.client.JSONObject;
 public class ChromosomeImpl implements star.genetics.genetic.model.Chromosome, Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private JSONObject data;
-	private Model model ;
+	private final JSONObject data;
+	private final Model model;
+
 	public Model getModel()
-    {
-	    return model;
-    }
-	
+	{
+		return model;
+	}
+
 	public ChromosomeImpl(JSONObject data, Model model)
 	{
 		this.data = data;
 		this.model = model;
 	}
 
-	public ChromosomeImpl(String name, Genome genome, Model model )
+	public ChromosomeImpl(String name, Genome genome, Model model)
 	{
 		data = new JSONObject();
 		data.put(NAME, Helper.wrapString(name));

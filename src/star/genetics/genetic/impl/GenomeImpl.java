@@ -78,15 +78,15 @@ public class GenomeImpl implements star.genetics.genetic.model.Genome, Serializa
 
 	JSONableList<Chromosome> getChromosomes()
 	{
-		if( data == null )
+		if (data == null)
 		{
 			throw new NullPointerException();
 		}
-		if( data.get(CHROMOSOMES) == null )
+		if (data.get(CHROMOSOMES) == null)
 		{
 			throw new NullPointerException();
 		}
-		
+
 		return new JSONableList<Chromosome>(data.get(CHROMOSOMES).isArray())
 		{
 			@Override

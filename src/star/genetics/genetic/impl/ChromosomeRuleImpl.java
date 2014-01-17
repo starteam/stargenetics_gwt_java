@@ -19,12 +19,13 @@ class ChromosomeRuleImpl implements Serializable, IndividualRule
 {
 	private static final long serialVersionUID = 1L;
 
-	Model model ;
+	final Model model;
+
 	public Model getModel()
-    {
-	    return model;
-    }
-	
+	{
+		return model;
+	}
+
 	private final Chromosome chromosome()
 	{
 		return getModel().getGenome().getChromosomeByName(Helper.unwrapString(data.get(CHROMOSOME)));
@@ -53,7 +54,7 @@ class ChromosomeRuleImpl implements Serializable, IndividualRule
 
 	RuleMakeup get()
 	{
-		return new RuleMakeup(data,getModel());
+		return new RuleMakeup(data, getModel());
 	}
 
 	public boolean test(GeneticMakeup makeup, Creature.Sex sex)
@@ -71,7 +72,7 @@ class ChromosomeRuleImpl implements Serializable, IndividualRule
 			logger.log(Level.INFO, "a 2");
 			logger.log(Level.INFO, "a 2a: " + get());
 			logger.log(Level.INFO, "a 2d");
-			DiploidAlleles da = new DiploidAllelesImpl(a, null,getModel());
+			DiploidAlleles da = new DiploidAllelesImpl(a, null, getModel());
 			Gene g = a.getGene();
 			get().put(g, da);
 			logger.log(Level.INFO, "a 3");
@@ -80,8 +81,8 @@ class ChromosomeRuleImpl implements Serializable, IndividualRule
 		else
 		{
 			logger.log(Level.INFO, "a 4");
-			logger.log(Level.INFO, "a 4a" + get() );
-			logger.log(Level.INFO, "a 4b" + a.getGene() );
+			logger.log(Level.INFO, "a 4a" + get());
+			logger.log(Level.INFO, "a 4b" + a.getGene());
 			DiploidAlleles diploid = get().get(a.getGene());
 			logger.log(Level.INFO, "a 5");
 			get().put(a.getGene(), new DiploidAllelesImpl(diploid != null ? diploid.get(0) : null, a, getModel()));

@@ -16,8 +16,8 @@ import com.google.gwt.json.client.JSONObject;
 public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Serializable
 {
 	private static final long serialVersionUID = 1L;
-	
-	private JSONObject data;
+
+	private final JSONObject data;
 
 	public ModelImpl()
 	{
@@ -55,7 +55,7 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 
 	public void setMater(MatingEngineImpl_XY mater)
 	{
-		data.put( MATER , mater.getJSON());
+		data.put(MATER, mater.getJSON());
 	}
 
 	public void setRecombinationRate(float rate, Sex sex)
@@ -72,12 +72,12 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 
 	public void setGenome(Genome genome)
 	{
-		data.put(GENOME,genome.getJSON());
+		data.put(GENOME, genome.getJSON());
 	}
 
 	public Genome getGenome()
 	{
-		return new GenomeImpl(data.get(GENOME).isObject(),getModel());
+		return new GenomeImpl(data.get(GENOME).isObject(), getModel());
 	}
 
 	public MatingEngine getMatingEngine()
@@ -99,7 +99,7 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 			}
 			else if (Genome.SexType.XO.equals(getGenome().getSexType()))
 			{
-				mater = new MatingEngineImpl_XO(maleRecombinationRate(), femaleRecombinationRate(), 0.5f, getProgeniesCount(), getSpontaniousMales(),getModel());
+				mater = new MatingEngineImpl_XO(maleRecombinationRate(), femaleRecombinationRate(), 0.5f, getProgeniesCount(), getSpontaniousMales(), getModel());
 			}
 			else if (Genome.SexType.Aa.equals(getGenome().getSexType()))
 			{
@@ -109,10 +109,12 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 			{
 				mater = new MatingEngineImpl_UNISEX(femaleRecombinationRate(), getProgeniesCount(), getModel());
 			}
-		} else {
+		}
+		else
+		{
 			if (Genome.SexType.XY.equals(getGenome().getSexType()))
 			{
-				mater = new MatingEngineImpl_XY(data.get(MATER).isObject(),getModel());
+				mater = new MatingEngineImpl_XY(data.get(MATER).isObject(), getModel());
 			}
 		}
 		return mater;
@@ -185,17 +187,17 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 
 	public GelRules getGelRules()
 	{
-		return new GelRulesImpl(data.get(GELRULESET).isObject(),getModel());
+		return new GelRulesImpl(data.get(GELRULESET).isObject(), getModel());
 	}
 
 	public JSONObject getJSON()
 	{
 		return data;
 	}
-	
+
 	@Override
 	public Model getModel()
 	{
-	    return this;
+		return this;
 	}
 }

@@ -21,7 +21,6 @@ public class MatingEngineImpl_UNISEX extends MatingEngineImpl_Common implements 
 	float twinningFrequency = 0;
 	float identicalTwinsFrequency = 0;
 
-
 	public MatingEngineImpl_UNISEX(float femaleRecombinationRate, int progeniesCount, Model model)
 	{
 		super(progeniesCount, 0, 0, model);

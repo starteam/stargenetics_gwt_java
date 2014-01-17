@@ -17,14 +17,18 @@ public class CreatureSetImpl implements star.genetics.genetic.model.CreatureSet,
 	private final Model model;
 
 	public Model getModel()
-    {
-	    return model;
-    }
-	
+	{
+		return model;
+	}
+
 	CreatureSetImpl(JSONObject data, Model model)
 	{
 		this.data = data;
 		this.model = model;
+		if (data.get(CREATURES) == null)
+		{
+			data.put(CREATURES, new JSONArray());
+		}
 	}
 
 	public CreatureSetImpl(Model model)
@@ -38,7 +42,6 @@ public class CreatureSetImpl implements star.genetics.genetic.model.CreatureSet,
 	{
 		return new JSONableList<Creature>(data.get(CREATURES).isArray())
 		{
-
 			@Override
 			public Creature create(JSONObject data)
 			{

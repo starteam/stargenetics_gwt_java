@@ -73,11 +73,12 @@ public class MatingEngineImpl_MAT implements MatingEngine, Serializable
 	float femaleSexRatio;
 	int progeniesCount;
 	private final Model model;
+
 	public Model getModel()
-    {
-	    return model;
-    }
-	
+	{
+		return model;
+	}
+
 	public MatingEngineImpl_MAT(float maleRecombinationRate, float femaleRecombinationRate, float femaleSexRatio, int progeniesCount, Model model)
 	{
 		this.model = model;
@@ -208,7 +209,7 @@ public class MatingEngineImpl_MAT implements MatingEngine, Serializable
 						default:
 							throw new RuntimeException(Messages.getString("MatingEngineImpl_MAT.0")); //$NON-NLS-1$
 						}
-						makeup.put(gene, new DiploidAllelesImpl(allele, null,getModel()));
+						makeup.put(gene, new DiploidAllelesImpl(allele, null, getModel()));
 					}
 				}
 			}

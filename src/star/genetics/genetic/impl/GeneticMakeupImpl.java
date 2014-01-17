@@ -16,10 +16,11 @@ public class GeneticMakeupImpl implements star.genetics.genetic.model.GeneticMak
 	private static final long serialVersionUID = 1L;
 	private final JSONObject data;
 	private final Model model;
+
 	public Model getModel()
-	    {
-	    return model;
-	    }
+	{
+		return model;
+	}
 
 	GeneticMakeupImpl(JSONObject data, Model model)
 	{
@@ -39,15 +40,15 @@ public class GeneticMakeupImpl implements star.genetics.genetic.model.GeneticMak
 	{
 		return data;
 	}
-	
-	public String toStr( Gene g )
+
+	public String toStr(Gene g)
 	{
 		JSONObject ret = new JSONObject();
 		ret.put("chromosome", Helper.wrapString(g.getChromosome().getName()));
 		ret.put("gene", Helper.wrapString(g.getName()));
 		return ret.toString();
 	}
-	
+
 	public void put(Gene g, DiploidAlleles d)
 	{
 		data.get(MAKEUP).isObject().put(toStr(g), d.getJSON());
@@ -56,9 +57,9 @@ public class GeneticMakeupImpl implements star.genetics.genetic.model.GeneticMak
 	public DiploidAlleles get(Gene g)
 	{
 		JSONValue value = data.get(MAKEUP).isObject().get(toStr(g));
-		if( value != null )
+		if (value != null)
 		{
-		return new DiploidAllelesImpl(value.isObject(),getModel());
+			return new DiploidAllelesImpl(value.isObject(), getModel());
 		}
 		else
 		{
@@ -68,10 +69,10 @@ public class GeneticMakeupImpl implements star.genetics.genetic.model.GeneticMak
 
 	public DiploidAlleles get(String g)
 	{
- 		JSONValue value = data.get(MAKEUP).isObject().get(g);
-		if(value != null )
+		JSONValue value = data.get(MAKEUP).isObject().get(g);
+		if (value != null)
 		{
-		return new DiploidAllelesImpl(value.isObject(),getModel());
+			return new DiploidAllelesImpl(value.isObject(), getModel());
 		}
 		else
 		{
@@ -141,14 +142,14 @@ public class GeneticMakeupImpl implements star.genetics.genetic.model.GeneticMak
 		boolean ret = true;
 		try
 		{
-			for( String s : map.keySet() )
+			for (String s : map.keySet())
 			{
 				DiploidAlleles rule = map.get(s);
 				DiploidAlleles organism = get(s);
-//			for (Entry<Gene, DiploidAlleles> entry : map.entrySet())
-//			{
-//				DiploidAlleles rule = entry.getValue();
-//				DiploidAlleles organism = get(entry.getKey());
+				// for (Entry<Gene, DiploidAlleles> entry : map.entrySet())
+				// {
+				// DiploidAlleles rule = entry.getValue();
+				// DiploidAlleles organism = get(entry.getKey());
 
 				if (organism == null)
 				{

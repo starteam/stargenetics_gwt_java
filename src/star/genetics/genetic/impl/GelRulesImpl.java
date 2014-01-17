@@ -92,7 +92,7 @@ public class GelRulesImpl implements GelRules, Serializable
 	public void addGel(String gelName, Allele allele, Float[] position)
 	{
 		Gel g = getOrCreateGel(gelName);
-		GelPositionImpl gpi = new GelPositionImpl(g, position, allele,getModel());
+		GelPositionImpl gpi = new GelPositionImpl(g, position, allele, getModel());
 		g.addGelPosition(gpi);
 		pos().add(gpi);
 	}

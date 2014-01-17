@@ -26,10 +26,12 @@ public class RuleSetImpl implements star.genetics.genetic.model.RuleSet
 
 	private final JSONObject data;
 	private final Model model;
+
 	public Model getModel()
-    {
-	    return model;
-    }
+	{
+		return model;
+	}
+
 	JSONableList<Rule> getRules()
 	{
 		return new JSONableList<Rule>(data.get(RULES).isArray())
@@ -38,7 +40,7 @@ public class RuleSetImpl implements star.genetics.genetic.model.RuleSet
 			@Override
 			public Rule create(JSONObject data)
 			{
-				return new RuleImpl(data,getModel());
+				return new RuleImpl(data, getModel());
 			}
 		};
 	}
@@ -79,11 +81,11 @@ public class RuleSetImpl implements star.genetics.genetic.model.RuleSet
 			{
 				return Helper.unwrapString(data);
 			}
-			
+
 			@Override
 			public Iterator<String> iterator()
 			{
-			    return super.iterator();
+				return super.iterator();
 			}
 		};
 	}
@@ -148,18 +150,18 @@ public class RuleSetImpl implements star.genetics.genetic.model.RuleSet
 	@Override
 	public boolean add(Rule rule)
 	{
-		logger.log( Level.INFO, "step 1");
+		logger.log(Level.INFO, "step 1");
 		JSONableList<String> propertyNames = propertyNames();
-		logger.log( Level.INFO, "step 2:" + data.get(PROPERTIES));
+		logger.log(Level.INFO, "step 2:" + data.get(PROPERTIES));
 		for (String s : rule.getProperties().asMap().keySet())
 		{
-			logger.log( Level.INFO, "step 2a " + propertyNames);
+			logger.log(Level.INFO, "step 2a " + propertyNames);
 			propertyNames.add(s);
-			logger.log( Level.INFO, "step 2b");
+			logger.log(Level.INFO, "step 2b");
 		}
-		logger.log( Level.INFO, "step 3");
+		logger.log(Level.INFO, "step 3");
 		getRules().add(rule);
-		logger.log( Level.INFO, "step 4");
+		logger.log(Level.INFO, "step 4");
 		return true;
 	}
 
