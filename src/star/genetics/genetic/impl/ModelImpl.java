@@ -32,6 +32,11 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 		data.put(GENOME, new JSONObject());
 	}
 
+	public ModelImpl(JSONObject data)
+	{
+		this.data = data;
+	}
+
 	public void setVisualizerClass(String className)
 	{
 		data.put(visualFactory, Helper.wrapString(className));
