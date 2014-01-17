@@ -145,23 +145,15 @@ public class RuleSetImpl implements star.genetics.genetic.model.RuleSet
 		}
 	}
 
-	static Logger logger = Logger.getLogger("RuleSetImpl");
-
 	@Override
 	public boolean add(Rule rule)
 	{
-		logger.log(Level.INFO, "step 1");
 		JSONableList<String> propertyNames = propertyNames();
-		logger.log(Level.INFO, "step 2:" + data.get(PROPERTIES));
 		for (String s : rule.getProperties().asMap().keySet())
 		{
-			logger.log(Level.INFO, "step 2a " + propertyNames);
 			propertyNames.add(s);
-			logger.log(Level.INFO, "step 2b");
 		}
-		logger.log(Level.INFO, "step 3");
 		getRules().add(rule);
-		logger.log(Level.INFO, "step 4");
 		return true;
 	}
 

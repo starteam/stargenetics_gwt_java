@@ -62,34 +62,19 @@ class ChromosomeRuleImpl implements Serializable, IndividualRule
 		return makeup.test(chromosome(), get());
 	}
 
-	static Logger logger = Logger.getLogger("ChromosomeRuleImpl");
-
 	void addAllele(int strand, Allele a)
 	{
-		logger.log(Level.INFO, "a 1");
 		if (strand == 0)
 		{
-			logger.log(Level.INFO, "a 2");
-			logger.log(Level.INFO, "a 2a: " + get());
-			logger.log(Level.INFO, "a 2d");
 			DiploidAlleles da = new DiploidAllelesImpl(a, null, getModel());
 			Gene g = a.getGene();
 			get().put(g, da);
-			logger.log(Level.INFO, "a 3");
-
 		}
 		else
 		{
-			logger.log(Level.INFO, "a 4");
-			logger.log(Level.INFO, "a 4a" + get());
-			logger.log(Level.INFO, "a 4b" + a.getGene());
 			DiploidAlleles diploid = get().get(a.getGene());
-			logger.log(Level.INFO, "a 5");
 			get().put(a.getGene(), new DiploidAllelesImpl(diploid != null ? diploid.get(0) : null, a, getModel()));
-			logger.log(Level.INFO, "a 6");
 		}
-		logger.log(Level.INFO, "a E");
-
 	}
 
 }

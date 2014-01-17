@@ -28,53 +28,39 @@ public class DiploidAllelesImpl implements star.genetics.genetic.model.DiploidAl
 		this.model = model;
 	}
 
-	static Logger logger = Logger.getLogger("DiploidAllelesImpl");
-
 	public DiploidAllelesImpl(Allele[] alleles, Model model)
 	{
 		this.model = model;
-		logger.log(Level.INFO, "a 1");
-
 		if (alleles != null && (alleles.length == 1 || alleles.length == 2))
 		{
-			logger.log(Level.INFO, "a 3");
-
 			data = new JSONObject();
 			if (alleles[0] != null)
 			{
 				data.put(ALLELE_1, alleles[0].getJSON());
 			}
-			logger.log(Level.INFO, "a 4");
 			if (alleles.length == 2 && alleles[1] != null)
 			{
 				data.put(ALLELE_2, alleles[1].getJSON());
 			}
-			logger.log(Level.INFO, "a 5");
-
 		}
 		else
 		{
 			throw new RuntimeException(Messages.getString("DiploidAllelesImpl.0")); //$NON-NLS-1$
 		}
-		logger.log(Level.INFO, "a 2");
-
 	}
 
 	public DiploidAllelesImpl(Allele a1, Allele a2, Model model)
 	{
 		this.model = model;
-		logger.log(Level.INFO, "a 7a A");
 		data = new JSONObject();
 		if (a1 != null)
 		{
 			data.put(ALLELE_1, a1.getJSON());
 		}
-		logger.log(Level.INFO, "a 7b B");
 		if (a2 != null)
 		{
 			data.put(ALLELE_2, a2.getJSON());
 		}
-		logger.log(Level.INFO, "a 7c C");
 	}
 
 	Allele get(JSONValue data)
