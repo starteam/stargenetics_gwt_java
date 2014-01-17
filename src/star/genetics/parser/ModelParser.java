@@ -25,30 +25,18 @@ public class ModelParser
 
 	private static void parseGenetics(ModelImpl model, JSONObject genetics)
 	{
-		Logger logger = Logger.getLogger("Parse");
-		logger.log( Level.INFO , "parse A");
 		VisualizerParser.parse(model, genetics.get("visualizer").isObject());
-		logger.log( Level.INFO , "parse B");
 		GenomeParser.parse(model, genetics.get("genome").isObject());
-		logger.log( Level.INFO , "parse C");
 		EngineParser.parse(model, genetics.get("engine").isObject());
-		logger.log( Level.INFO , "parse D");
 		PhenotypeRulesParser.parse(model, genetics.get("phenotype_rules").isArray());
-		logger.log( Level.INFO , "parse E");
 		StrainsParser.parse(model, genetics.get("strains").isObject());
-		logger.log( Level.INFO , "parse F");
 	}
 
 	public static Model parse(String json)
 	{
-		Logger logger = Logger.getLogger("Parse");
-		logger.log( Level.INFO , "parse Start E");
 		ModelImpl model = new ModelImpl();
-		logger.log( Level.INFO , "parse 2");
 		JSONObject top = getTop(json);
-		logger.log( Level.INFO , "parse 3");
 		parse(model, top);
-		logger.log( Level.INFO , "parse End");
 		return model;
 	}
 
