@@ -1,5 +1,8 @@
 package star.genetics.genetic.impl;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import star.genetics.client.Helper;
 import star.genetics.genetic.model.Allele;
 import star.genetics.genetic.model.Chromosome;
@@ -13,6 +16,7 @@ import com.google.gwt.json.client.JSONValue;
 
 public class GeneticMakeupImpl implements star.genetics.genetic.model.GeneticMakeup
 {
+
 	private static final long serialVersionUID = 1L;
 	private final JSONObject data;
 	private final Model model;
@@ -43,10 +47,11 @@ public class GeneticMakeupImpl implements star.genetics.genetic.model.GeneticMak
 
 	public String toStr(Gene g)
 	{
-		JSONObject ret = new JSONObject();
-		ret.put("chromosome", Helper.wrapString(g.getChromosome().getName()));
-		ret.put("gene", Helper.wrapString(g.getName()));
-		return ret.toString();
+//		JSONObject ret = new JSONObject();
+//		ret.put("chromosome", Helper.wrapString(g.getChromosome().getName()));
+//		ret.put("gene", Helper.wrapString(g.getName()));
+//		return ret.toString();
+		return g.getId();
 	}
 
 	public void put(Gene g, DiploidAlleles d)
@@ -117,6 +122,7 @@ public class GeneticMakeupImpl implements star.genetics.genetic.model.GeneticMak
 
 	private boolean test(Allele a, Allele b, Allele x, Allele y)
 	{
+
 		boolean ax, by;
 		if (a != null)
 		{
@@ -144,6 +150,7 @@ public class GeneticMakeupImpl implements star.genetics.genetic.model.GeneticMak
 		{
 			for (String s : map.keySet())
 			{
+				
 				DiploidAlleles rule = map.get(s);
 				DiploidAlleles organism = get(s);
 				// for (Entry<Gene, DiploidAlleles> entry : map.entrySet())
@@ -163,6 +170,7 @@ public class GeneticMakeupImpl implements star.genetics.genetic.model.GeneticMak
 				Allele o1 = organism.get(1);
 
 				ret &= test(r0, r1, o0, o1);
+
 				if (!ret)
 				{
 					break;
@@ -173,6 +181,7 @@ public class GeneticMakeupImpl implements star.genetics.genetic.model.GeneticMak
 		{
 			throw new RuntimeException(e);
 		}
+
 		return ret;
 	}
 

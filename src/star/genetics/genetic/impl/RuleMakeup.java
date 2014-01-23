@@ -34,13 +34,13 @@ public class RuleMakeup implements JSONable
 
 	public void put(Gene g, DiploidAlleles d)
 	{
-		String gene_str = g.getJSON().toString();
+		String gene_str = g.getId();
 		data.get(MAKEUP).isObject().put(gene_str, d.getJSON());
 	}
 
 	public DiploidAlleles get(Gene g)
 	{
-		return new DiploidAllelesImpl(data.get(MAKEUP).isObject().get(g.getJSON().toString()).isObject(), getModel());
+		return new DiploidAllelesImpl(data.get(MAKEUP).isObject().get(g.getId()).isObject(), getModel());
 	}
 
 	public DiploidAlleles get(String g)
