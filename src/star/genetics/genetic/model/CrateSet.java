@@ -2,7 +2,9 @@ package star.genetics.genetic.model;
 
 import java.util.Iterator;
 
-public interface CrateSet extends Iterable<CrateModel>
+import star.genetics.client.JSONable;
+
+public interface CrateSet extends Iterable<CrateModel>, JSONable
 {
 	CrateModel current();
 

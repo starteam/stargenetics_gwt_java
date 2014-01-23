@@ -1,6 +1,8 @@
 package star.genetics.genetic.model;
 
-public interface Gel extends Iterable<GelPosition>
+import star.genetics.client.JSONable;
+
+public interface Gel extends Iterable<GelPosition>, JSONable
 {
 	String getName();
 

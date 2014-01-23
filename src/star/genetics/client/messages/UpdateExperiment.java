@@ -1,6 +1,5 @@
 package star.genetics.client.messages;
 
-
 public class UpdateExperiment extends Exec
 {
 
@@ -9,12 +8,11 @@ public class UpdateExperiment extends Exec
 	}
 
 	public final native Experiment getExperiment() /*-{
-		return this.data.experiment;
-	}-*/;
+	                                               return this.data.experiment;
+	                                               }-*/;
 
 	public final native String getExperimentCommand() /*-{
-	    return this.data.command;
-    }-*/;
-
+	                                                  return this.data.command;
+	                                                  }-*/;
 
 }

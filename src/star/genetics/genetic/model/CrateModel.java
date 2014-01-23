@@ -1,6 +1,8 @@
 package star.genetics.genetic.model;
 
-public interface CrateModel
+import star.genetics.client.JSONable;
+
+public interface CrateModel extends JSONable
 {
 	public CreatureSet getParents();
 
@@ -9,12 +11,6 @@ public interface CrateModel
 	public String getName();
 
 	public void setName(String name);
-
-	public boolean isVisible();
-
-	public void setVisible(boolean visible);
-
-	public CrateExperimentMetadata getMetadata();
 
 	public String getUUID();
 

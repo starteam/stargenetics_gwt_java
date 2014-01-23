@@ -1,12 +1,13 @@
 package star.genetics.genetic.model;
 
-import java.util.HashMap;
+import star.genetics.client.JSONable;
+import star.genetics.client.JSONableMap;
 
-public interface Rule
+public interface Rule extends JSONable
 {
 	static final String DEFAULT = "Default";
 
-	public HashMap<String, String> getProperties();
+	public JSONableMap getProperties();
 
 	public boolean isDefault();
 

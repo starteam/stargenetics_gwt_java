@@ -1,47 +1,123 @@
 package star.genetics.genetic.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import star.genetics.client.Helper;
+import star.genetics.client.JSONableList;
 import star.genetics.genetic.model.Creature;
 import star.genetics.genetic.model.GeneticMakeup;
+import star.genetics.genetic.model.Model;
 import star.genetics.genetic.model.Rule;
 
-public class RuleSetImpl extends ArrayList<Rule> implements star.genetics.genetic.model.RuleSet
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
+
+public class RuleSetImpl implements star.genetics.genetic.model.RuleSet
 {
 	private static final long serialVersionUID = 1L;
 
-	LinkedHashSet<String> propertyNames = new LinkedHashSet<String>();
+	private final JSONObject data;
+	private final Model model;
 
-	public RuleSetImpl(LinkedHashSet<String> orderedSet)
+	public Model getModel()
 	{
-		propertyNames = orderedSet;
+		return model;
 	}
 
-	public RuleSetImpl()
+	JSONableList<Rule> getRules()
 	{
+		return new JSONableList<Rule>(data.get(RULES).isArray())
+		{
+
+			@Override
+			public Rule create(JSONObject data)
+			{
+				return new RuleImpl(data, getModel());
+			}
+		};
+	}
+
+	public RuleSetImpl(LinkedHashSet<String> orderedSet, Model model)
+	{
+		this.data = new JSONObject();
+		this.model = model;
+		JSONArray d = new JSONArray();
+		JSONableList<String> q = new JSONableList<String>(d)
+		{
+
+			@Override
+			public String create(JSONObject data)
+			{
+				return Helper.unwrapString(data);
+			}
+		};
+		for (String s : orderedSet)
+		{
+			q.add(s);
+		}
+		data.put(PROPERTIES, d);
+		data.put(RULES, new JSONArray());
+	}
+
+	public JSONObject getJSON()
+	{
+		return data;
+	}
+
+	JSONableList<String> propertyNames()
+	{
+		return new JSONableList<String>(data.get(PROPERTIES).isArray())
+		{
+			@Override
+			public String create(JSONObject data)
+			{
+				return Helper.unwrapString(data);
+			}
+
+			@Override
+			public Iterator<String> iterator()
+			{
+				return super.iterator();
+			}
+		};
+	}
+
+	public RuleSetImpl(Model model)
+	{
+		this.model = model;
+		this.data = new JSONObject();
+		data.put(PROPERTIES, new JSONArray());
+		data.put(RULES, new JSONArray());
+
+	}
+
+	public RuleSetImpl(JSONObject data, Model model)
+	{
+		this.model = model;
+		this.data = data;
 	}
 
 	public Map<String, String> getProperties(GeneticMakeup genotype, Creature.Sex sex)
 	{
 		Map<String, String> ret = new TreeMap<String, String>();
 		initialize(ret);
-		for (Rule r : this)
+		for (Rule r : getRules())
 		{
 			if (r.isMatching(genotype, sex))
 			{
-				combine(ret, r.getProperties());
+				combine(ret, r.getProperties().asMap());
 			}
 		}
 		LinkedHashMap<String, String> retRule = new LinkedHashMap<String, String>();
-		for (String key : propertyNames)
+		for (String key : propertyNames())
 		{
 			if (ret.containsKey(key))
 			{
@@ -72,24 +148,34 @@ public class RuleSetImpl extends ArrayList<Rule> implements star.genetics.geneti
 	@Override
 	public boolean add(Rule rule)
 	{
-		propertyNames.addAll(rule.getProperties().keySet());
-		return super.add(rule);
+		JSONableList<String> propertyNames = propertyNames();
+		for (String s : rule.getProperties().asMap().keySet())
+		{
+			propertyNames.add(s);
+		}
+		getRules().add(rule);
+		return true;
 	}
 
 	private void initialize(Map<String, String> ret)
 	{
-		for (Rule r : this)
+		for (Rule r : getRules())
 		{
 			if (r.isDefault())
 			{
-				ret.putAll(r.getProperties());
+				ret.putAll(r.getProperties().asMap());
 			}
 		}
 	}
 
 	public Set<String> getPropertyNames()
 	{
-		return Collections.unmodifiableSet(propertyNames);
+		LinkedHashSet<String> ret = new LinkedHashSet<String>();
+		for (String s : propertyNames())
+		{
+			ret.add(s);
+		}
+		return ret;
 	}
 
 }

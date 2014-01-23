@@ -3,7 +3,6 @@ package star.genetics.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsonUtils;
-import com.google.gwt.dev.json.JsonObject;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
@@ -66,7 +65,7 @@ public class Messages
 	public static String getString(String key)
 	{
 		String ret = getNativeString(key, map);
-		//String ret = null;
+		// String ret = null;
 		return ret != null ? ret : '!' + key + '!';
 	}
 

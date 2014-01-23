@@ -3,7 +3,9 @@ package star.genetics.genetic.model;
 import java.util.Map;
 import java.util.Set;
 
-public interface RuleSet
+import star.genetics.client.JSONable;
+
+public interface RuleSet extends JSONable
 {
 	public boolean add(Rule rule);
 

@@ -8,22 +8,24 @@ import java.util.TreeMap;
 import star.genetics.genetic.model.Creature;
 import star.genetics.visualizers.Visualizer;
 
+import com.google.gwt.json.client.JSONNumber;
+import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONValue;
+
 public class Helper
 {
 	public static void setVisualizerFromCreature(Visualizer v, Creature c)
 	{
 		v.setName(c.getName());
-		v.setNote(c.getNote());
-		v.setProperties(c.getProperties(), c.getSex());
+		v.setProperties(c.getProperties().asMap(), c.getSex());
 	}
 
 	public static void setVisualizerFromCreature(Visualizer v, Creature c, HashMap<String, String> additional)
 	{
 		v.setName(c.getName());
-		v.setNote(c.getNote());
 		// additional.putAll(c.getProperties());
 		HashMap<String, String> prop = new HashMap<String, String>();
-		prop.putAll(c.getProperties());
+		prop.putAll(c.getProperties().asMap());
 		prop.putAll(additional);
 		v.setProperties(prop, c.getSex());
 	}
@@ -71,4 +73,33 @@ public class Helper
 
 	private static String MODEL_PROVIDER_EXCEPTION = "Model Modified Provider not found"; //$NON-NLS-1$
 
+	public static final JSONValue wrapString(String value)
+	{
+		if (value != null)
+		{
+			return new JSONString(value);
+		}
+		return new JSONString("");
+	}
+
+	public static final String unwrapString(JSONValue value)
+	{
+		if (value == null)
+		{
+			return null;
+		}
+		JSONString s = value.isString();
+		return s != null ? s.stringValue() : null;
+	}
+
+	public static JSONValue wrapNumber(float position)
+	{
+		return new JSONNumber(position);
+	}
+
+	public static float unwrapNumber(JSONValue jsonValue)
+	{
+		JSONNumber ret = jsonValue.isNumber();
+		return ret != null ? (float) ret.doubleValue() : Float.NaN;
+	}
 }

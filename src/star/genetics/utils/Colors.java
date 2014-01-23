@@ -9,12 +9,12 @@ public class Colors
 
 	private static String Color(int red, int green, int blue)
 	{
-		return "rgb("+red+", "+green+", "+blue+")";
+		return "rgb(" + red + ", " + green + ", " + blue + ")";
 	}
 
 	private static String Color(float red, float green, float blue)
 	{
-		return "rgb("+red+", "+green+", "+blue+")";
+		return "rgb(" + red + ", " + green + ", " + blue + ")";
 	}
 
 	public static String parseName(String name, String defaultColor)
@@ -28,7 +28,7 @@ public class Colors
 				int red = Integer.parseInt(name.substring(1, 3), 16);
 				int green = Integer.parseInt(name.substring(3, 5), 16);
 				int blue = Integer.parseInt(name.substring(5, 7), 16);
-				return Color(red,green,blue);
+				return Color(red, green, blue);
 			}
 			if (colors == null)
 			{
@@ -81,41 +81,41 @@ public class Colors
 			{
 				return;
 			}
-//			InputStream is = Colors.class.getClassLoader().getResourceAsStream("utils/rgb.txt");
-//			if (is != null)
-//			{
-//				BufferedReader r = new BufferedReader(new InputStreamReader(is));
-//				colors = new HashMap<String, String>();
-//				colorNames = new HashMap<String, String>();
-//				String line;
-//				while ((line = r.readLine()) != null)
-//				{
-//					if (line.startsWith("!"))
-//					{
-//						continue;
-//					}
-//					StringTokenizer st = new StringTokenizer(line);
-//					try
-//					{
-//						int red = Integer.parseInt(st.nextToken());
-//						int green = Integer.parseInt(st.nextToken());
-//						int blue = Integer.parseInt(st.nextToken());
-//						String name = st.nextToken("\n");
-//						if (name != null)
-//						{
-//							name = name.trim();
-//							name = name.toLowerCase();
-//							colors.put(name, Color(red, green, blue));
-//							colorNames.put(Color(red, green, blue), name);
-//						}
-//					}
-//					catch (Exception ex)
-//					{
-//						ex.printStackTrace();
-//					}
-//				}
-//				addSpecialColors();
-//			}
+			// InputStream is = Colors.class.getClassLoader().getResourceAsStream("utils/rgb.txt");
+			// if (is != null)
+			// {
+			// BufferedReader r = new BufferedReader(new InputStreamReader(is));
+			// colors = new HashMap<String, String>();
+			// colorNames = new HashMap<String, String>();
+			// String line;
+			// while ((line = r.readLine()) != null)
+			// {
+			// if (line.startsWith("!"))
+			// {
+			// continue;
+			// }
+			// StringTokenizer st = new StringTokenizer(line);
+			// try
+			// {
+			// int red = Integer.parseInt(st.nextToken());
+			// int green = Integer.parseInt(st.nextToken());
+			// int blue = Integer.parseInt(st.nextToken());
+			// String name = st.nextToken("\n");
+			// if (name != null)
+			// {
+			// name = name.trim();
+			// name = name.toLowerCase();
+			// colors.put(name, Color(red, green, blue));
+			// colorNames.put(Color(red, green, blue), name);
+			// }
+			// }
+			// catch (Exception ex)
+			// {
+			// ex.printStackTrace();
+			// }
+			// }
+			// addSpecialColors();
+			// }
 		}
 		catch (Exception ex)
 		{

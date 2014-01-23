@@ -4,10 +4,12 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class Strain extends JavaScriptObject
 {
-	protected Strain() {};
-	
+	protected Strain()
+	{
+	};
+
 	public final native String getId() /*-{
-		return this.id;
-	}-*/;
-	
+	                                   return this.id;
+	                                   }-*/;
+
 }

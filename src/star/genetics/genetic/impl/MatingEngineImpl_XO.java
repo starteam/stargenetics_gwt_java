@@ -11,6 +11,7 @@ import star.genetics.genetic.model.Gene;
 import star.genetics.genetic.model.GeneticMakeup;
 import star.genetics.genetic.model.Genome;
 import star.genetics.genetic.model.MatingEngine;
+import star.genetics.genetic.model.Model;
 import star.genetics.genetic.model.RuleSet;
 
 public class MatingEngineImpl_XO extends MatingEngineImpl_Common implements MatingEngine, Serializable
@@ -24,9 +25,9 @@ public class MatingEngineImpl_XO extends MatingEngineImpl_Common implements Mati
 	float twinningFrequency = 0;
 	float identicalTwinsFrequency = 0;
 
-	public MatingEngineImpl_XO(float maleRecombinationRate, float femaleRecombinationRate, float femaleSexRatio, int progeniesCount, float spontaniousMales)
+	public MatingEngineImpl_XO(float maleRecombinationRate, float femaleRecombinationRate, float femaleSexRatio, int progeniesCount, float spontaniousMales, Model model)
 	{
-		super(progeniesCount, 0, 0);
+		super(progeniesCount, 0, 0, model);
 		this.maleRecombinationRate = maleRecombinationRate;
 		this.femaleRecombinationRate = femaleRecombinationRate;
 		this.femaleSexRatio = femaleSexRatio;
@@ -47,7 +48,7 @@ public class MatingEngineImpl_XO extends MatingEngineImpl_Common implements Mati
 
 	protected GeneticMakeup mate(Genome genome, GeneticMakeup makeup1, Creature.Sex sex1, GeneticMakeup makeup2, Creature.Sex sex2)
 	{
-		GeneticMakeup makeup = new star.genetics.genetic.impl.GeneticMakeupImpl();
+		GeneticMakeup makeup = new star.genetics.genetic.impl.GeneticMakeupImpl(getModel());
 		boolean position1 = Math.random() < .5f;
 		boolean position2 = Math.random() < .5f;
 		star.genetics.genetic.model.Creature.Sex sex = Math.random() < femaleSexRatio ? star.genetics.genetic.model.Creature.Sex.FEMALE : star.genetics.genetic.model.Creature.Sex.MALE;
@@ -130,7 +131,7 @@ public class MatingEngineImpl_XO extends MatingEngineImpl_Common implements Mati
 					}
 				}
 			}
-			DiploidAlleles allele = new star.genetics.genetic.impl.DiploidAllelesImpl(a1, a2);
+			DiploidAlleles allele = new star.genetics.genetic.impl.DiploidAllelesImpl(a1, a2, getModel());
 			makeup.put(g, allele);
 		}
 		return makeup;

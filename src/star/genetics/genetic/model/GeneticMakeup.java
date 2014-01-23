@@ -1,17 +1,15 @@
 package star.genetics.genetic.model;
 
-import java.util.Map.Entry;
+import star.genetics.client.JSONable;
+import star.genetics.genetic.impl.RuleMakeup;
 
-public interface GeneticMakeup
+public interface GeneticMakeup extends JSONable
 {
-	boolean containsKey(Gene g);
 
 	DiploidAlleles get(Gene g);
 
-	// TODO: revisit
-	DiploidAlleles put(Gene g, DiploidAlleles d);
+	void put(Gene g, DiploidAlleles d);
 
-	boolean test(Chromosome c, java.util.Map<Gene, DiploidAlleles> map);
+	boolean test(Chromosome c, RuleMakeup map);
 
-	Iterable<Entry<Gene, DiploidAlleles>> entrySet();
 }

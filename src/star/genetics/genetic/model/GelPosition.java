@@ -1,6 +1,8 @@
 package star.genetics.genetic.model;
 
-public interface GelPosition
+import star.genetics.client.JSONable;
+
+public interface GelPosition extends JSONable
 {
 	Gel getGel();
 
