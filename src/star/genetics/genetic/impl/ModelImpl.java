@@ -58,11 +58,11 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 		return new RuleSetImpl(data.get(RULESET).isObject(), getModel());
 	}
 
-	public void setMater(MatingEngineImpl_XY mater)
+	public void setMater(MatingEngine mater)
 	{
 		data.put(MATER, mater.getJSON());
 	}
-
+	
 	public void setRecombinationRate(float rate, Sex sex)
 	{
 		if (Sex.MALE.equals(sex))
@@ -120,6 +120,10 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 			if (Genome.SexType.XY.equals(getGenome().getSexType()))
 			{
 				mater = new MatingEngineImpl_XY(data.get(MATER).isObject(), getModel());
+			}
+			else if(Genome.SexType.Aa.equals(getGenome().getSexType())) 
+			{
+				mater = new MatingEngineImpl_MAT(data.get(MATER).isObject(), getModel());
 			}
 		}
 		return mater;
