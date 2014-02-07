@@ -30,6 +30,7 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 		data.put(CRATESET, (new CrateSetImpl(getModel())).getJSON());
 		data.put(RULESET, new JSONObject());
 		data.put(GENOME, new JSONObject());
+		data.put(CREATURESMAP, new JSONObject());
 	}
 
 	public ModelImpl(JSONObject data)
@@ -208,5 +209,15 @@ public class ModelImpl implements star.genetics.genetic.model.ModelWriter, Seria
 	public Model getModel()
 	{
 		return this;
+	}
+	
+	public JSONObject getCreatureData( String uuid )
+	{
+		return data.get(CREATURESMAP).isObject().get(uuid).isObject();
+	}
+	
+	public void setCreatureData( JSONObject d )
+	{
+		data.get(CREATURESMAP).isObject().put(d.get(UUID).isString().stringValue(), d);
 	}
 }

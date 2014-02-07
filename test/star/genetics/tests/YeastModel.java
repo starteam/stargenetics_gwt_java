@@ -1,8 +1,13 @@
 package star.genetics.tests;
 
+import star.genetics.genetic.impl.CreatureSetImpl;
+import star.genetics.genetic.impl.MatingException;
+import star.genetics.genetic.model.Creature;
+import star.genetics.genetic.model.CreatureSet;
 import star.genetics.genetic.model.Model;
 import star.genetics.parser.ModelParser;
 
+import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.junit.client.GWTTestCase;
 
 public class YeastModel extends GWTTestCase
@@ -18,6 +23,40 @@ public class YeastModel extends GWTTestCase
 		assertNotNull(m.getMatingEngine());
 		assertNotNull(m.getRules());
 		assertNotNull(m.getCreatures());
+	}
+
+	public void test2()
+	{
+		Model m = ModelParser.parse(getJson());
+		Creature c0 = m.getCreatures().get(0);
+		Creature c1 = m.getCreatures().get(1);
+		assertTrue(c0.getSex() != c1.getSex() );
+		CreatureSetImpl parents = new CreatureSetImpl(m);
+		parents.add(c0);
+		parents.add(c1);		
+		try
+        {
+			int progenies = 40;
+			String prefix = "Experiment 1";
+	       CreatureSet progeny = m.getMatingEngine().getProgenies(prefix, parents, 1, progenies, m.getRules());
+	       assertEquals(progenies, progeny.size());
+	       assertEquals(prefix+"-1A", progeny.get(0).getName());
+	       assertEquals(prefix+"-1B", progeny.get(1).getName());
+	       assertEquals(prefix+"-1C", progeny.get(2).getName());
+	       assertEquals(prefix+"-1D", progeny.get(3).getName());
+	       for( Creature c : progeny)
+	       {
+	    	   System.out.println( c.getName() );
+	    	   System.out.println( c.getJSON() );
+	       }
+	       System.out.println( m.getJSON());
+        }
+        catch (MatingException e)
+        {
+	        e.printStackTrace();
+	        fail(e.getMessage());
+        }
+		
 	}
 	
 	@Override
