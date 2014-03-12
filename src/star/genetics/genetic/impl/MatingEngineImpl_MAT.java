@@ -203,9 +203,17 @@ public class MatingEngineImpl_MAT implements MatingEngine, Serializable, JSONabl
 		}
 		return chromosomeMapping;
 	}
-
 	public CreatureSet getProgenies(String crateName, CreatureSet parents, int countFrom, int matings, RuleSet rules) throws MatingException
 	{
+		return getProgenies(crateName, parents, countFrom, matings, rules,progeniesCount());
+	}
+	
+	public CreatureSet getProgenies(String crateName, CreatureSet parents, int countFrom, int matings, RuleSet rules, int targetCount) throws MatingException
+	{
+		if( targetCount <= 0 )
+		{
+			targetCount = progeniesCount();
+		}
 
 		Creature c1 = parents.get(0);
 		Creature c2 = parents.get(1);
@@ -213,7 +221,7 @@ public class MatingEngineImpl_MAT implements MatingEngine, Serializable, JSONabl
 		Random rng = new Random();
 		CreatureSetImpl ret = new CreatureSetImpl(getModel());
 		Genome genome = c1.getGenome();
-		for (int pIndex = 0; pIndex < progeniesCount(); pIndex++)
+		for (int pIndex = 0; pIndex < targetCount; pIndex++)
 		{
 			GeneticMakeupImpl[] makeups = new GeneticMakeupImpl[4];
 			for (int i = 0; i < 4; i++)
