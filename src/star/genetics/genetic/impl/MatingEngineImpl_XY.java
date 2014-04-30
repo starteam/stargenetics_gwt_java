@@ -84,6 +84,14 @@ public class MatingEngineImpl_XY extends MatingEngineImpl_Common implements Mati
 			{
 				isLethal = Boolean.parseBoolean(lethal);
 			}
+			else
+			{
+				lethal = x.get(GeneticModel.lethal.toLowerCase());
+				if (lethal != null)
+				{
+					isLethal = Boolean.parseBoolean(lethal);
+				}
+			}
 			if (!isLethal)
 			{
 				star.genetics.genetic.impl.CreatureImpl ret = new star.genetics.genetic.impl.CreatureImpl(name, genome, sex, makeup, matings, x, parents, getModel());

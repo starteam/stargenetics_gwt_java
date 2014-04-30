@@ -4,7 +4,7 @@ var $gwt_version = "2.5.1";
 var $wnd = parent;
 var $doc = $wnd.document;
 var $moduleName, $moduleBase;
-var $strongName = 'F684DF7C4BB4B15ECBC948D2DE1A2DD5';
+var $strongName = 'FDE59E5FF5E0C26D835B5AAEA3DB1B01';
 var $stats = $wnd.__gwtStatsEvent ? function(a) {return $wnd.__gwtStatsEvent(a);} : null,
 $sessionId = $wnd.__gwtStatsSessionId ? $wnd.__gwtStatsSessionId : null;
 $stats && $stats({moduleName:'stargenetics_gwt_java',sessionId:$sessionId,subSystem:'startup',evtGroup:'moduleStartup',millis:(new Date()).getTime(),type:'moduleEvalStart'});
@@ -10477,7 +10477,13 @@ _.mate__Ljava_lang_String_2Lstar_genetics_genetic_model_Creature_2Lstar_genetics
     star_genetics_client_JSONableList_$add__Lstar_genetics_client_JSONableList_2Ljava_lang_Object_2V(new star_genetics_genetic_impl_CreatureSetImpl$1_CreatureSetImpl$1__Lstar_genetics_genetic_impl_CreatureSetImpl_2Lcom_google_gwt_json_client_JSONArray_2V(parents, com_google_gwt_json_client_JSONObject_$get__Lcom_google_gwt_json_client_JSONObject_2Ljava_lang_String_2Lcom_google_gwt_json_client_JSONValue_2(parents.star_genetics_genetic_impl_CreatureSetImpl_data, $intern_98).isArray__Lcom_google_gwt_json_client_JSONArray_2()), p2);
     isLethal = false;
     lethal = com_google_gwt_lang_Cast_dynamicCast__Ljava_lang_Object_2ILjava_lang_Object_2(java_util_LinkedHashMap_$get__Ljava_util_LinkedHashMap_2Ljava_lang_Object_2Ljava_lang_Object_2(x, $intern_137), Q$java_lang_String);
-    lethal != null && (isLethal = (java_lang_Boolean_$clinit__V() , java_lang_String_$equalsIgnoreCase__Ljava_lang_String_2Ljava_lang_String_2Z($intern_94, lethal)));
+    if (lethal != null) {
+      isLethal = (java_lang_Boolean_$clinit__V() , java_lang_String_$equalsIgnoreCase__Ljava_lang_String_2Ljava_lang_String_2Z($intern_94, lethal));
+    }
+     else {
+      lethal = com_google_gwt_lang_Cast_dynamicCast__Ljava_lang_Object_2ILjava_lang_Object_2(java_util_LinkedHashMap_$get__Ljava_util_LinkedHashMap_2Ljava_lang_Object_2Ljava_lang_Object_2(x, 'lethal'), Q$java_lang_String);
+      lethal != null && (isLethal = (java_lang_Boolean_$clinit__V() , java_lang_String_$equalsIgnoreCase__Ljava_lang_String_2Ljava_lang_String_2Z($intern_94, lethal)));
+    }
     if (isLethal) {
       return null;
     }
