@@ -53,8 +53,8 @@ public class EngineParser
 
 	private static void parse_XY(ModelImpl model, JSONObject engine)
 	{
-		float maleRecombinationRate = get(engine, "male_recombination_rate", 1.0f);
-		float femaleRecombinationRate = get(engine, "female_recombination_rate", 1.0f);
+		float maleRecombinationRate = get(engine, "male_recombination_rate", 1.0f)/100f;
+		float femaleRecombinationRate = get(engine, "female_recombination_rate", 1.0f)/100f;
 		float femaleSexRatio = get(engine, "female_sex_ratio", 1.0f);
 		int progeniesCount = Math.round(get(engine, "avg_offspring_count", 50.0f));
 		float twinningFrequency = get(engine, "twinning", 0.0f);

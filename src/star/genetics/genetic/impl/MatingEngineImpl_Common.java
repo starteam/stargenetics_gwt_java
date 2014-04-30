@@ -195,6 +195,9 @@ public abstract class MatingEngineImpl_Common implements Serializable, JSONable
 		}
 		return canMate;
 	}
+	
+	private static Logger logger = Logger.getLogger("StarGenetics MatingEngine_Common");
+
 
 	protected boolean randomizeInternal(boolean original, float distance, Creature.Sex sex)
 	{

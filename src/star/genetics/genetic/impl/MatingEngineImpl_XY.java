@@ -3,6 +3,7 @@ package star.genetics.genetic.impl;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeSet;
+import java.util.logging.Logger;
 
 import star.genetics.client.Helper;
 import star.genetics.genetic.model.Allele;
@@ -107,14 +108,14 @@ public class MatingEngineImpl_XY extends MatingEngineImpl_Common implements Mati
 		boolean position2 = Math.random() < .5f;
 		star.genetics.genetic.model.Creature.Sex sex = Math.random() < femaleSexRatio() ? star.genetics.genetic.model.Creature.Sex.FEMALE : star.genetics.genetic.model.Creature.Sex.MALE;
 
-		float previousGenePosition = 0;
 		Chromosome previousChromosome = null;
 		TreeSet<Gene> set = new TreeSet<Gene>();
 		set.addAll(genome.getGenes());
+		float previousGenePosition = 0;
 		for (Gene g : set)
 		{
 			Chromosome c = g.getChromosome();
-			if (previousChromosome != c)
+			if (previousChromosome == null || previousChromosome.getName() != c.getName())
 			{
 				position1 = Math.random() < .5f;
 				position2 = Math.random() < .5f;
@@ -183,6 +184,8 @@ public class MatingEngineImpl_XY extends MatingEngineImpl_Common implements Mati
 		}
 		return makeup;
 	}
+
+	private static Logger logger = Logger.getLogger("StarGenetics MatingEngine_XY");
 
 	private boolean randomize(boolean original, float distance, Creature.Sex sex)
 	{
